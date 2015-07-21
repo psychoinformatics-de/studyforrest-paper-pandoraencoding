@@ -74,14 +74,56 @@ Magdeburg, Magdeburg, Germany}
 
 \paragraph{Decoding accuracy}
 
-\todo[inline]{test decoding with the first PCA components of the encoded signal removed}
+%test decoding with the first PCA components of the encoded signal removed
+%-->reduced accuracy by ~10%
 
 \section*{Results}
 
-\missingfigure{estimate size of model input (mitchel had 500, no idea why); check for 7T and 3T)}
-\missingfigure{binary classification accuracy result, connect to casey/mitchel}
-\missingfigure{correlation rankscore 3 and 7 incl. permutation analysis}
-\missingfigure{decoding(encoding) accuracy: 3 vs 7 (vs. plain decoding)}
+	
+%estimate size of model input (mitchel had 500, no idea why); check for 7T and 3T)
+\todo[inline]{update for different nr of voxels & 3T}
+\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth]{pics/voxelnr}
+	\caption{Correlation rank score as a function of the included number of voxels. The included voxels were the most stable ones i.e. their activity corresponding to each stimulus had the highest mean pairwise correlation across runs.}
+	\label{fig:voxelnr}
+\end{figure}
+ 
+ 
+ 
+%binary classification accuracy result, connect to casey/mitchel
+\todo[inline]{potentially other nr of voxels, take avr across all runs for 3T and 7T}
+\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth]{pics/binary_retrieval_accuracy}
+	\caption{Binary retrieval classification accuracy for 3T and 7T}
+	\label{fig:binretr}
+\end{figure}
+ 
+ 
+ 
+ 
+%correlation rankscore 3 and 7 incl. permutation analysis
+\todo[inline]{potentially other nr of voxels, take avr across all runs for 3T and 7T,add permutation analysis}
+\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth]{pics/correlation_rank_score}
+	\caption{Correlation rank score for 3T and 7T}
+	\label{fig:rankscore}
+\end{figure}
+ 
+ 
+ 
+ 
+ 
+%decoding(encoding) accuracy: 3 vs 7 (vs. plain decoding)
+\todo[inline]{potentially other nr of voxels, take avr across all runs for 3T and 7T,add discriminative classifier baseline}
+\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth]{pics/decoding_accuracy}
+	\caption{Decoding accuracy for 3T and 7T. A generative decoder was constructed by probabilistically inverting the encoding model.}
+	\label{fig:decoder}
+\end{figure}
 
 \missingfigure{model validation on the movie}
 
