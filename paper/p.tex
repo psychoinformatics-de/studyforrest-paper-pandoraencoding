@@ -62,15 +62,42 @@ Magdeburg, Magdeburg, Germany}
 
 \missingfigure{encoding scheme}
 
+%each voxel separately, ridge, generalized cross-validation -- look up possible citations
+
+For each f{MRI} sample $y_{vt}$ (where $t=1,2,..,T$ denotes the time-points and $v=1,2,..,V$ denotes the voxels) the LQ-MFS features $x_{t}$ $[1x\widetilde{M}]$ (where $\widetilde{M}$ is the number of LQ-MFS coefficients) of the corresponding two second part of the stimulus was computed. In case there was no stimulus presented at time-point $t$, it was associated with a $[1x\widetilde{M}]$ zero-vector. 
+
+
+Since the BOLD response is delayed, for each f{MRI} sample, the previous features were temporally stacked and the most recent feature vector removed (since it could not yet have influenced the f{MRI} activity), therefore creating a new feature vector for each time-point $t$ by concatenating $x_{t-1}$,$x_{t-2}$ and $x_{t-3}$.  
+
+The f{MRI} activity time-series, as well as the feature time-series, were then vertically stacked, resulting in a matrix of features $X$ $[NxM]$ (where $N$ is the number of f{MRI} samples, and $M$ is number of LQ-MFS coefficients, with $M=3\widetilde{M}$) and a matrix of f{MRI} activity $Y$ $[NxV]$ (where V is the number of voxels).
+
+%here linear model + ridge etc.
+
 \subsection*{Quality metrics}
+
+\todo[inline]{add description of standardization}
 
 \paragraph{Binary retrieval accuracy}
 
-\todo[inline]{cite both mitchel and casey}
+Binary retrieval accuracy \cite{ML08} was used in a prior study \cite{CTK+2012}, which also employed massively univariate encoding models on the same dataset.
+
+For a trained model $\mathbf{C}$ $[M x V]$ (where M is the number of LQ-MFS coefficients and V is the number of voxels), and a given LQ-MFS representation of two stimuli from the validation set $s_{1}$ and $s_{2}$ $[1 x M]$ and their corresponding f{MRI} activity $i_{1}$ and $i_{2}$ $[ 1 x V ]$, the binary retrieval accuracy is computed as follows:
+
+-Using the univariate encoding models for each voxel, compute the predicted f{MRI} activity given $s_{1}$ and $s_{2}$ 
+\begin{equation}\label{eq:predict}
+\widetilde{i}_{1} = s_{1}C
+\end{equation}
+-Compute the cosine similarity, the cosine of the angle between two vectors, for each combination of $\widetilde{i}$ and $i$, i.e.
+\[ cossim(\widetilde{i}_{1},i_{1}) =  \frac{\widetilde{i}_{1} \cdot i_{1}}{\|\widetilde{i}_{1} \cdot i_{1}\|} \] 
+-If \[ cossim(\widetilde{i}_{1},i_{1})+cossim(\widetilde{i}_{2},i_{2}) < cossim(\widetilde{i}_{1},i_{2})+cossim(\widetilde{i}_{2},i_{1}) \] the binary retrieval was successfull for this pair of stimuli
+-The mean binary retrieval accuracy in the validation set is computed on the binary retrieval successes for each combination of stimuli
 
 \paragraph{Correlation rank metric}
-
-\todo[inline]{cite formisano}
+\todo[inline]{check if it was really introduced by santoro et al.}
+An alternative measure of encoding performance is the correlation rank score introduced by Santoro et al. (\cite{SF14}). For each stimulus $s_{n}$ $n=1,2..N$  in the validation set its predicted f{MRI} activity $\widetilde{i}_{n}$ is computed as in \ref{eq:predict}.
+For a given stimulus, the correlations between its predicted f{MRI} activity $\widetilde{i}_{n}$ and the measured f{MRI} activity of all stimuli were computed, and the matching score $m(s_{n})$ is computed as
+\[ m(s_{n}) = 1-\frac{rank(s_{n})-1}{N-1} \]
+Where $rank(s_{n})$ is the rank of the correlation between $\widetilde{i}_{n}$ and $i_{n}$.
 
 \paragraph{Decoding accuracy}
 
@@ -180,7 +207,6 @@ We are grateful to Michael Casey\ldots
 \todo[inline]{express gratitude}
 
 \bibliography{references}
-
 \end{document}
 
 % vim: textwidth=80 colorcolumn=81
