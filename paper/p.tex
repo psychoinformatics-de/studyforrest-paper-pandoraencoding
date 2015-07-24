@@ -64,14 +64,20 @@ Magdeburg, Magdeburg, Germany}
 
 %each voxel separately, ridge, generalized cross-validation -- look up possible citations
 
-For each f{MRI} sample $y_{vt}$ (where $t=1,2,..,T$ denotes the time-points and $v=1,2,..,V$ denotes the voxels) the LQ-MFS features $x_{t}$ $[1x\widetilde{M}]$ (where $\widetilde{M}$ is the number of LQ-MFS coefficients) of the corresponding two second part of the stimulus was computed. In case there was no stimulus presented at time-point $t$, it was associated with a $[1x\widetilde{M}]$ zero-vector. 
+For each f{MRI} sample $y_{vt}$ (where $t=1,2,..,T$ denotes the time-points and $v=1,2,..,V$ denotes the voxels) the LQ-MFS features $x_{t}$ $[1x\widetilde{M}]$ (where $\widetilde{M}$ is the number of LQ-MFS coefficients) of the corresponding two second part of the stimulus were computed. In case there was no stimulus presented at time-point $t$, it was associated with a $[1x\widetilde{M}]$ zero-vector. 
 
-
-Since the BOLD response is delayed, for each f{MRI} sample, the previous features were temporally stacked and the most recent feature vector removed (since it could not yet have influenced the f{MRI} activity), therefore creating a new feature vector for each time-point $t$ by concatenating $x_{t-1}$,$x_{t-2}$ and $x_{t-3}$.  
+%make more clear that notation is overloaded
+Since the BOLD response is delayed, for each f{MRI} sample, the most recent feature was vector removed (since it could not yet have influenced the f{MRI} activity), and the new feature vector at time-point $t$ was created by concatenating the prior feature vectors $x_{t-1}$,$x_{t-2}$ and $x_{t-3}$, further denoted as $x_{t}$. Time-points were removed from the analysis, if two-thirds or more of the concatenated feature vectors were zero-vectors.
 
 The f{MRI} activity time-series, as well as the feature time-series, were then vertically stacked, resulting in a matrix of features $X$ $[NxM]$ (where $N$ is the number of f{MRI} samples, and $M$ is number of LQ-MFS coefficients, with $M=3\widetilde{M}$) and a matrix of f{MRI} activity $Y$ $[NxV]$ (where V is the number of voxels).
 
-%here linear model + ridge etc.
+%probabilistic or objective function minimization, also cite someone about using lin. reg. in encoding
+The encoding model could then be expressed as the probability to observe the f{MRI} activity at time-point $t$ and voxel $v$:
+\begin{equation}\label{eq:encmo}
+p(y_{vt}|x_{t}) = N(y_{vt};x_{t}\beta_{v},\sigma) 
+\end{equation}
+where $N(y;\mu,\sigma)$ denotes the probability density at point $y$ for a gaussian with mean $\mu$ and standard deviation $\sigma$, and $\beta_{v}$ is a $[Mx1]$ vector of regression coefficients specific to voxel $v$.
+
 
 \subsection*{Quality metrics}
 
