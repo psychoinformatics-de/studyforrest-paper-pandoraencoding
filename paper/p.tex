@@ -58,7 +58,9 @@ Magdeburg, Magdeburg, Germany}
 
 \subsection*{Encoding model}
 
-\todo[inline]{reference feature set description and describe encoding algorithm}
+\todo[inline]{feature representations citation}
+
+To build an encoding model with high predictive power, we need to find an appropriate feature representation of the music stimuli. \cite{CTK+2012} already compared different feature representations of the same stimuli for the 3T dataset. We choose the feature set that performed best in their study, the low-quefrency mel-frequency spectrum \cite{HDH+2015}, corresponding to the timbre of the stimulus.   
 
 \missingfigure{encoding scheme}
 
@@ -74,14 +76,7 @@ The f{MRI} activity time-series, as well as the feature time-series, were then v
 %probabilistic or objective function minimization, also cite someone about using lin. reg. in encoding
 The encoding model could then be expressed as the probability to observe the f{MRI} activity at time-point $t$ and voxel $v$:
 \begin{equation}\label{eq:encmo}
-p(y_{vt}|x_{t}) = N(y_{vt};x_{t}\beta_{v},\sigma) 
-\end{equation}
-where $N(y;\mu,\sigma)$ denotes the probability density at point $y$ for a gaussian with mean $\mu$ and standard deviation $\sigma$, and $\beta_{v}$ is a $[Mx1]$ vector of regression coefficients specific to voxel $v$.
-
-
-\subsection*{Quality metrics}
-
-\todo[inline]{add description of standardization}
+p(y_{vt}|x_{t}) = N(y_{vt};x_{t}\beta_{v},\sigma) \end{equation} where $N(y;\mu,\sigma)$ denotes the probability density at point $y$ for a gaussian with mean $\mu$ and standard deviation $\sigma$, and $\beta_{v}$ is a $[Mx1]$ vector of regression coefficients specific to voxel $v$.  \subsection*{Quality metrics} \todo[inline]{add description of standardization}
 
 \paragraph{Binary retrieval accuracy}
 
@@ -99,19 +94,22 @@ For a trained model $\mathbf{C}$ $[M x V]$ (where M is the number of LQ-MFS coef
 -The mean binary retrieval accuracy in the validation set is computed on the binary retrieval successes for each combination of stimuli
 
 \paragraph{Correlation rank metric}
-\todo[inline]{check if it was really introduced by santoro et al.}
-An alternative measure of encoding performance is the correlation rank score introduced by Santoro et al. (\cite{SF14}). For each stimulus $s_{n}$ $n=1,2..N$  in the validation set its predicted f{MRI} activity $\widetilde{i}_{n}$ is computed as in \ref{eq:predict}.
-For a given stimulus, the correlations between its predicted f{MRI} activity $\widetilde{i}_{n}$ and the measured f{MRI} activity of all stimuli were computed, and the matching score $m(s_{n})$ is computed as
+\todo[inline]{wording}
+An alternative measure of encoding performance is the correlation rank score as in \cite{SF14}. The predicted f{MRI} activity $\widetilde{i}_{n}$ is computed as in \ref{eq:predict}for each stimulus $s_{n}$ $n=1,2..N$  in the validation set.
+For each stimulus, the correlations between $\widetilde{i}_{n}$ and the measured f{MRI} activity of all stimuli is computed, and the matching score $m(s_{n})$ is then
 \[ m(s_{n}) = 1-\frac{rank(s_{n})-1}{N-1} \]
 Where $rank(s_{n})$ is the rank of the correlation between $\widetilde{i}_{n}$ and $i_{n}$.
 
 \paragraph{Decoding accuracy}
 
-%test decoding with the first PCA components of the encoded signal removed
-%-->reduced accuracy by ~10%
+Instead of testing the encoding performance, we can also test the performance of a decoder built from all individual encoding models (\cite{NG11}). To go from $p(y_{vt}|x_{t})$ to $p(x_{t}|y_{t})$ we follow \cite{NG09} and first condense the large number of individual voxel-specific encoding models into one multivoxel encoding model. We do this by estimating the first $k$ principal components of the $[N x V]$ matrix of predicted f{MRI} activity (where $k$ is the number of principal components that retains 95\% of the variance and is chosen individually for each participant) and then projecting the predicted and measured f{MRI} activity onto them. As in \cite{NG09} we construct the k-dimensional multivariate normal probability density function $p(y_{t}|x_{t})$ and use a uniform prior distribution $p(x_{t})$ to obtain the approximate posterior probability $p(x_{t}|y_{t}) \propto p(y_{t}|x_{t})p(x_{t})$. Given the measured f{MRI} activity we can now estimate the probability distribution over music stimuli $p(s_{i}|y)$ (for $i=1..25$ (??)). We use the simplifying assumption that the f{MRI} activity is influenced by the music stimuli only through their LQ-MFS coefficients $x$, and - given that each music stimulus was associated with only three (lagged) LQ-MFS representations - we arrive at $p(l_{i}|y) \propto p(x_{t-1}|y_{t-1})p(x_{t}|y_{t})p(x_{t+1}|y_{t+1})$ where $t$ is the sample 6 seconds after the start of the music stimulus. The mode of this probability distribution is the music stimulus that was most likely presented. Less strictly, we can check if the predicted stimulus belongs at least to the same music genre as the presented stimulus. 
+
+
 
 \section*{Results}
 
+\todo[inline]{number of voxels with other quality metrics}
+One of the degrees of freedom was the number of voxels used in this analysis. \cite{ML08} chose the 500 most stable voxels, while we evaluate the model performance for several different number of voxels (see Figure \ref{fig:voxelnr}). In the further analyses we use the best-performing number of voxel, i.e. 1000.
 	
 \begin{figure}
 	\centering
@@ -156,9 +154,23 @@ Where $rank(s_{n})$ is the rank of the correlation between $\widetilde{i}_{n}$ a
 	\label{fig:decoder}
 \end{figure}
 
+\subsection*{Comparison of 3 and 7T}
+\todo[inline]{Add words}
+We compared the encoding performance between 3 and 7T for three different quality metrics, binary retrieval accuracy (Figure \ref{fig:binretr}), a correlation based matching score (Figure \ref{fig:rankscore}) and the decoding accuracy for musical genres (Figure \ref{fig:decoder}). Each participant contributed 8 datapoints to these violin plots (one for each held out run). The first two metrics (which are purely encoding based) show a similar performance for 3 and 7T, while decoding accuracy is higher for 7T. Decoding accuracy is easily interpretable, it is harder to compare binary retrieval accuracy and the matching score.     
+
 \missingfigure{model validation on the movie}
 
 \section*{Discussion}
+
+We built an encoding model for LQ-MFS music features on a 3 and a 7T dataset, and compared its performance using three different quality metrics, two of them purely encoding based (binary retrieval accuracy and the correlation rank matching score) and one using a decoding model built from our encoding model (the decoding accuracy of each stimulus' music genre). We could show a similar performance between 3 and 7T for the encoding based metrics, while the 7T led to a higher decoding accuracy. Other studies \cite{SF14} found the opposite effect using the matching score, but their 3T and 7T datasets did also differ in the number of stimuli used. Interestingly, encoding in 7T became advantageous if we used it to decode a stimulus feature (the music genre). To do this we combined the single voxel encoding models into a multivoxel encoding model (see \cite{NG09}), reducing the dimensionality of our model to gain a more stable estimate. Should the voxels selected by a stability criterion in 7T be actually more heterogeneous (e.g. mixing LQ-MFS sensitive voxels with non-sensitive ones) than the ones selected in 3T, this could mitigate the effect of the higher functional contrast-to-noise ratio in 7T, but might not matter if we reduce the massive single voxel encoding to a multivoxel encoding model.
+
+%pretty speculative, add citations...
+Of the three quality metrics used, binary retrieval accuracy and the correlation rank score are maximized by an encoding model with high predictive power (that explains much of the variance of the f{MRI} data) and a high variance in the feature set of the predictors (even with strong predictive power, the predictions need to differ for high scores in these metrics). Additionally, for a high decoding accuracy (in a generative decoder) the feature set needs to covary with the stimulus labels and the relationship between stimulus and f{MRI} activity needs to be conditional on the chosen feature set. In contrast to a discriminative decoder, this not only tests how well a stimulus label is recoverable, but also how well the stimulus label is encoded by this particular feature set.
+
+%look Wehbe 2014 up again
+All encoding models were trained to predict the (pre-processed) f{MRI} time-series without explicitly modelling the BOLD response. 
+
+
 
 \todo[inline]{7T doesnt matter -- stay cheap}
 
