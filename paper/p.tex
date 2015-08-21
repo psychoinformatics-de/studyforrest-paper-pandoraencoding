@@ -59,8 +59,12 @@ Magdeburg, Magdeburg, Germany}
 \subsection*{Encoding model}
 
 \todo[inline]{feature representations citation}
-
-To build an encoding model with high predictive power, we need to find an appropriate feature representation of the music stimuli. \cite{CTK+2012} already compared different feature representations of the same stimuli for the 3T dataset. We choose the feature set that performed best in their study, the low-quefrency mel-frequency spectrum \cite{HDH+2015}, corresponding to the timbre of the stimulus.   
+%MPS??
+To build an encoding model with high predictive power, we need to find an
+appropriate feature representation of the music stimuli. \cite{CTK+2012} already
+compared different feature representations of the same stimuli in the 3T
+dataset. We choose the feature set with the best encoding performance in this
+study, the low-quefrency mel-frequency spectrum \cite{HDH+2015}, corresponding to the timbre of the stimulus. 
 
 \missingfigure{encoding scheme}
 
@@ -103,8 +107,6 @@ Where $rank(s_{n})$ is the rank of the correlation between $\widetilde{i}_{n}$ a
 \paragraph{Decoding accuracy}
 
 Instead of testing the encoding performance, we can also test the performance of a decoder built from all individual encoding models (\cite{NG11}). To go from $p(y_{vt}|x_{t})$ to $p(x_{t}|y_{t})$ we follow \cite{NG09} and first condense the large number of individual voxel-specific encoding models into one multivoxel encoding model. We do this by estimating the first $k$ principal components of the $[N x V]$ matrix of predicted f{MRI} activity (where $k$ is the number of principal components that retains 95\% of the variance and is chosen individually for each participant) and then projecting the predicted and measured f{MRI} activity onto them. As in \cite{NG09} we construct the k-dimensional multivariate normal probability density function $p(y_{t}|x_{t})$ and use a uniform prior distribution $p(x_{t})$ to obtain the approximate posterior probability $p(x_{t}|y_{t}) \propto p(y_{t}|x_{t})p(x_{t})$. Given the measured f{MRI} activity we can now estimate the probability distribution over music stimuli $p(s_{i}|y)$ (for $i=1..25$ (??)). We use the simplifying assumption that the f{MRI} activity is influenced by the music stimuli only through their LQ-MFS coefficients $x$, and - given that each music stimulus was associated with only three (lagged) LQ-MFS representations - we arrive at $p(l_{i}|y) \propto p(x_{t-1}|y_{t-1})p(x_{t}|y_{t})p(x_{t+1}|y_{t+1})$ where $t$ is the sample 6 seconds after the start of the music stimulus. The mode of this probability distribution is the music stimulus that was most likely presented. Less strictly, we can check if the predicted stimulus belongs at least to the same music genre as the presented stimulus. 
-
-
 
 \section*{Results}
 
