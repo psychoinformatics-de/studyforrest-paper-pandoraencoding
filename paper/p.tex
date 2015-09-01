@@ -36,7 +36,6 @@ Magdeburg, Magdeburg, Germany}
 
 \section*{Introduction}
 
-\cite{CTK+2012}
 
 \todo[inline]{any fieldstrength differences, i.e. higher resolution gives better model?}
 \todo[inline]{formisano says 7T better, but more stimuli and more data with a different model are confounds}
@@ -45,7 +44,37 @@ Magdeburg, Magdeburg, Germany}
 
 % summary: first comparative study
 
-\todo[inline]{is this the first decode(encode(fmri)) study?}
+In functional magnetic resonance imaging (f{MRI}) research, voxel-wise encoding models are an increasingly popular tool
+to characterize the relationship between a real world stimulus and BOLD-activity \cite{NG11}.
+Both stimulus and brain activity can be represented as high-dimensional vectors \cite{HCG14},
+an encoding model is then trained separately for each voxel in a region of interest. 
+The predictions of such a set of encoding models can be validated in a number of different ways:  \cite{ML08} used a binary retrieval task to
+validate the predicted f{MRI} images for the meaning of nouns, while
+\cite{KG+08} used stimulus identification, and \cite{NG09} used stimulus reconstruction
+as quality metrics.
+In auditory neuroscience, where encoding models are less frequent, only binary
+retrieval accuracy \cite{CTK+2012} and stimulus identification \cite{SF14} have been used and it is yet unclear how the results of these validation strategies vary with the
+parameters of f{MRI} data analysis (e.g. number of voxels used)  or acquisition (e.g. field strength).
+\cite{SF14} used stimulus identification to validate an encoding model for natural sounds and reported a
+difference for 3-Tesla and 7-Tesla f{MRI} data, although the different number of
+stimuli used in the two experiments might be a potential confound. 
+Apart from field strength, researchers have also many other degrees of freedom
+in constructing an encoding model.
+Their choice of parameters, like the number of voxels used, will affect the quality of predictions, but it is unknown
+if these choices will affect encoding quality metrics differentally. 
+Recently a 3-Tesla f{MRI} study on the perception of musical genres \cite{CTK+2012} has been replicated with 7-Tesla data
+\cite{HDH+2015}, making it possible to directly compare the effect of field strength on
+different validation strategies for encoding models.
+This study aims to compare three quality metrics, binary retrieval accuracy \cite{ML08},
+sound identification \cite{KG+08} \cite{SF14} and the decoding accuracy of a stimulus feature, the
+musical genre. We do this by varying either field strength, comparing
+performance in a 3-Tesla and a 7-Tesla dataset, and parameters of the data
+analysis, specifically, the number of voxels used and how they were selected.
+While not including stimulus reconstruction as in \cite{NG09}, we use the same
+method of constructing a probabilistic decoding model from a set of encoding
+models, and use it to infer the music genre of the presented stimulus.
+
+
 
 \section*{Methods}
 
