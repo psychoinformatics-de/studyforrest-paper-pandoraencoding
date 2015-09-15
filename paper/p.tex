@@ -46,8 +46,10 @@ Magdeburg, Magdeburg, Germany}
 
 In functional magnetic resonance imaging (f{MRI}) research, voxel-wise encoding models are an increasingly popular tool
 to characterize the relationship between a real world stimulus and BOLD-activity \cite{NG11}.
+%eigtl unnoetig
 Both stimulus and brain activity can be represented as high-dimensional vectors \cite{HCG14},
 an encoding model is then trained separately for each voxel in a region of interest. 
+
 The predictions of such a set of encoding models can be validated in a number of different ways:  \cite{ML08} used a binary retrieval task to
 validate the predicted f{MRI} images for the meaning of nouns, while
 \cite{KG+08} used stimulus identification, and \cite{NG09} used stimulus reconstruction
@@ -67,13 +69,13 @@ Recently a 3-Tesla f{MRI} study on the perception of musical genres \cite{CTK+20
 different validation strategies for encoding models.
 This study aims to compare three quality metrics, binary retrieval accuracy \cite{ML08},
 sound identification \cite{KG+08} \cite{SF14} and the decoding accuracy of a stimulus feature, the
-musical genre. We do this by varying either field strength, comparing
-performance in a 3-Tesla and a 7-Tesla dataset, and parameters of the data
-analysis, specifically, the number of voxels used and how they were selected.
-While not including stimulus reconstruction as in \cite{NG09}, we use the same
-method of constructing a probabilistic decoding model from a set of encoding
-models, and use it to infer the music genre of the presented stimulus.
-
+musical genre. We do this by varying field strength, comparing
+performance in a 3-Tesla and a 7-Tesla dataset, and two parameters of the data
+analysis, the number of voxels used and how they were selected.
+While we do not replicate stimulus reconstruction as in \cite{NG09}, we use a
+similar method of constructing a probabilistic decoding model from a set of
+voxel-specific encoding models, and use it to infer the music genre of the presented stimulus.
+%possibly cite NG11
 
 
 \section*{Methods}
@@ -90,44 +92,52 @@ models, and use it to infer the music genre of the presented stimulus.
 \todo[inline]{feature representations citation}
 %MPS??
 To build an encoding model with high predictive power, we need to find an
-appropriate feature representation of the music stimuli. \cite{CTK+2012} already
-compared different feature representations of the same stimuli in the 3T
-dataset. We choose the feature set with the best encoding performance in this
-study, the low-quefrency mel-frequency spectrum \cite{HDH+2015}, corresponding to the timbre of the stimulus. 
+appropriate feature representation of the music stimuli.  
+\cite{CTK+2012} already compared different feature representations of the same stimuli in the 3T
+dataset. We chose the feature set with the best encoding performance in this
+study, the low-quefrency mel-frequency spectrum (LQ-MFS) \cite{HDH+2015}, corresponding to the timbre of the stimulus. 
+
 
 \missingfigure{encoding scheme}
 
-%each voxel separately, ridge, generalized cross-validation -- look up possible citations
 
-For each f{MRI} sample $y_{vt}$ (where $t=1,2,..,T$ denotes the time-points and $v=1,2,..,V$ denotes the voxels) the LQ-MFS features $x_{t}$ $[1x\widetilde{M}]$ (where $\widetilde{M}$ is the number of LQ-MFS coefficients) of the corresponding two second part of the stimulus were computed. In case there was no stimulus presented at time-point $t$, it was associated with a $[1x\widetilde{M}]$ zero-vector. 
+For each f{MRI} sample $y_{vt}$ (where $t=1,2,..,T$ denotes the time-points and
+$v=1,2,..,V$ denotes the voxels) the LQ-MFS features $x_{t}$ $[1x\widetilde{M}]$
+(where $\widetilde{M}$ is the number of LQ-MFS coefficients) of the
+corresponding two second part of the stimulus were computed. In case there was
+no stimulus presented at time-point $t$, a zero vector $[1x\widetilde{M}]$ was
+used. 
 
-%make more clear that notation is overloaded
-Since the BOLD response is delayed, for each f{MRI} sample, the most recent feature was vector removed (since it could not yet have influenced the f{MRI} activity), and the new feature vector at time-point $t$ was created by concatenating the prior feature vectors $x_{t-1}$,$x_{t-2}$ and $x_{t-3}$, further denoted as $x_{t}$. Time-points were removed from the analysis, if two-thirds or more of the concatenated feature vectors were zero-vectors.
+Since the BOLD response is delayed,  the most recent feature was vector removed for each f{MRI} sample (since it could not yet have influenced the f{MRI} activity), 
+and the new feature vector at time-point $t$ was created by concatenating the
+prior feature vectors $x_{t-1}$,$x_{t-2}$ and $x_{t-3}$. We overload the
+notation and denote this stacked feature vector as $x_{t}$. Feature vectors (and the corresponding f{MRI} sample) were removed from the analysis, if two-thirds or more of the concatenated feature vectors were zero-vectors.
 
 The f{MRI} activity time-series, as well as the feature time-series, were then vertically stacked, resulting in a matrix of features $X$ $[NxM]$ (where $N$ is the number of f{MRI} samples, and $M$ is number of LQ-MFS coefficients, with $M=3\widetilde{M}$) and a matrix of f{MRI} activity $Y$ $[NxV]$ (where V is the number of voxels).
 
 %probabilistic or objective function minimization, also cite someone about using lin. reg. in encoding
 The encoding model could then be expressed as the probability to observe the f{MRI} activity at time-point $t$ and voxel $v$:
-\begin{equation}\label{eq:encmo}
-p(y_{vt}|x_{t}) = N(y_{vt};x_{t}\beta_{v},\sigma) \end{equation} where $N(y;\mu,\sigma)$ denotes the probability density at point $y$ for a gaussian with mean $\mu$ and standard deviation $\sigma$, and $\beta_{v}$ is a $[Mx1]$ vector of regression coefficients specific to voxel $v$.  \subsection*{Quality metrics} \todo[inline]{add description of standardization}
+\begin{equation}\label{eq:encmo} p(y_{vt}|x_{t}) = N(y_{vt};x_{t}\beta_{v},\sigma) \end{equation} where
+$N(y;\mu,\sigma)$ denotes the probability density at point $y$ for a gaussian
+with mean $\mu$ and standard deviation $\sigma$, and $\beta_{v}$ is a $[Mx1]$
+vector of regression coefficients specific to voxel $v$. To reduce over-fitting
+the regression-coefficients were estimated using ridge regression \cite{HK70}.
+Independently for each voxel, the regularization parameter $\lambda$ with the
+lowest mean squared error in a generalized leave-one-out cross-validation
+\cite{GHW79} was chosen from a set of candidate values.
+
+\subsection*{Quality metrics} \todo[inline]{add description of standardization}
 
 \paragraph{Binary retrieval accuracy}
 
-Binary retrieval accuracy \cite{ML08} was used in a prior study \cite{CTK+2012}, which also employed massively univariate encoding models on the same dataset.
-
-For a trained model $\mathbf{C}$ $[M x V]$ (where M is the number of LQ-MFS coefficients and V is the number of voxels), and a given LQ-MFS representation of two stimuli from the validation set $s_{1}$ and $s_{2}$ $[1 x M]$ and their corresponding f{MRI} activity $i_{1}$ and $i_{2}$ $[ 1 x V ]$, the binary retrieval accuracy is computed as follows:
-
--Using the univariate encoding models for each voxel, compute the predicted f{MRI} activity given $s_{1}$ and $s_{2}$ 
-\begin{equation}\label{eq:predict}
-\widetilde{i}_{1} = s_{1}C
-\end{equation}
--Compute the cosine similarity, the cosine of the angle between two vectors, for each combination of $\widetilde{i}$ and $i$, i.e.
-\[ cossim(\widetilde{i}_{1},i_{1}) =  \frac{\widetilde{i}_{1} \cdot i_{1}}{\|\widetilde{i}_{1} \cdot i_{1}\|} \] 
--If \[ cossim(\widetilde{i}_{1},i_{1})+cossim(\widetilde{i}_{2},i_{2}) < cossim(\widetilde{i}_{1},i_{2})+cossim(\widetilde{i}_{2},i_{1}) \] the binary retrieval was successfull for this pair of stimuli
--The mean binary retrieval accuracy in the validation set is computed on the binary retrieval successes for each combination of stimuli
+Binary retrieval accuracy (as described in \cite{ML08}) estimates if predictions
+for a stimulus are closer to the f{MRI} activity associated with this stimulus
+or a decoy stimulus. This is done pair-wise for all combinations of stimuli and
+then averaged.
+In a prior study \cite{CTK+2012}, using the 3-Tesla data, binary retrieval accuracy was used to validate voxel-specific encoding models on the same dataset.
 
 \paragraph{Correlation rank metric}
-\todo[inline]{wording}
+\todo[inline]{change N}
 An alternative measure of encoding performance is the correlation rank score as in \cite{SF14}. The predicted f{MRI} activity $\widetilde{i}_{n}$ is computed as in \ref{eq:predict}for each stimulus $s_{n}$ $n=1,2..N$  in the validation set.
 For each stimulus, the correlations between $\widetilde{i}_{n}$ and the measured f{MRI} activity of all stimuli is computed, and the matching score $m(s_{n})$ is then
 \[ m(s_{n}) = 1-\frac{rank(s_{n})-1}{N-1} \]
