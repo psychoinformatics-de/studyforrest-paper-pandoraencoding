@@ -110,11 +110,11 @@ corresponding to the timbre of the stimulus.
 
 
 For each f{MRI} sample $y_{vt}$ (where $t=1,2,..,T$ denotes the time-points and
-$v=1,2,..,V$ denotes the voxels) the LQ-MFS features $x_{t}$
-$[1x\widetilde{M}]$ (where $\widetilde{M}$ is the number of LQ-MFS
-coefficients) of the corresponding two second part of the stimulus were
-computed. In case there was no stimulus presented at time-point $t$, a zero
-vector $[1x\widetilde{M}]$ was used. 
+$v=1,2,..,V$ denotes the voxels) the LQ-MFS features $x_{t}$ $[1x\widetilde{M}]$
+(where $\widetilde{M}$ is the number of LQ-MFS coefficients) of the
+corresponding two second part of the stimulus were computed. In case there was
+no stimulus presented at time-point $t$, a zero vector $[1x\widetilde{M}]$ was
+used. 
 
 Since the BOLD response is delayed,  the most recent feature was vector removed
 for each f{MRI} sample (since it could not yet have influenced the f{MRI}
@@ -125,16 +125,14 @@ Feature vectors (and the corresponding f{MRI} sample) were removed from the
 analysis, if two-thirds or more of the concatenated feature vectors were
 zero-vectors.
 
-The f{MRI} activity time-series, as well as the feature time-series, were then
+The f{MRI} activity time-series, as well as the feature time-series, were
 vertically stacked, resulting in a matrix of features $X$ $[NxM]$ (where $N$ is
 the number of f{MRI} samples, and $M$ is number of LQ-MFS coefficients, with
-$M=3\widetilde{M}$) and a matrix of f{MRI} activity $Y$ $[NxV]$ (where V is the
-number of voxels).
+$M=3\widetilde{M}$) and a matrix of f{MRI} activity $Y$ $[NxV]$ (where $V$ is
+the number of voxels).
 
-%probabilistic or objective function minimization, also cite someone about
-%using lin. reg. in encoding
-The encoding model could then be expressed as the probability to observe the
-f{MRI} activity at time-point $t$ and voxel $v$:
+%probabilistic or objective function minimization, also cite someone about using lin. reg. in encoding
+The encoding model could then be expressed as the probability to observe the f{MRI} activity at time-point $t$ and voxel $v$:
 %
 \begin{equation}
   \label{eq:encmo}
@@ -152,54 +150,56 @@ cross-validation \citep{GHW79} was chosen from a set of candidate values.
 \subsection*{Quality metrics} \todo[inline]{add description of standardization}
 
 \paragraph{Binary retrieval accuracy}
-%
-Binary retrieval accuracy \citep[as described in][]{ML08} estimates if
-predictions for a stimulus are closer to the f{MRI} activity associated with
-this stimulus or a decoy stimulus. This is done pair-wise for all combinations
-of stimuli and then averaged.  In a prior study \citep{CTK+2012}, using the
-3-Tesla data, binary retrieval accuracy was used to validate voxel-specific
-encoding models on the same dataset.
 
-\paragraph{Correlation rank metric}
-%
-\todo[inline]{change N}
-%
-An alternative measure of encoding performance is the correlation rank score
-\citep{SF14}. The predicted f{MRI} activity $\widetilde{i}_{n}$ is computed as
-in \ref{eq:predict} \todo{undefined ref} for each stimulus $s_{n}$ $n=1,2..N$
-in the validation set.  For each stimulus, the correlations between
-$\widetilde{i}_{n}$ and the measured f{MRI} activity of all stimuli is
-computed, and the matching score $m(s_{n})$ is then
+Binary retrieval accuracy \citep{ML08} estimates if a stimulus'
+predicted f{MRI} activity is closer, in terms of cosine similarity, to its
+observed f{MRI} activity than to the f{MRI} activity of a decoy stimulus.
+This is done pair-wise for all combinations of stimuli and
+then averaged.
 
-\[ m(s_{n}) = 1-\frac{rank(s_{n})-1}{N-1} \]
+%wiederholung.
+In a prior study \citep{CTK+2012}, using the 3-Tesla data, binary retrieval
+accuracy was used to validate voxel-specific encoding models on the same
+dataset.
+
+\paragraph{Correlation rank score}
+%
+An alternative measure of encoding performance is the correlation rank score or
+matching score \citep{SF14}. For each stimulus $s_{n}$ in the validation set,
+its predicted f{MRI} activity $\widetilde{y}_{n}$ is correlated with the
+observed f{MRI} activity of every stimulus, $y_{i}$ for $i=1..25$. These
+correlations are then ordered, and the  matching score $m(s_{n})$ is \[
+m(s_{n}) = 1-\frac{rank(s_{n})-1}{N-1} \] Where $rank(s_{n})$ is the rank of
+the correlation between predicted $\widetilde{y}_{n}$ and observed $y_{n}$
+f{MRI} activity of $s_{n}$. Finally, the matching scores for all stimuli in the
+validation set are averaged.
 
 where $rank(s_{n})$ is the rank of the correlation between $\widetilde{i}_{n}$
 and $i_{n}$.
 
-\paragraph{Decoding accuracy}
-%
-Instead of testing the encoding performance, we can also test the performance
-of a decoder built from all individual encoding models \citep{NG11}. To go
-from $p(y_{vt}|x_{t})$ to $p(x_{t}|y_{t})$ we follow \citet{NG09} and first
-condense the large number of individual voxel-specific encoding models into one
-multivoxel encoding model. We do this by estimating the first $k$ principal
-components of the $[N x V]$ matrix of predicted f{MRI} activity (where $k$ is
-the number of principal components that retains 95\% of the variance and is
-chosen individually for each participant) and then projecting the predicted and
-measured f{MRI} activity onto them. Like \citet{NG09} we construct the
-k-dimensional multivariate normal probability density function $p(y_{t}|x_{t})$
-and use a uniform prior distribution $p(x_{t})$ to obtain the approximate
-posterior probability $p(x_{t}|y_{t}) \propto p(y_{t}|x_{t})p(x_{t})$. Given
-the measured f{MRI} activity we can now estimate the probability distribution
-over music stimuli $p(s_{i}|y)$ (for $i=1..25$ (??\todo{??})). We use the simplifying
-assumption that the f{MRI} activity is influenced by the music stimuli only
-through their LQ-MFS coefficients $x$, and - given that each music stimulus was
-associated with only three (lagged) LQ-MFS representations - we arrive at
-$p(l_{i}|y) \propto p(x_{t-1}|y_{t-1})p(x_{t}|y_{t})p(x_{t+1}|y_{t+1})$\todo{worth its own line IMHO} where
-$t$ is the sample 6 seconds after the start of the music stimulus. The mode of
-this probability distribution is the music stimulus that was most likely
-presented. Less strictly, we can check if the predicted stimulus belongs at
-least to the same music genre as the presented stimulus. 
+Instead of testing the encoding performance, we can also test the performance of
+a decoder based on the individual encoding models \citet{NG11}. To go from
+$p(y_{vt}|x_{t})$ to $p(x_{t}|y_{t})$ we follow \citet{NG09} and first condense
+the large number of voxel-specific encoding models into one multivoxel encoding model.
+To do this we project the predicted and observed f{MRI} data onto the first $k$ principal components of the $[N x V]$ matrix of predicted f{MRI} activity \todo{Change to CV} (where $k$ is the number of principal components that retains 95\% of the variance and is chosen individually for each participant) 
+%We do this by estimating the first $k$ principal components of the $[N x V]$ matrix of predicted f{MRI} activity \todo{Change to CV} (where $k$ is the number of principal components that retains 95\% of the variance and is chosen individually for each participant) and then projecting the predicted and measured f{MRI} activity onto them.
+As in \citet{NG09} we construct the $k$-dimensional multivariate normal
+probability density function $p(y_{t}|x_{t})$ and use a uniform prior
+distribution $p(x_{t})$ to obtain the approximate posterior probability
+$p(x_{t}|y_{t}) \propto p(y_{t}|x_{t})p(x_{t})$. Given the observed f{MRI}
+activity we can now estimate the probability distribution over music stimuli
+$p(s_{i}|y)$ (for $i=1..25$ (??)). We use the simplifying assumption that the
+f{MRI} activity is influenced by the music stimuli only through their LQ-MFS
+coefficients $x$, and - given that each music stimulus was associated with only
+three (lagged) LQ-MFS representations - we arrive at $p(l_{i}|y) \propto
+p(x_{t-1}|y_{t-1})p(x_{t}|y_{t})p(x_{t+1}|y_{t+1})$ where $t$ is the sample 6
+seconds after the start of the music stimulus. The mode of this probability
+distribution is the music stimulus that was most likely presented given the
+observed f{MRI} activity. Since inter-genre similarity of LQ-MFS features drive
+genre classification performance \citep{CTK+2012}, we predict the musical genre
+of the presented stimulus given the observed f{MRI} activity as the mode of $p(c_{i}|y)
+\propto \prod\nolimits_{l \in stim(c_{i})} p(l|y)$ where $stim(c_{i})$ are
+the labels of the stimuli belonging to the genre $c_{i}$. 
 
 \section*{Results}
 %
