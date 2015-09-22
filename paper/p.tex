@@ -68,7 +68,7 @@ potential confound.  Apart from field strength, researchers have also many
 other degrees of freedom in constructing an encoding model.  Their choice of
 parameters, like the number of voxels used, will affect the quality of
 predictions, but it is unknown if these choices will affect encoding quality
-metrics differentally.  Recently a 3-Tesla f{MRI} study on the perception of
+metrics differentially.  Recently a 3-Tesla f{MRI} study on the perception of
 musical genres \citep{CTK+2012} has been replicated with 7-Tesla data
 \citep{HDH+2015}, making it possible to directly compare the effect of field
 strength on different validation strategies for encoding models.  This study
@@ -98,8 +98,8 @@ and previously published datasets. While these datasets have been acquired
 using identical stimuli, with the same number of acquisition runs and
 number of stimulation trials, they nevertheless differ in their precise
 stimulation timing, stimulation setup and equipment, as well as other
-acquisition details. A brief desription of both datasets is provided below.
-For more information the reader is referred to the respective puplications.
+acquisition details. A brief description of both datasets is provided below.
+For more information the reader is referred to the respective publications.
 
 \paragraph{\unit[3]{Tesla}}
 %
@@ -156,7 +156,7 @@ The encoding model could then be expressed as the probability to observe the f{M
 \end{equation}
 %
 where $N(y;\mu,\sigma)$ denotes the probability density at point $y$ for a
-gaussian with mean $\mu$ and standard deviation $\sigma$, and $\beta_{v}$ is a
+Gaussian with mean $\mu$ and standard deviation $\sigma$, and $\beta_{v}$ is a
 $[Mx1]$ vector of regression coefficients specific to voxel $v$. To reduce
 over-fitting the regression-coefficients were estimated using ridge regression
 \citep{HK70}.  Independently for each voxel, the regularization parameter
@@ -196,7 +196,7 @@ and $i_{n}$.
 Instead of testing the encoding performance, we can also test the performance of
 a decoder based on the individual encoding models \citet{NG11}. To go from
 $p(y_{vt}|x_{t})$ to $p(x_{t}|y_{t})$ we follow \citet{NG09} and first condense
-the large number of voxel-specific encoding models into one multivoxel encoding model.
+the large number of voxel-specific encoding models into one multi-voxel encoding model.
 To do this we project the predicted and observed f{MRI} data onto the first $k$ principal components of the $[N x V]$ matrix of predicted f{MRI} activity \todo{Change to CV} (where $k$ is the number of principal components that retains 95\% of the variance and is chosen individually for each participant) 
 %We do this by estimating the first $k$ principal components of the $[N x V]$ matrix of predicted f{MRI} activity \todo{Change to CV} (where $k$ is the number of principal components that retains 95\% of the variance and is chosen individually for each participant) and then projecting the predicted and measured f{MRI} activity onto them.
 As in \citet{NG09} we construct the $k$-dimensional multivariate normal
@@ -273,7 +273,7 @@ We compared the encoding performance between 3 and 7T for three different
 quality metrics, binary retrieval accuracy (Figure \ref{fig:binretr}), a
 correlation based matching score (Figure \ref{fig:rankscore}) and the decoding
 accuracy for musical genres (Figure \ref{fig:decoder}). Each participant
-contributed 8 datapoints to these violin plots (one for each held out run). The
+contributed 8 data points to these violin plots (one for each held out run). The
 first two metrics (which are purely encoding based) show a similar performance
 for 3 and 7T, while decoding accuracy is higher for 7T. Decoding accuracy is
 easily interpretable, it is harder to compare binary retrieval accuracy and the
@@ -293,13 +293,13 @@ to a higher decoding accuracy. Other studies \citep[e.g.,][]{SF14} found the opp
 effect using the matching score, but their 3T and 7T datasets did also differ
 in the number of stimuli used. Interestingly, encoding in 7T became
 advantageous if we used it to decode a stimulus feature (the music genre). To
-do this we combined the single voxel encoding models into a multivoxel encoding
+do this we combined the single voxel encoding models into a multi-voxel encoding
 model \citep[see][]{NG09}, reducing the dimensionality of our model to gain a
 more stable estimate. Should the voxels selected by a stability criterion in 7T
 be actually more heterogeneous (e.g. mixing LQ-MFS sensitive voxels with
 non-sensitive ones) than the ones selected in 3T, this could mitigate the
 effect of the higher functional contrast-to-noise ratio in 7T, but might not
-matter if we reduce the massive single voxel encoding to a multivoxel encoding
+matter if we reduce the massive single voxel encoding to a multi-voxel encoding
 model.
 
 %pretty speculative, add citations...
