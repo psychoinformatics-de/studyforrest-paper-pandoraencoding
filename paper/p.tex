@@ -109,6 +109,11 @@ For more information the reader is referred to the respective publications.
 %
 \citet{HDH+2015}; maybe \citet{HBI+14}
 
+
+\subsection*{Preprocessing}
+
+Temporal lobe masks were 
+
 \subsection*{Encoding model}
 
 \todo[inline]{feature representations citation}
@@ -190,9 +195,6 @@ the correlation between predicted $\widetilde{y}_{n}$ and observed $y_{n}$
 f{MRI} activity of $s_{n}$. Finally, the matching scores for all stimuli in the
 validation set are averaged.
 
-where $rank(s_{n})$ is the rank of the correlation between $\widetilde{i}_{n}$
-and $i_{n}$.
-
 Instead of testing the encoding performance, we can also test the performance of
 a decoder based on the individual encoding models \citet{NG11}. To go from
 $p(y_{vt}|x_{t})$ to $p(x_{t}|y_{t})$ we follow \citet{NG09} and first condense
@@ -217,73 +219,132 @@ of the presented stimulus given the observed f{MRI} activity as the mode of $p(c
 \propto \prod\nolimits_{l \in stim(c_{i})} p(l|y)$ where $stim(c_{i})$ are
 the labels of the stimuli belonging to the genre $c_{i}$. 
 
+\subsection*{Voxel selection}
+
+We varied the number of voxels used in the analysis, both for 3- and 7-Tesla f{MRI} data,
+and selected which voxels to keep by two different criteria. Both criteria were
+based on voxel characteristics in the training set.  
+
+\paragraph{Selection by stability}
+
+\citet{ML08} selected the 500 most stable voxels for their analysis. For one
+voxel, each run can be represented as a vector of f{MRI} activity, where each
+entry is associated with one stimulus. A voxel's "stability score" is the average correlation between the vectors of the 25 stimuli's f{MRI} activity of each pair of runs.
+This criterion selects voxels with consistent activation for each stimulus across runs.
+
+\paragraph{Selection by $r^2$}
+
+Since we are interested in encoding performance, we can use the quality of
+predictions of each voxel's encoding model as a selection criterion. We compute
+the coefficient of determination $r^2$ for each voxel-specific encoding model in
+the training set. Using this criterion selects voxels whose activity can be explained well
+by an LQ-MFS-based encoding model.
+
+\subsection*{Number of voxels used}
+
+
+
 \section*{Results}
 %
-\todo[inline]{number of voxels with other quality metrics} One of the degrees
-of freedom was the number of voxels used in this analysis. \citet{ML08} chose
-the 500 most stable voxels, while we evaluate the model performance for several
-different number of voxels (see Figure \ref{fig:voxelnr}). In the further
-analyses we use the best-performing number of voxel, i.e. 1000.
+We varied the number of voxels used in the analysis and how they are selected,
+both for 3- and 7-Tesla f{MRI} data, and compared the resulting differences in
+three encoding metrics.
 
 \begin{figure}
   \centering
-  \includegraphics[width=\linewidth]{pics/nr_of_voxels_both}
+  \def\svgwidth{\linewidth}
+  \input{pics/Nr_of_voxels_binary_score_selection.pdf_tex}
+  %\includegraphics[width=\linewidth]{pics/Nr_of_voxels_binary_score_selection}
+	
+  \caption{Mean binary retrieval accuracy as a function of the included number of
+  voxels for 3- and 7-Tesla, for stability- and $r^2$-based voxel selection. Error bars denote the bootstrapped 95\% confidence
+  interval of the mean. The mean is taken over binary retrieval accuracies of
+  eight runs for each of the 19 participants.}
 
-  \caption{Mean decoding accuracy as a function of the included number of
-  voxels for 3T and 7T. Error bars denote the bootstrapped 95\% confidence
-  interval of the mean. The included voxels were the most stable ones i.e. their
-  activity corresponding to each stimulus had the highest mean pairwise
-  correlation across runs}
-
- \label{fig:voxelnr}
+ \label{fig:binary_retrieval}
 \end{figure}
 
-%binary classification accuracy result, connect to casey/mitchel
-\todo[inline]{potentially other nr of voxels, take avr across all runs for 3T and 7T}
+\paragraph{Binary retrieval accuracy}
+
+Differences in binary retrieval accuracy are shown in Figure \ref{fig:binary_retrieval}. For both selection criteria, binary retrieval
+accuracy is higher in 3-Tesla than 7-Tesla data for lower numbers of voxels.
+When a higher number of the most stable voxels are included, binary retrieval accuracy increases for 7-Tesla data, while decreasing for 3-Tesla data.    
+In contrast, increasing the number of voxels included by $r^2$ decreases the
+binary retrieval accuracy for 3-Tesla as well as 7-Tesla data, although the
+decrease seen in 3-Tesla data is somewhat larger. The peak
+performance of 3-Tesla as well as 7-Tesla encoding models, is higher using
+voxels selected by their $r^2$.
+
 \begin{figure}
   \centering
-  \includegraphics[width=\linewidth]{pics/binary_retrieval_accuracy}
-  \caption{Binary retrieval classification accuracy for 3T and 7T}
-  \label{fig:binretr}
+  \def\svgwidth{\linewidth}
+  \input{pics/Nr_of_voxels_matching_score_selection.pdf_tex}
+
+  %\includegraphics[width=\linewidth]{pics/Nr_of_voxels_matching_score_selection}
+
+  \caption{Mean matching score as a function of the included number of
+  voxels for 3- and 7-Tesla, for stability- and $r^2$-based voxel selection. Error bars denote the bootstrapped 95\% confidence
+  interval of the mean. The mean is taken over matching scores of
+  eight runs for each of the 19 participants.}
+
+ \label{fig:matching_scores}
 \end{figure}
 
-%correlation rankscore 3 and 7 incl. permutation analysis
-\todo[inline]{potentially other nr of voxels, take avr across all runs for 3T and 7T,add permutation analysis}
+\paragraph{Matching score}
+
+In Figure \ref{fig:matching_scores}, the matching score is shown. Again, for
+few voxels, encoding models for 3-Tesla data produce a higher score than encoding
+models for 7-Tesla data. Increasing the numbers of voxels increases the matching
+score for 7-Tesla data, and decreases the score for 3-Tesla data. This pattern
+is present in both selection criteria. For voxels selected by $r^2$, there is a
+steeper increase and decrease and a higher peak for both field strengths.
+
 \begin{figure}
   \centering
-  \includegraphics[width=\linewidth]{pics/correlation_rank_score}
-  \caption{Correlation rank score for 3T and 7T}
-  \label{fig:rankscore}
+  \def\svgwidth{\linewidth}
+  \input{pics/Nr_of_voxels_decoding_accuracy_selection.pdf_tex}
+ %\includegraphics[width=\linewidth]{pics/Nr_of_voxels_decoding_accuracy_selection}
+
+  \caption{Mean decoding accuracy of music category as a function of the included number of
+  voxels, for 3- and 7-Tesla and for stability- and $r^2$-based voxel selection. Error bars denote the bootstrapped 95\% confidence
+  interval of the mean. The mean is taken over decoding accuracies of
+  eight runs for each of the 19 participants. The dashed lines denote the
+  decoding accuracy achieved by a linear support vector machine for 3-Tesla
+  and 7-Tesla data (0.38 and 0.56).}
+
+ \label{fig:decoding_accuracy}
 \end{figure}
 
-%decoding(encoding) accuracy: 3 vs 7 (vs. plain decoding)
-\todo[inline]{potentially other nr of voxels, take avr across all runs for 3T and 7T,add discriminative classifier baseline}
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{pics/decoding_accuracy}
-  \caption{Decoding accuracy for 3T and 7T. A generative decoder was constructed by probabilistically inverting the encoding model.}
-  \label{fig:decoder}
-\end{figure}
+\paragraph{Decoding accuracy}
 
-\subsection*{Comparison of 3 and 7T}
-%
-\todo[inline]{Add words}
-%
-We compared the encoding performance between 3 and 7T for three different
-quality metrics, binary retrieval accuracy (Figure \ref{fig:binretr}), a
-correlation based matching score (Figure \ref{fig:rankscore}) and the decoding
-accuracy for musical genres (Figure \ref{fig:decoder}). Each participant
-contributed 8 data points to these violin plots (one for each held out run). The
-first two metrics (which are purely encoding based) show a similar performance
-for 3 and 7T, while decoding accuracy is higher for 7T. Decoding accuracy is
-easily interpretable, it is harder to compare binary retrieval accuracy and the
-matching score.     
+The decoding accuracy of each stimulus' music category is shown in Figure
+\ref{fig:decoding_accuracy}. Since the decoder is based on an encoding model, a
+natural comparison is with the performance a discriminative decoder. Here, we
+use a linear support vector machine for an One versus Rest classification
+(denoted by a dashed line). The decoding accuracy was higher for 7-Tesla data
+than for 3-Tesla data, across all voxel numbers and selection criteria.
+Selecting the most stable voxels, the decoding accuracy slightly increases for
+7-Tesla data with higher numbers of voxels, while decreasing for 3-Tesla data.
+If we select the voxel-specific encoding models with the highest $r^2$, the
+decoding accuracy decreases for 3-Tesla data, but first stays level and then
+decreases for 7-Tesla data. Encoding models on 3-Tesla data show a higher
+decoding accuracy than a discriminative decoder, except for the largest numbers
+of voxels. This contrasts the pattern present in the 7-Tesla data, where our decoding model only
+shows a higher decoding accuracy for voxels selected by $r^2$.
+
+\todo[inline]{Add plot about number of eigenvectors}
 
 \missingfigure{model validation on the movie}
 
 \section*{Discussion}
 
-We built an encoding model for LQ-MFS music features on a 3 and a 7T dataset,
+We built an LQ-MFS-based, voxel-specific encoding model
+for music stimuli, varying the number of voxels used and the way the voxels were
+selected, for a 3- and a 7-Tesla dataset. We evaluated the performance by three
+different quality metrics, two of which are purely encoding-based (binary
+retrieval accuracy and the matching score) and one using the decoding model
+derived from our encoding model. 
+
 and compared its performance using three different quality metrics, two of them
 purely encoding based (binary retrieval accuracy and the correlation rank
 matching score) and one using a decoding model built from our encoding model
