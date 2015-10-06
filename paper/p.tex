@@ -150,9 +150,9 @@ analysis, if two-thirds or more of the concatenated feature vectors were
 zero-vectors.
 
 The f{MRI} activity time-series, as well as the feature time-series, were
-vertically stacked, resulting in a matrix of features $X$ $[NxM]$ (where $N$ is
+vertically stacked, resulting in a matrix of features $X$ $[N\timesM]$ (where $N$ is
 the number of f{MRI} samples, and $M$ is number of LQ-MFS coefficients, with
-$M=3\widetilde{M}$) and a matrix of f{MRI} activity $Y$ $[NxV]$ (where $V$ is
+$M=3\widetilde{M}$) and a matrix of f{MRI} activity $Y$ $[N\timesV]$ (where $V$ is
 the number of voxels).
 
 %probabilistic or objective function minimization, also cite someone about using lin. reg. in encoding
@@ -165,7 +165,7 @@ The encoding model could then be expressed as the probability to observe the f{M
 %
 where $N(y;\mu,\sigma)$ denotes the probability density at point $y$ for a
 Gaussian with mean $\mu$ and standard deviation $\sigma$, and $\beta_{v}$ is a
-$[Mx1]$ vector of regression coefficients specific to voxel $v$. To reduce
+$[M\times1]$ vector of regression coefficients specific to voxel $v$. To reduce
 over-fitting, the regression-coefficients were estimated using ridge regression
 \citep{HK70}.  Independently for each voxel, the regularization parameter
 $\lambda$ with the lowest mean squared error in a generalized leave-one-out
@@ -205,7 +205,7 @@ Instead of testing the encoding performance, we can also test the performance of
 a decoder based on the individual encoding models \citet{NG11}. To go from
 $p(y_{vt}|x_{t})$ to $p(x_{t}|y_{t})$ we follow \citet{NG09} and first condense
 the large number of voxel-specific encoding models into one multi-voxel encoding model.
-To do this we project the predicted and observed f{MRI} data onto the first $k$ principal components of the $[N x V]$ matrix of predicted f{MRI} activity \todo{Change to CV} (where $k$ is the number of principal components that retains 95\% of the variance and is chosen individually for each participant) 
+To do this we project the predicted and observed f{MRI} data onto the first $k$ principal components of the $[N\timesV]$ matrix of predicted f{MRI} activity \todo{Change to CV} (where $k$ is the number of principal components that retains 95\% of the variance and is chosen individually for each participant) 
 %We do this by estimating the first $k$ principal components of the $[N x V]$ matrix of predicted f{MRI} activity \todo{Change to CV} (where $k$ is the number of principal components that retains 95\% of the variance and is chosen individually for each participant) and then projecting the predicted and measured f{MRI} activity onto them.
 As in \citet{NG09} we construct the $k$-dimensional multivariate normal
 probability density function $p(y_{t}|x_{t})$ and use a uniform prior
@@ -359,13 +359,8 @@ for music stimuli, varying the number of voxels used and the way the voxels were
 selected, for a 3- and a 7-Tesla dataset. We evaluated the performance by three
 different quality metrics, two of which are purely encoding-based (binary
 retrieval accuracy and the matching score) and one using the decoding model
-derived from our encoding model. 
-
-and compared its performance using three different quality metrics, two of them
-purely encoding based (binary retrieval accuracy and the correlation rank
-matching score) and one using a decoding model built from our encoding model
-(the decoding accuracy of each stimulus' music genre). We could show a similar
-performance between 3 and 7T for the encoding based metrics, while the 7T led
+derived from our encoding model (the decoding accuracy of each stimulus' music genre). We could show a similar
+performance between 3T and 7T for the encoding based metrics, while the 7T led
 to a higher decoding accuracy. Other studies \citep[e.g.,][]{SF14} found the opposite
 effect using the matching score, but their 3T and 7T datasets did also differ
 in the number of stimuli used. Interestingly, encoding in 7T became
@@ -434,7 +429,7 @@ Center for Behavioral Brain Sciences.
 %do not list grant funding in this section (this should be included in the
 %Grant information section - See above).
 
-We are grateful to Michael Casey\ldots
+We are grateful to Michael Casey and the musicians ;) \ldots
 
 \todo[inline]{express gratitude}
 
