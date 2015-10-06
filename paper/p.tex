@@ -36,28 +36,26 @@ Magdeburg, Magdeburg, Germany}
 
 \section*{Introduction}
 
-
-\todo[inline]{any fieldstrength differences, i.e. higher resolution gives better model?}
-\todo[inline]{formisano says 7T better, but more stimuli and more data with a different model are confounds}
-\todo[inline]{maybe add other feature sets and check metrics across all of them}
-
 % summary: first comparative study
 
 In functional magnetic resonance imaging (f{MRI}) research, voxel-wise encoding
 models are an increasingly popular computational tool to characterize the
 relationship between a real world stimulus and BOLD-activity patterns
 \citep{NG11}\todo{if popular we need 2+ citations}.
-%eigtl unnoetig
-%Both stimulus and brain activity can be represented as high-dimensional vectors
-%\cite{HCG14}, an encoding model is then trained separately for each voxel in a
-%region of interest. 
+\todo[inline]{what do you think about this 2nd part of an intro paragraph:
+need to evaluate the impact of bold acquisition parameters (field strength
+resolution -- but little is known about the impact of feature selection
+strategies and performance metrics -- there is basically Santoro et al. and
+nothing else -- here we explcitely look at things that other studies did
+and compare them using a dataset with identical stimuli and comparable design
+(in contrast to Santoro?)}
 
 Encoding models can be validated in a number of different ways: \citet{ML08},
 for example, used a binary retrieval task to validate the predicted f{MRI}
 images for the meaning of nouns, while \citet{KG+08} used stimulus
 identification, and \citet{NG09} used \todo{quality of?}stimulus reconstruction
 as quality metrics.  In auditory neuroscience, where encoding models are less
-frequent, only binary retrieval accuracy \citep{CTK+2012} and stimulus
+frequent, only binary retrieval accuracy \citep{CTK+2012}\todo{we probably cannot avoid a sentence that describes this method a bit more} and stimulus
 identification \citep{SF14} have been used and it is yet unclear how the
 results of these validation strategies vary with the parameters of f{MRI} data
 analysis (e.g. number of voxels used)  or acquisition (e.g. field strength).
@@ -66,7 +64,7 @@ natural sounds and reported a difference for 3-Tesla and 7-Tesla f{MRI} data,
 although the different number of stimuli used in the two experiments might be a
 potential confound.  Apart from field strength, researchers have also many
 other degrees of freedom in constructing an encoding model.  Their choice of
-parameters, like the number of voxels used, will affect the quality of
+parameters, like voxel selection strategy, will affect the quality of
 predictions, but it is unknown if these choices will affect encoding quality
 metrics differentially.  Recently a 3-Tesla f{MRI} study on the perception of
 musical genres \citep{CTK+2012} has been replicated with 7-Tesla data
@@ -74,9 +72,9 @@ musical genres \citep{CTK+2012} has been replicated with 7-Tesla data
 strength on different validation strategies for encoding models.  This study
 aims to compare three quality metrics, binary retrieval accuracy \citep{ML08},
 sound identification \citep{KG+08,SF14} and the decoding accuracy of a stimulus
-feature, the musical genre. We do this by varying field strength, comparing
-performance in a 3-Tesla and a 7-Tesla dataset, and two parameters of the data
-analysis, the number of voxels used and how they were selected.  While we do
+feature, the musical genre. We compare
+performance on a 3-Tesla and a 7-Tesla dataset while variing the number of
+voxels in the model, and the voxel selection strategy.  Although we do
 not replicate stimulus reconstruction as in \citep{NG09}, we use a similar
 method of constructing a probabilistic decoding model from a set of
 voxel-specific encoding models, and use it to infer the music genre of the
@@ -112,7 +110,8 @@ For more information the reader is referred to the respective publications.
 
 \subsection*{Preprocessing}
 
-Temporal lobe masks were 
+Temporal lobe masks were\todo{please add the respective code to the repo, so
+we can fill the section}
 
 \subsection*{Encoding model}
 
@@ -137,11 +136,11 @@ corresponding two second part of the stimulus were computed. In case there was
 no stimulus presented at time-point $t$, a zero vector $[1x\widetilde{M}]$ was
 used. 
 
-Since the BOLD response is delayed,  the most recent feature was vector removed
+Since the BOLD response is delayed,  the most recent feature vector was removed
 for each f{MRI} sample (since it could not yet have influenced the f{MRI}
 activity), and the new feature vector at time-point $t$ was created by
 concatenating the prior feature vectors $x_{t-1}$,$x_{t-2}$ and $x_{t-3}$. We
-overload the notation and denote this stacked feature vector as $x_{t}$.
+overload \todo{dunno what this mean? jargon?} the notation and denote this stacked feature vector as $x_{t}$.
 Feature vectors (and the corresponding f{MRI} sample) were removed from the
 analysis, if two-thirds or more of the concatenated feature vectors were
 zero-vectors.
@@ -195,6 +194,9 @@ the correlation between predicted $\widetilde{y}_{n}$ and observed $y_{n}$
 f{MRI} activity of $s_{n}$. Finally, the matching scores for all stimuli in the
 validation set are averaged.
 
+
+\todo[inline]{Next part should have its own subheading}
+
 Instead of testing the encoding performance, we can also test the performance of
 a decoder based on the individual encoding models \citet{NG11}. To go from
 $p(y_{vt}|x_{t})$ to $p(x_{t}|y_{t})$ we follow \citet{NG09} and first condense
@@ -206,10 +208,10 @@ probability density function $p(y_{t}|x_{t})$ and use a uniform prior
 distribution $p(x_{t})$ to obtain the approximate posterior probability
 $p(x_{t}|y_{t}) \propto p(y_{t}|x_{t})p(x_{t})$. Given the observed f{MRI}
 activity we can now estimate the probability distribution over music stimuli
-$p(s_{i}|y)$ (for $i=1..25$ (??)). We use the simplifying assumption that the
+$p(s_{i}|y)$ (for $i=1..25$ (??)\todo{why ??}). We use the simplifying assumption that the
 f{MRI} activity is influenced by the music stimuli only through their LQ-MFS
-coefficients $x$, and - given that each music stimulus was associated with only
-three (lagged) LQ-MFS representations - we arrive at $p(l_{i}|y) \propto
+coefficients $x$, and --- given that each music stimulus was associated with only
+three (lagged) LQ-MFS representations --- we arrive at $p(l_{i}|y) \propto
 p(x_{t-1}|y_{t-1})p(x_{t}|y_{t})p(x_{t+1}|y_{t+1})$ where $t$ is the sample 6
 seconds after the start of the music stimulus. The mode of this probability
 distribution is the music stimulus that was most likely presented given the
@@ -218,6 +220,8 @@ genre classification performance \citep{CTK+2012}, we predict the musical genre
 of the presented stimulus given the observed f{MRI} activity as the mode of $p(c_{i}|y)
 \propto \prod\nolimits_{l \in stim(c_{i})} p(l|y)$ where $stim(c_{i})$ are
 the labels of the stimuli belonging to the genre $c_{i}$. 
+
+\todo[inline]{I am still struggeling to understand the aggregation/evaluation of the probabilities -- maybe we can discuss this on the phone and try to rephrase together}
 
 \subsection*{Voxel selection}
 
@@ -240,7 +244,7 @@ the coefficient of determination $r^2$ for each voxel-specific encoding model in
 the training set. Using this criterion selects voxels whose activity can be explained well
 by an LQ-MFS-based encoding model.
 
-\subsection*{Number of voxels used}
+\subsection*{Number of voxels used\todo{leftover?}}
 
 
 
@@ -249,6 +253,9 @@ by an LQ-MFS-based encoding model.
 We varied the number of voxels used in the analysis and how they are selected,
 both for 3- and 7-Tesla f{MRI} data, and compared the resulting differences in
 three encoding metrics.
+\todo[inline]{i wonder whether we should merge fig 1 and 2 into a vertically
+stacked joint figure. this would emphasize that the selected voxels are the
+same set at each step (right?) and how the two scores relate to each other}
 
 \begin{figure}
   \centering
@@ -259,7 +266,8 @@ three encoding metrics.
   \caption{Mean binary retrieval accuracy as a function of the included number of
   voxels for 3- and 7-Tesla, for stability- and $r^2$-based voxel selection. Error bars denote the bootstrapped 95\% confidence
   interval of the mean. The mean is taken over binary retrieval accuracies of
-  eight runs for each of the 19 participants.}
+  eight runs for each of the 19 participants.
+  \todo[inline]{not a TODO: just stating that I really like the visual style of the figures}}
 
  \label{fig:binary_retrieval}
 \end{figure}
@@ -321,7 +329,11 @@ The decoding accuracy of each stimulus' music category is shown in Figure
 \ref{fig:decoding_accuracy}. Since the decoder is based on an encoding model, a
 natural comparison is with the performance a discriminative decoder. Here, we
 use a linear support vector machine for an One versus Rest classification
-(denoted by a dashed line). The decoding accuracy was higher for 7-Tesla data
+(denoted by a dashed line).\todo[inline]{this was done on the full ROI, which is a bit unfair. at least ``stability-based'' selection can be applied here too -- hence a curve and not just a line in the figure. For illustration purposes we could also
+  apply an SVM to the R2 features -- although the we cannot get them without
+and encoding model -- but we would see how well the clf work in comparison}
+
+The decoding accuracy was higher for 7-Tesla data
 than for 3-Tesla data, across all voxel numbers and selection criteria.
 Selecting the most stable voxels, the decoding accuracy slightly increases for
 7-Tesla data with higher numbers of voxels, while decreasing for 3-Tesla data.
@@ -378,12 +390,7 @@ encoded by this particular feature set.
 
 %look Wehbe 2014 up again
 All encoding models were trained to predict the (pre-processed) f{MRI}
-time-series without explicitly modelling the BOLD response. 
-
-
-\todo[inline]{decode(encode(fmri)) vs. plain decoding}
-
-\todo[inline]{naturalistic validation is now mandatory}
+time-series without explicitly modelling the BOLD response.\todo{move into methods?}
 
 
 \section*{Author contributions}
