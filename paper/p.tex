@@ -46,7 +46,9 @@ Magdeburg, Magdeburg, Germany}
 In functional magnetic resonance imaging (f{MRI}) research, voxel-wise encoding
 models are an increasingly popular computational tool to characterize the
 relationship between a real world stimulus and BOLD-activity patterns
-\citep{NG11}\todo{if popular we need 2+ citations}.
+\citep{NG11}\todo{if popular we need 2+ citations}.\todo[inline]{How about adding
+citations used in the next paragraph? There is a new Neuroimage paper from 
+Naselaris as well.-Swaroop}
 %eigtl unnoetig
 %Both stimulus and brain activity can be represented as high-dimensional vectors
 %\cite{HCG14}, an encoding model is then trained separately for each voxel in a
@@ -73,7 +75,7 @@ musical genres \citep{CTK+2012} has been replicated with 7-Tesla data
 \citep{HDH+2015}, making it possible to directly compare the effect of field
 strength on different validation strategies for encoding models.  This study
 aims to compare three quality metrics, binary retrieval accuracy \citep{ML08},
-sound identification \citep{KG+08,SF14} and the decoding accuracy of a stimulus
+stimulus identification \citep{KG+08,SF14} and the decoding accuracy of a stimulus
 feature, the musical genre. We do this by varying field strength, comparing
 performance in a 3-Tesla and a 7-Tesla dataset, and two parameters of the data
 analysis, the number of voxels used and how they were selected.  While we do
@@ -125,19 +127,20 @@ already compared different feature representations of the same stimuli in the
 3T dataset. We chose the feature set with the best encoding performance in this
 study, the low-quefrency mel-frequency spectrum (LQ-MFS) \citep{HDH+2015},
 corresponding to the timbre of the stimulus. 
-
+\todo[inline]{Is this accurate description? Casey et al. used LCQFT, and not
+Mel frequency spectrum.}
 
 \missingfigure{encoding scheme}
 
 
 For each f{MRI} sample $y_{vt}$ (where $t=1,2,..,T$ denotes the time-points and
-$v=1,2,..,V$ denotes the voxels) the LQ-MFS features $x_{t}$ $[1x\widetilde{M}]$
+$v=1,2,..,V$ denotes the voxels) the LQ-MFS features $x_{t}$ $[1\times\widetilde{M}]$
 (where $\widetilde{M}$ is the number of LQ-MFS coefficients) of the
 corresponding two second part of the stimulus were computed. In case there was
-no stimulus presented at time-point $t$, a zero vector $[1x\widetilde{M}]$ was
+no stimulus presented at time-point $t$, a zero vector $[1\times\widetilde{M}]$ was
 used. 
 
-Since the BOLD response is delayed,  the most recent feature was vector removed
+Since the BOLD response is delayed,  the most recent feature vector was removed
 for each f{MRI} sample (since it could not yet have influenced the f{MRI}
 activity), and the new feature vector at time-point $t$ was created by
 concatenating the prior feature vectors $x_{t-1}$,$x_{t-2}$ and $x_{t-3}$. We
@@ -163,7 +166,7 @@ The encoding model could then be expressed as the probability to observe the f{M
 where $N(y;\mu,\sigma)$ denotes the probability density at point $y$ for a
 Gaussian with mean $\mu$ and standard deviation $\sigma$, and $\beta_{v}$ is a
 $[Mx1]$ vector of regression coefficients specific to voxel $v$. To reduce
-over-fitting the regression-coefficients were estimated using ridge regression
+over-fitting, the regression-coefficients were estimated using ridge regression
 \citep{HK70}.  Independently for each voxel, the regularization parameter
 $\lambda$ with the lowest mean squared error in a generalized leave-one-out
 cross-validation \citep{GHW79} was chosen from a set of candidate values.
@@ -177,7 +180,7 @@ predicted f{MRI} activity is closer, in terms of cosine similarity, to its
 observed f{MRI} activity than to the f{MRI} activity of a decoy stimulus.
 This is done pair-wise for all combinations of stimuli and
 then averaged.
-
+\todo[inline]{Are the test pairs from different genres?}
 %wiederholung.
 In a prior study \citep{CTK+2012}, using the 3-Tesla data, binary retrieval
 accuracy was used to validate voxel-specific encoding models on the same
