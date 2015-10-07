@@ -150,9 +150,9 @@ analysis, if two-thirds or more of the concatenated feature vectors were
 zero-vectors.
 
 The f{MRI} activity time-series, as well as the feature time-series, were
-vertically stacked, resulting in a matrix of features $X$ $[N\timesM]$ (where $N$ is
+vertically stacked, resulting in a matrix of features $X$ $[N\times M]$ (where $N$ is
 the number of f{MRI} samples, and $M$ is number of LQ-MFS coefficients, with
-$M=3\widetilde{M}$) and a matrix of f{MRI} activity $Y$ $[N\timesV]$ (where $V$ is
+$M=3\widetilde{M}$) and a matrix of f{MRI} activity $Y$ $[N\times V]$ (where $V$ is
 the number of voxels).
 
 %probabilistic or objective function minimization, also cite someone about using lin. reg. in encoding
@@ -205,7 +205,7 @@ Instead of testing the encoding performance, we can also test the performance of
 a decoder based on the individual encoding models \citet{NG11}. To go from
 $p(y_{vt}|x_{t})$ to $p(x_{t}|y_{t})$ we follow \citet{NG09} and first condense
 the large number of voxel-specific encoding models into one multi-voxel encoding model.
-To do this we project the predicted and observed f{MRI} data onto the first $k$ principal components of the $[N\timesV]$ matrix of predicted f{MRI} activity \todo{Change to CV} (where $k$ is the number of principal components that retains 95\% of the variance and is chosen individually for each participant) 
+To do this we project the predicted and observed f{MRI} data onto the first $k$ principal components of the $[N\times V]$ matrix of predicted f{MRI} activity \todo{Change to CV} (where $k$ is the number of principal components that retains 95\% of the variance and is chosen individually for each participant) 
 %We do this by estimating the first $k$ principal components of the $[N x V]$ matrix of predicted f{MRI} activity \todo{Change to CV} (where $k$ is the number of principal components that retains 95\% of the variance and is chosen individually for each participant) and then projecting the predicted and measured f{MRI} activity onto them.
 As in \citet{NG09} we construct the $k$-dimensional multivariate normal
 probability density function $p(y_{t}|x_{t})$ and use a uniform prior
