@@ -41,7 +41,17 @@ Magdeburg, Magdeburg, Germany}
 In functional magnetic resonance imaging (f{MRI}) research, voxel-wise encoding
 models are an increasingly popular computational tool to characterize the
 relationship between a real world stimulus and BOLD-activity patterns
-\citep{NG11}\todo{if popular we need 2+ citations}.
+\citep{NG11,TD+06,KG+08,SZ09}.
+A researcher has many choices in building such an encoding model.
+Not only parameters of the data analysis, but also parameters of BOLD-acquisition, as field strength and resolution,
+might impact encoding performance. \citet{SF14} offer some evidence that an
+encoding model performs better on 7-Tesla than 3-Tesla data, but their datasets
+did also differ in the number of stimuli used, making it hard to generalize.
+Even less is known about effects of feature selection strategies or the choice
+of encoding performance metric. Here, we apply three approaches to encoding validation from
+different studies and compare them in a 3-Tesla and 7-Tesla dataset with
+identical stimuli and comparable design for different data analysis strategies. 
+
 \todo[inline]{what do you think about this 2nd part of an intro paragraph:
 need to evaluate the impact of bold acquisition parameters (field strength
 resolution -- but little is known about the impact of feature selection
@@ -56,8 +66,8 @@ Naselaris as well.-Swaroop}
 Encoding models can be validated in a number of different ways: \citet{ML08},
 for example, used a binary retrieval task to validate the predicted f{MRI}
 images for the meaning of nouns, while \citet{KG+08} used stimulus
-identification, and \citet{NG09} used \todo{quality of?}stimulus reconstruction
-as quality metrics.  In auditory neuroscience, where encoding models are less
+identification, and \citet{NG09} used stimulus reconstruction
+as a quality metric of encoding performance.  In auditory neuroscience, where encoding models are less
 frequent, only binary retrieval accuracy \citep{CTK+2012}\todo{we probably cannot avoid a sentence that describes this method a bit more} and stimulus
 identification \citep{SF14} have been used and it is yet unclear how the
 results of these validation strategies vary with the parameters of f{MRI} data
