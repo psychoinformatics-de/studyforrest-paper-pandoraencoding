@@ -129,7 +129,6 @@ we can fill the section}
 \subsection*{Encoding model}
 
 \todo[inline]{feature representations citation}
-%MPS??
 
 To build an encoding model with high predictive power, we need to find an
 appropriate feature representation of the music stimuli.  \citet{CTK+2012}
@@ -140,7 +139,16 @@ corresponding to the timbre of the stimulus.
 \todo[inline]{Is this accurate description? Casey et al. used LCQFT, and not
 Mel frequency spectrum.}
 
-\missingfigure{encoding scheme}
+
+\begin{figure}
+  \centering
+  %\input{pics/encoding_scheme}
+  \includegraphics[width=\linewidth]{pics/encoding_scheme}
+
+  \caption{}
+
+ \label{fig:encoding_scheme}
+\end{figure}
 
 
 For each f{MRI} sample $y_{vt}$ (where $t=1,2,..,T$ denotes the time-points and
@@ -209,14 +217,15 @@ f{MRI} activity of $s_{n}$. Finally, the matching scores for all stimuli in the
 validation set are averaged.
 
 
-\todo[inline]{Next part should have its own subheading}
+\paragraph{Decoding of stimulus category}
 
 Instead of testing the encoding performance, we can also test the performance of
 a decoder based on the individual encoding models \citet{NG11}. To go from
 $p(y_{vt}|x_{t})$ to $p(x_{t}|y_{t})$ we follow \citet{NG09} and first condense
 the large number of voxel-specific encoding models into one multi-voxel encoding model.
-To do this we project the predicted and observed f{MRI} data onto the first $k$ principal components of the $[N\times V]$ matrix of predicted f{MRI} activity \todo{Change to CV} (where $k$ is the number of principal components that retains 95\% of the variance and is chosen individually for each participant) 
-%We do this by estimating the first $k$ principal components of the $[N x V]$ matrix of predicted f{MRI} activity \todo{Change to CV} (where $k$ is the number of principal components that retains 95\% of the variance and is chosen individually for each participant) and then projecting the predicted and measured f{MRI} activity onto them.
+To do this we project the predicted and observed f{MRI} data onto the first $k$
+principal components of the $[N\times V]$ matrix of predicted f{MRI} activity, where $k$ is the number of principal components that maximize the decoding
+accuracy on the training set for this participant.
 As in \citet{NG09} we construct the $k$-dimensional multivariate normal
 probability density function $p(y_{t}|x_{t})$ and use a uniform prior
 distribution $p(x_{t})$ to obtain the approximate posterior probability

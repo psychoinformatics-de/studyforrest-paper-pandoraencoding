@@ -1,8 +1,8 @@
 import os
-os.system("fslmaths temporal_lobe_mni_3T.nii.gz -thr 10 -bin temporal_lobe_mask_3T.nii.gz")
+os.system("fslmaths ../masks/temporal_lobe_mni_3T.nii.gz -thr 10 -bin temporal_lobe_mask_3T.nii.gz")
 os.system("/usr/share/fsl/5.0/bin/flirt -in /home/mboos/SpeechEncoding/temporal_lobe_mask_3T.nii.gz -applyxfm -init /home/data/psyinf/pandora_dartmouth/data/templates/grpbold/xfm/mni2tmpl_12dof.mat -out /home/mboos/SpeechEncoding/temporal_lobe_mask_grp_3T.nii.gz -paddingsize 0.0 -interp nearestneighbour -ref /home/data/psyinf/pandora_dartmouth/data/templates/grpbold/head.nii.gz")
 
-os.system("fslmaths temporal_lobe_mni_7T.nii.gz -thr 10 -bin temporal_lobe_mask_head.nii.gz")
+os.system("fslmaths ../masks/temporal_lobe_mni_7T.nii.gz -thr 10 -bin temporal_lobe_mask_head.nii.gz")
 os.system("/usr/share/fsl/5.0/bin/flirt -in /home/mboos/SpeechEncoding/temporal_lobe_mask_7T.nii.gz -applyxfm -init /home/data/psyinf/pandora_dartmouth/data/templates/grpbold/xfm/mni2tmpl_12dof.mat -out /home/mboos/SpeechEncoding/temporal_lobe_mask_grp_7T.nii.gz -paddingsize 0.0 -interp nearestneighbour -ref /home/data/psyinf/pandora_dartmouth/data/templates/grpbold/head.nii.gz")
 
 for i in xrange(1,20):
