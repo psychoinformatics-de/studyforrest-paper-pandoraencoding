@@ -1,7 +1,7 @@
 \input{boilerplate}
+
 \begin{document}
 \bibliographystyle{unsrtnat}
-
 \title{Decoding musical genre with an fMRI encoding model of musical
 features -- a 3T/7T comparison}
 
@@ -67,8 +67,11 @@ Encoding models can be validated in a number of different ways: \citet{ML08},
 for example, used a binary retrieval task to validate the predicted f{MRI}
 images for the meaning of nouns, while \citet{KG+08} used stimulus
 identification, and \citet{NG09} used stimulus reconstruction
-as a quality metric of encoding performance.  In auditory neuroscience, where encoding models are less
-frequent, only binary retrieval accuracy \citep{CTK+2012}\todo{we probably cannot avoid a sentence that describes this method a bit more} and stimulus
+as a quality metric of encoding performance. In auditory neuroscience, where encoding models are less
+frequent, only binary retrieval accuracy \citep{CTK+2012},
+%change
+which estimates if for each pair of stimuli the predicted data are closer
+to the actual data than the switched data, and stimulus
 identification \citep{SF14} have been used and it is yet unclear how the
 results of these validation strategies vary with the parameters of f{MRI} data
 analysis (e.g. number of voxels used)  or acquisition (e.g. field strength).
@@ -92,7 +95,6 @@ not replicate stimulus reconstruction as in \citep{NG09}, we use a similar
 method of constructing a probabilistic decoding model from a set of
 voxel-specific encoding models, and use it to infer the music genre of the
 presented stimulus.
-%possibly cite NG11
 
 
 \section*{Methods}
@@ -123,29 +125,32 @@ For more information the reader is referred to the respective publications.
 
 \subsection*{Preprocessing}
 
-Temporal lobe masks were\todo{please add the respective code to the repo, so
-we can fill the section}
+Temporal lobe masks for each participant were extracted from Montreal
+Neurological Institute coordinate space using FSL \citep{SJB+04,JBB+12}.
+Each voxel inside the temporal lobe mask was run-wise normalized and linearly
+de-trended using PyMVPA \citep{HHS09b}. 
 
 \subsection*{Encoding model}
-
-\todo[inline]{feature representations citation}
 
 To build an encoding model with high predictive power, we need to find an
 appropriate feature representation of the music stimuli.  \citet{CTK+2012}
 already compared different feature representations of the same stimuli in the
-3T dataset. We chose the feature set with the best encoding performance in this
-study, the low-quefrency mel-frequency spectrum (LQ-MFS) \citep{HDH+2015},
-corresponding to the timbre of the stimulus. 
-\todo[inline]{Is this accurate description? Casey et al. used LCQFT, and not
-Mel frequency spectrum.}
+3T dataset. They found that features corresponding to the timbre of the stimulus
+performed best.
+We chose a similar feature set made available by \citet{HDH+2015}, the low-quefrency
+mel-frequency spectrum (LQ-MFS).
 
 
 \begin{figure}
   \centering
-  %\input{pics/encoding_scheme}
   \includegraphics[width=\linewidth]{pics/encoding_scheme}
 
-  \caption{}
+  \caption{A schematic overview of the encoding process. The spectrogram for
+	  each stimulus is transformed into its low-quefrency mel-frequency
+	  spectrum (LQ-MFS). Then, the encoding features are extracted by a
+  sliding window from the LQ-MFS. Using these features, encoding model is trained on all runs in
+  the training set, and used to predict the f{MRI} activity of the left-out run.
+  These predictions are subsequently used for validation.}
 
  \label{fig:encoding_scheme}
 \end{figure}
@@ -189,17 +194,16 @@ over-fitting, the regression-coefficients were estimated using ridge regression
 $\lambda$ with the lowest mean squared error in a generalized leave-one-out
 cross-validation \citep{GHW79} was chosen from a set of candidate values.
 
-\subsection*{Quality metrics} \todo[inline]{add description of standardization}
+\subsection*{Quality metrics} 
 
 \paragraph{Binary retrieval accuracy}
 
 Binary retrieval accuracy \citep{ML08} estimates if a stimulus'
 predicted f{MRI} activity is closer, in terms of cosine similarity, to its
 observed f{MRI} activity than to the f{MRI} activity of a decoy stimulus.
-This is done pair-wise for all combinations of stimuli and
-then averaged.
-\todo[inline]{Are the test pairs from different genres?}
-%wiederholung.
+This is done pair-wise for all combinations of stimuli, include stimuli from the
+same genre, and then averaged.
+
 In a prior study \citep{CTK+2012}, using the 3-Tesla data, binary retrieval
 accuracy was used to validate voxel-specific encoding models on the same
 dataset.
@@ -219,32 +223,48 @@ validation set are averaged.
 
 \paragraph{Decoding of stimulus category}
 
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{pics/Decoding_scheme}
+
+  \caption{A schematic overview of the decoding of music category. The predicted
+  f{MRI} time series of the validation run is reduced in dimensionality by
+  principal component analysis,
+  and a multivariate-normal likelihood function $p(y_{t}|x_{t})$ is constructed.
+  From there, the probability distribution over music stimuli and subsequently musical categories is estimated.}
+
+ \label{fig:decoding_scheme}
+\end{figure}
+
+
 Instead of testing the encoding performance, we can also test the performance of
-a decoder based on the individual encoding models \citet{NG11}. To go from
+a decoder based on the individual encoding models \citet{NG11}
+(Figure \ref{fig:decoding_scheme}). To go from
 $p(y_{vt}|x_{t})$ to $p(x_{t}|y_{t})$ we follow \citet{NG09} and first condense
 the large number of voxel-specific encoding models into one multi-voxel encoding model.
 To do this we project the predicted and observed f{MRI} data onto the first $k$
 principal components of the $[N\times V]$ matrix of predicted f{MRI} activity, where $k$ is the number of principal components that maximize the decoding
 accuracy on the training set for this participant.
 As in \citet{NG09} we construct the $k$-dimensional multivariate normal
-probability density function $p(y_{t}|x_{t})$ and use a uniform prior
-distribution $p(x_{t})$ to obtain the approximate posterior probability
-$p(x_{t}|y_{t}) \propto p(y_{t}|x_{t})p(x_{t})$. Given the observed f{MRI}
-activity we can now estimate the probability distribution over music stimuli
-$p(s_{i}|y)$ (for $i=1..25$ (??)\todo{why ??}). We use the simplifying assumption that the
-f{MRI} activity is influenced by the music stimuli only through their LQ-MFS
+probability density function $p(y_{t}|x_{t})$ to obtain a likelihood function across voxels.
+To build a decoding model, we now express this likelihood in terms of the label
+of the music stimulus instead of its LQ-MFS features.
+We use the simplifying assumption that the f{MRI} activity is influenced by the music stimuli only through their LQ-MFS
 coefficients $x$, and --- given that each music stimulus was associated with only
-three (lagged) LQ-MFS representations --- we arrive at $p(l_{i}|y) \propto
-p(x_{t-1}|y_{t-1})p(x_{t}|y_{t})p(x_{t+1}|y_{t+1})$ where $t$ is the sample 6
-seconds after the start of the music stimulus. The mode of this probability
-distribution is the music stimulus that was most likely presented given the
-observed f{MRI} activity. Since inter-genre similarity of LQ-MFS features drive
-genre classification performance \citep{CTK+2012}, we predict the musical genre
-of the presented stimulus given the observed f{MRI} activity as the mode of $p(c_{i}|y)
+three (lagged) LQ-MFS representations --- the likelihood to observe a given
+triple of consecutive $y$ for a specific music stimulus $l_{i}$ is $p(y|l_{i}) \propto
+p(y_{t-1}|x_{1})p(y_{t}|x_{2})p(y_{t+1}|x_{3})$ where $t$ is the sample 6
+seconds after the start of the music stimulus and $x$ are the three LQ-MFS
+feature vectors of this stimulus.
+For a given triple of consecutive f{MRI} activity $y$ from the same stimulus, we can now estimate the probability distribution over music stimuli
+$p(l_{i}|y)$ (for $i=1..25$) by using Bayes' rule: $p(l_{i}|y) \propto
+p(y|l_{i})p(l_{i})$ and ignoring the normalizing constant $p(y)$. Since each
+stimulus was presented was presented exactly once, it has an uniform prior
+distribution with $p(l_{i})=\frac{1}{25}$. The mode of this distribution is the
+most probable presented stimulus given the data.
+We can then decode the musical genre of the presented stimulus given the observed f{MRI} activity as the mode of $p(c_{i}|y)
 \propto \prod\nolimits_{l \in stim(c_{i})} p(l|y)$ where $stim(c_{i})$ are
 the labels of the stimuli belonging to the genre $c_{i}$. 
-
-\todo[inline]{I am still struggeling to understand the aggregation/evaluation of the probabilities -- maybe we can discuss this on the phone and try to rephrase together}
 
 \subsection*{Voxel selection}
 
@@ -267,10 +287,6 @@ the coefficient of determination $r^2$ for each voxel-specific encoding model in
 the training set. Using this criterion selects voxels whose activity can be explained well
 by an LQ-MFS-based encoding model.
 
-\subsection*{Number of voxels used\todo{leftover?}}
-
-
-
 \section*{Results}
 %
 We varied the number of voxels used in the analysis and how they are selected,
@@ -284,7 +300,6 @@ same set at each step (right?) and how the two scores relate to each other}
   \centering
   \def\svgwidth{\linewidth}
   \input{pics/Nr_of_voxels_binary_score_selection.pdf_tex}
-  %\includegraphics[width=\linewidth]{pics/Nr_of_voxels_binary_score_selection}
 	
   \caption{Mean binary retrieval accuracy as a function of the included number of
   voxels for 3- and 7-Tesla, for stability- and $r^2$-based voxel selection. Error bars denote the bootstrapped 95\% confidence
@@ -311,8 +326,6 @@ voxels selected by their $r^2$.
   \def\svgwidth{\linewidth}
   \input{pics/Nr_of_voxels_matching_score_selection.pdf_tex}
 
-  %\includegraphics[width=\linewidth]{pics/Nr_of_voxels_matching_score_selection}
-
   \caption{Mean matching score as a function of the included number of
   voxels for 3- and 7-Tesla, for stability- and $r^2$-based voxel selection. Error bars denote the bootstrapped 95\% confidence
   interval of the mean. The mean is taken over matching scores of
@@ -334,7 +347,6 @@ steeper increase and decrease and a higher peak for both field strengths.
   \centering
   \def\svgwidth{\linewidth}
   \input{pics/Nr_of_voxels_decoding_accuracy_selection.pdf_tex}
- %\includegraphics[width=\linewidth]{pics/Nr_of_voxels_decoding_accuracy_selection}
 
   \caption{Mean decoding accuracy of music category as a function of the included number of
   voxels, for 3- and 7-Tesla and for stability- and $r^2$-based voxel selection. Error bars denote the bootstrapped 95\% confidence
@@ -352,8 +364,7 @@ The decoding accuracy of each stimulus' music category is shown in Figure
 \ref{fig:decoding_accuracy}. Since the decoder is based on an encoding model, a
 natural comparison is with the performance a discriminative decoder. Here, we
 use a linear support vector machine for an One versus Rest classification
-(denoted by a dashed line).\todo[inline]{this was done on the full ROI, which is a bit unfair. at least ``stability-based'' selection can be applied here too -- hence a curve and not just a line in the figure. For illustration purposes we could also
-  apply an SVM to the R2 features -- although the we cannot get them without
+(denoted by a dashed line).\todo[inline]{this was done on the full ROI, which is a bit unfair. at least ``stability-based'' selection can be applied here too -- hence a curve and not just a line in the figure. For illustration purposes we could also apply an SVM to the R2 features -- although the we cannot get them without
 and encoding model -- but we would see how well the clf work in comparison}
 
 The decoding accuracy was higher for 7-Tesla data
@@ -367,7 +378,6 @@ decoding accuracy than a discriminative decoder, except for the largest numbers
 of voxels. This contrasts the pattern present in the 7-Tesla data, where our decoding model only
 shows a higher decoding accuracy for voxels selected by $r^2$.
 
-\todo[inline]{Add plot about number of eigenvectors}
 
 \missingfigure{model validation on the movie}
 
