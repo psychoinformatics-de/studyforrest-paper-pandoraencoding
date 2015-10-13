@@ -46,32 +46,24 @@ A researcher has many choices in building such an encoding model.
 Not only parameters of the data analysis, but also parameters of BOLD-acquisition, as field strength and resolution,
 might impact encoding performance. \citet{SF14} offer some evidence that an
 encoding model performs better on 7-Tesla than 3-Tesla data, but their datasets
-did also differ in the number of stimuli used, making it hard to generalize.
+did differ in the number of stimuli used, making it hard to generalize.
 Even less is known about effects of feature selection strategies or the choice
-of encoding performance metric. Here, we apply three approaches to encoding validation from
+of the encoding performance metric. Here, we apply three approaches to encoding validation from
 different studies and compare them in a 3-Tesla and 7-Tesla dataset with
-identical stimuli and comparable design for different data analysis strategies. 
+identical stimuli and comparable design for different analysis strategies. 
 
-\todo[inline]{what do you think about this 2nd part of an intro paragraph:
-need to evaluate the impact of bold acquisition parameters (field strength
-resolution -- but little is known about the impact of feature selection
-strategies and performance metrics -- there is basically Santoro et al. and
-nothing else -- here we explcitely look at things that other studies did
-and compare them using a dataset with identical stimuli and comparable design
-(in contrast to Santoro?)}
 \todo[inline]{How about adding
 citations used in the next paragraph? There is a new Neuroimage paper from 
 Naselaris as well.-Swaroop}
 
-Encoding models can be validated in a number of different ways: \citet{ML08},
-for example, used a binary retrieval task to validate the predicted f{MRI}
-images for the meaning of nouns, while \citet{KG+08} used stimulus
-identification, and \citet{NG09} used stimulus reconstruction
-as a quality metric of encoding performance. In auditory neuroscience, where encoding models are less
-frequent, only binary retrieval accuracy \citep{CTK+2012},
-%change
-which estimates if for each pair of stimuli the predicted data are closer
-to the actual data than the switched data, and stimulus
+Encoding models can be validated in a number of different ways: \citet{ML08}
+used a binary retrieval task --- whether an encoding model's predictions
+are more similar to the  corresponding observed data or to the observed data
+with switched labels --- to validate the predicted f{MRI}
+images for the meaning of nouns. \citet{KG+08} used stimulus
+identification, and \citet{NG09} used stimulus reconstruction,
+as a metric for encoding performance. In auditory neuroscience, where encoding models are less
+frequent, only binary retrieval accuracy \citep{CTK+2012} and stimulus
 identification \citep{SF14} have been used and it is yet unclear how the
 results of these validation strategies vary with the parameters of f{MRI} data
 analysis (e.g. number of voxels used)  or acquisition (e.g. field strength).
@@ -89,7 +81,7 @@ strength on different validation strategies for encoding models.  This study
 aims to compare three quality metrics, binary retrieval accuracy \citep{ML08},
 stimulus identification \citep{KG+08,SF14} and the decoding accuracy of a stimulus
 feature, the musical genre. We compare
-performance on a 3-Tesla and a 7-Tesla dataset while variing the number of
+performance on a 3-Tesla and a 7-Tesla dataset while varying the number of
 voxels in the model, and the voxel selection strategy.  Although we do
 not replicate stimulus reconstruction as in \citep{NG09}, we use a similar
 method of constructing a probabilistic decoding model from a set of
@@ -166,8 +158,8 @@ used.
 Since the BOLD response is delayed,  the most recent feature vector was removed
 for each f{MRI} sample (since it could not yet have influenced the f{MRI}
 activity), and the new feature vector at time-point $t$ was created by
-concatenating the prior feature vectors $x_{t-1}$,$x_{t-2}$ and $x_{t-3}$. We
-overload \todo{dunno what this mean? jargon?} the notation and denote this stacked feature vector as $x_{t}$.
+concatenating the prior feature vectors $x_{t-1}$,$x_{t-2}$ and $x_{t-3}$. From
+now on, we denote this stacked feature vector as $x_{t}$.
 Feature vectors (and the corresponding f{MRI} sample) were removed from the
 analysis, if two-thirds or more of the concatenated feature vectors were
 zero-vectors.
@@ -221,7 +213,6 @@ f{MRI} activity of $s_{n}$. Finally, the matching scores for all stimuli in the
 validation set are averaged.
 
 
-\paragraph{Decoding of stimulus category}
 
 \begin{figure}
   \centering
@@ -236,6 +227,8 @@ validation set are averaged.
  \label{fig:decoding_scheme}
 \end{figure}
 
+
+\paragraph{Decoding of stimulus category}
 
 Instead of testing the encoding performance, we can also test the performance of
 a decoder based on the individual encoding models \citet{NG11}
@@ -288,7 +281,7 @@ the training set. Using this criterion selects voxels whose activity can be expl
 by an LQ-MFS-based encoding model.
 
 \section*{Results}
-%
+
 We varied the number of voxels used in the analysis and how they are selected,
 both for 3- and 7-Tesla f{MRI} data, and compared the resulting differences in
 three encoding metrics.
@@ -310,7 +303,7 @@ same set at each step (right?) and how the two scores relate to each other}
  \label{fig:binary_retrieval}
 \end{figure}
 
-\paragraph{Binary retrieval accuracy}
+\subsection*{Binary retrieval accuracy}
 
 Differences in binary retrieval accuracy are shown in Figure \ref{fig:binary_retrieval}. For both selection criteria, binary retrieval
 accuracy is higher in 3-Tesla than 7-Tesla data for lower numbers of voxels.
@@ -334,7 +327,7 @@ voxels selected by their $r^2$.
  \label{fig:matching_scores}
 \end{figure}
 
-\paragraph{Matching score}
+\subsection*{Matching score}
 
 In Figure \ref{fig:matching_scores}, the matching score is shown. Again, for
 few voxels, encoding models for 3-Tesla data produce a higher score than encoding
@@ -346,7 +339,7 @@ steeper increase and decrease and a higher peak for both field strengths.
 \begin{figure}
   \centering
   \def\svgwidth{\linewidth}
-  \input{pics/Nr_of_voxels_decoding_accuracy_selection.pdf_tex}
+  \input{pics/Nr_of_voxels_decoding_accuracy_selection_svc.pdf_tex}
 
   \caption{Mean decoding accuracy of music category as a function of the included number of
   voxels, for 3- and 7-Tesla and for stability- and $r^2$-based voxel selection. Error bars denote the bootstrapped 95\% confidence
@@ -358,7 +351,7 @@ steeper increase and decrease and a higher peak for both field strengths.
  \label{fig:decoding_accuracy}
 \end{figure}
 
-\paragraph{Decoding accuracy}
+\subsection*{Decoding accuracy}
 
 The decoding accuracy of each stimulus' music category is shown in Figure
 \ref{fig:decoding_accuracy}. Since the decoder is based on an encoding model, a
