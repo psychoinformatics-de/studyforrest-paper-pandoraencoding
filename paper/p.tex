@@ -292,13 +292,13 @@ same set at each step (right?) and how the two scores relate to each other}
 \begin{figure}
   \centering
   \def\svgwidth{\linewidth}
-  \input{pics/Nr_of_voxels_binary_score_selection.pdf_tex}
+  \input{pics/binary_score_joint.pdf_tex}
 	
-  \caption{Mean binary retrieval accuracy as a function of the included number of
+  \caption{\textbf{A} Mean binary retrieval accuracy as a function of the included number of
   voxels for 3- and 7-Tesla, for stability- and $r^2$-based voxel selection. Error bars denote the bootstrapped 95\% confidence
   interval of the mean. The mean is taken over binary retrieval accuracies of
-  eight runs for each of the 19 participants.
-  \todo[inline]{not a TODO: just stating that I really like the visual style of the figures}}
+  eight runs for each of the 19 participants. \textbf{B} Mean binary retrieval accuracy as a function of the overall volume of
+	  the included voxels for 3- and 7-Tesla, for stability- and $r^2$-based voxel selection.}
 
  \label{fig:binary_retrieval}
 \end{figure}
@@ -314,22 +314,26 @@ decrease seen in 3-Tesla data is somewhat larger. The peak
 performance of 3-Tesla as well as 7-Tesla encoding models, is higher using
 voxels selected by their $r^2$.
 
+
 \begin{figure}
   \centering
   \def\svgwidth{\linewidth}
-  \input{pics/Nr_of_voxels_matching_score_selection.pdf_tex}
-
-  \caption{Mean matching score as a function of the included number of
+  \input{pics/matching_score_joint.pdf_tex}
+	
+  \caption{\textbf{A} Mean matching score as a function of the included number of
   voxels for 3- and 7-Tesla, for stability- and $r^2$-based voxel selection. Error bars denote the bootstrapped 95\% confidence
-  interval of the mean. The mean is taken over matching scores of
-  eight runs for each of the 19 participants.}
+  interval of the mean. The mean is taken over binary retrieval accuracies of
+  eight runs for each of the 19 participants. \textbf{B} Mean matching score as a function of the overall volume of
+	  the included voxels for 3- and 7-Tesla, for stability- and $r^2$-based voxel selection.}
 
- \label{fig:matching_scores}
+ \label{fig:matching_score}
 \end{figure}
+
+
 
 \subsection*{Matching score}
 
-In Figure \ref{fig:matching_scores}, the matching score is shown. Again, for
+In Figure \ref{fig:matching_score}, the matching score is shown. Again, for
 few voxels, encoding models for 3-Tesla data produce a higher score than encoding
 models for 7-Tesla data. Increasing the numbers of voxels increases the matching
 score for 7-Tesla data, and decreases the score for 3-Tesla data. This pattern
@@ -339,15 +343,13 @@ steeper increase and decrease and a higher peak for both field strengths.
 \begin{figure}
   \centering
   \def\svgwidth{\linewidth}
-  \input{pics/Nr_of_voxels_decoding_accuracy_selection_svc.pdf_tex}
-
-  \caption{Mean decoding accuracy of music category as a function of the included number of
-  voxels, for 3- and 7-Tesla and for stability- and $r^2$-based voxel selection. Error bars denote the bootstrapped 95\% confidence
-  interval of the mean. The mean is taken over decoding accuracies of
-  eight runs for each of the 19 participants. The dashed lines denote the
-  decoding accuracy achieved by a linear support vector machine for 3-Tesla
-  and 7-Tesla data (0.38 and 0.56).}
-
+  \input{pics/decoding_accuracy_joint.pdf_tex}
+	
+  \caption{\textbf{A} Mean decoding accuracy of music category as a function of the included number of
+  voxels for 3- and 7-Tesla, for stability- and $r^2$-based voxel selection. Error bars denote the bootstrapped 95\% confidence
+  interval of the mean. The mean is taken over binary retrieval accuracies of
+  eight runs for each of the 19 participants. \textbf{B} Mean decoding accuracy
+  of music category as a function of the overall volume of the included voxels for 3- and 7-Tesla, for stability- and $r^2$-based voxel selection.}
  \label{fig:decoding_accuracy}
 \end{figure}
 
@@ -357,20 +359,25 @@ The decoding accuracy of each stimulus' music category is shown in Figure
 \ref{fig:decoding_accuracy}. Since the decoder is based on an encoding model, a
 natural comparison is with the performance a discriminative decoder. Here, we
 use a linear support vector machine for an One versus Rest classification
-(denoted by a dashed line).\todo[inline]{this was done on the full ROI, which is a bit unfair. at least ``stability-based'' selection can be applied here too -- hence a curve and not just a line in the figure. For illustration purposes we could also apply an SVM to the R2 features -- although the we cannot get them without
-and encoding model -- but we would see how well the clf work in comparison}
-
-The decoding accuracy was higher for 7-Tesla data
+(denoted by a dashed line). The decoding accuracy was higher for 7-Tesla data
 than for 3-Tesla data, across all voxel numbers and selection criteria.
 Selecting the most stable voxels, the decoding accuracy slightly increases for
 7-Tesla data with higher numbers of voxels, while decreasing for 3-Tesla data.
 If we select the voxel-specific encoding models with the highest $r^2$, the
 decoding accuracy decreases for 3-Tesla data, but first stays level and then
-decreases for 7-Tesla data. Encoding models on 3-Tesla data show a higher
-decoding accuracy than a discriminative decoder, except for the largest numbers
-of voxels. This contrasts the pattern present in the 7-Tesla data, where our decoding model only
-shows a higher decoding accuracy for voxels selected by $r^2$.
+decreases for 7-Tesla data. For both selection methods, we contrast the decoding
+performance of an encoding model, with the decoding performance of a linear Support
+Vector Machine \todo[inline]{citation vapnik(?) and liblinear}. While such a
+discriminative decoder can use the subset of the most stable voxels, it can only
+select the voxels with the highest $r^2$, if it leverages the information of an
+encoding model. We still include these data, to show which information could be
+extracted from these voxels by a more sophisticated decoding approach.
 
+Encoding models on 3-Tesla data show a higher or equal decoding accuracy than a discriminative decoder across all numbers of
+voxels. This contrasts the pattern present in the 7-Tesla data, where our
+decoding model shows a higher decoding accuracy only for smaller numbers of
+voxels. Using voxels selected by $r^2$ the Support Vector Machine starts to
+outperform the encoding model for lower numbers of voxels.
 
 \missingfigure{model validation on the movie}
 
