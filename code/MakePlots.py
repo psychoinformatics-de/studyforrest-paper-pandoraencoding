@@ -325,6 +325,30 @@ bin_melted = stable_bin_melted.append(corr_bin_melted)
 match_melted = stable_match_melted.append(corr_match_melted)
 probs_melted = stable_probs_melted.append([corr_probs_melted,stable_svc_melted,corr_svc_melted])
 
+t3mm = 27
+t7mm = 2.7 #actually 2.74... but this messes up seaborns categorical plotting
+probs_melted_mm = probs_melted2.copy()
+probs_melted_mm.loc[probs_melted_mm['Field strength']=='7T','voxelnr'] *= t7mm
+probs_melted_mm.loc[probs_melted_mm['Field strength']=='3T','voxelnr'] *= t3mm
+probs_melted_mm.loc[probs_melted_mm['Field strength']=='SVC 7T','voxelnr'] *= t7mm
+probs_melted_mm.loc[probs_melted_mm['Field strength']=='SVC 3T','voxelnr'] *= t3mm
+probs_melted_mm.voxelnr /= 1000
+
+match_melted_mm = match_melted.copy()
+match_melted_mm.loc[match_melted_mm['Field strength']=='7T','voxelnr'] *= t7mm
+match_melted_mm.loc[match_melted_mm['Field strength']=='3T','voxelnr'] *= t3mm
+match_melted_mm.loc[match_melted_mm['Field strength']=='SVC 7T','voxelnr'] *= t7mm
+match_melted_mm.loc[match_melted_mm['Field strength']=='SVC 3T','voxelnr'] *= t3mm
+match_melted_mm.voxelnr /= 1000
+
+
+bin_melted_mm = bin_melted.copy()
+bin_melted_mm.loc[bin_melted_mm['Field strength']=='7T','voxelnr'] *= t7mm
+bin_melted_mm.loc[bin_melted_mm['Field strength']=='3T','voxelnr'] *= t3mm
+bin_melted_mm.loc[bin_melted_mm['Field strength']=='SVC 7T','voxelnr'] *= t7mm
+bin_melted_mm.loc[bin_melted_mm['Field strength']=='SVC 3T','voxelnr'] *= t3mm
+bin_melted_mm.voxelnr /= 1000
+
 
 
 ##Matching score
@@ -340,6 +364,19 @@ g.axes.flat[0].set_ylabel('Matching rank score')
 plt.savefig('Nr_of_voxels_matching_score_selection.svg')
 
 
+plt.figure(figsize=(14,12))
+sns.set_style(style='whitegrid')
+g = sns.factorplot(x='voxelnr',y='data',hue='Field strength',col='selection',data=match_melted_mm)
+sns.despine(left=True)
+for axes in g.axes.flat:
+    axes.set_xlabel('Overall voxel volume in ' + r'$cm^3$')
+    axes.set_xticklabels(labels=['0.675','1.35','6.75','13.5','27','67.5','135','270'])
+g.axes.flat[0].set_title('Most stable voxels')
+g.axes.flat[1].set_title('Voxels with highest ' + r'$r^2$')
+g.axes.flat[0].set_ylabel('Matching rank score')
+plt.savefig('Nr_of_voxels_matching_score_selection_volume.svg')
+
+
 ##Binary retrieval score
 plt.figure(figsize=(10,8))
 sns.set_style(style='whitegrid')
@@ -352,6 +389,21 @@ g.axes.flat[0].set_title('Most stable voxels')
 g.axes.flat[1].set_title('Voxels with highest ' + r'$r^2$')
 g.axes.flat[0].set_ylabel('Binary rank score')
 plt.savefig('Nr_of_voxels_binary_score_selection.svg')
+
+
+plt.figure(figsize=(10,8))
+sns.set_style(style='whitegrid')
+g = sns.factorplot(x='voxelnr',y='data',hue='Field strength',col='selection',data=bin_melted_mm)
+sns.despine(left=True)
+for axes in g.axes.flat:
+    axes.set_xlabel('Overall voxel volume in ' + r'$cm^3$')
+    axes.set_xticklabels(labels=['0.675','1.35','6.75','13.5','27','67.5','135','270'])
+    
+g.axes.flat[0].set_title('Most stable voxels')
+g.axes.flat[1].set_title('Voxels with highest ' + r'$r^2$')
+g.axes.flat[0].set_ylabel('Binary rank score')
+plt.savefig('Nr_of_voxels_binary_score_selection_volume.svg')
+
 
 ##Decoding accuracy + SVC decoding accuracy
 plt.figure(figsize=(10,8))
@@ -366,3 +418,17 @@ g.axes.flat[1].set_title('Voxels with highest ' + r'$r^2$')
 g.axes.flat[0].set_ylabel('Decoding accuracy of music category')
 
 plt.savefig('Nr_of_voxels_decoding_accuracy_selection_svc.svg')
+
+plt.figure(figsize=(10,8))
+sns.set_style(style='whitegrid')
+g = sns.factorplot(x='voxelnr',y='data',hue='Field strength',col='selection',linestyles=['-','-','--','--'],markers=['o','o','x','x'],data=probs_melted_mm)
+sns.despine(left=True)
+for i,axes in enumerate(g.axes.flat):
+    axes.set_xlabel('Overall voxel volume in ' + r'$cm^3$')
+    axes.set_xticklabels(labels=['0.675','1.35','6.75','13.5','27','67.5','135','270'])
+g.axes.flat[0].set_title('Most stable voxels')
+g.axes.flat[1].set_title('Voxels with highest ' + r'$r^2$')
+g.axes.flat[0].set_ylabel('Decoding accuracy of music category')
+
+plt.savefig('Nr_of_voxels_decoding_accuracy_selection_svc_volume.svg')
+
