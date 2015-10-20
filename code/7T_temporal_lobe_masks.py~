@@ -1,0 +1,4 @@
+import os
+for i in xrange(3,20):
+	os.system("""applywarp -i temporal_lobe_grp_head.nii.gz -o temporal_lobe_mask_head_subj%02dbold.nii.gz -r /home/data/psyinf/forrest_gump/anondata/sub0%02d/templates/bold7Tp1/head.nii.gz -w /home/data/psyinf/forrest_gump/anondata/sub0%02d/templates/bold7Tp1/in_grpbold7Tp1/tmpl2subj_warp.nii.gz  --interp=nn""" % (i,i,i))
+
