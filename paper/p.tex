@@ -40,7 +40,7 @@ Magdeburg, Magdeburg, Germany}
 
 In functional magnetic resonance imaging (f{MRI}) research, voxel-wise encoding
 models are an increasingly popular tool to characterize the
-relationship between a real world stimulus and BOLD-activity patterns
+relationship between a real world stimulus and BOLD activity patterns
 \citep{NG11,TD+06,KG+08,SZ09}.
 Yet not all encoding models are made alike, and a researcher has many degrees
 of freedom in constructing one.
@@ -76,26 +76,63 @@ identical stimuli and comparable design for different analysis strategies.
 
 \subsection*{Stimuli}
 
-origin \citet{CTK+2012}
-published in \citet{HDH+2015}
+Stimuli were five natural, stereo, high-quality music stimuli (\unit[6]{s}
+duration; \unit[44.1]{kHz} sampling rate) for each of five different musical
+genres: 1) Ambient, 2) Roots Country 3) Heavy Metal, 4) 50s Rock'n'Roll, and 5)
+Symphonic. Previously, all 25 stimuli and have been made publicly available \citep{HDH+2015}.
 
 \subsection*{fMRI data}
 
-The analyses presented here were performed on two independently recorded,
-and previously published datasets. While these datasets have been acquired
-using identical stimuli, with the same number of acquisition runs and
-number of stimulation trials, they nevertheless differ in their precise
-stimulation timing, stimulation setup and equipment, as well as other
+The analyses presented here were performed on two independently recorded, and
+previously published datasets \citep{CTK+2012,HDH+2015} . While these datasets
+have been acquired using identical stimuli, with the same number of acquisition
+runs and number of stimulation trials, they nevertheless differ in their
+precise stimulation timing, stimulation setup and equipment, as well as other
 acquisition details. A brief description of both datasets is provided below.
 For more information the reader is referred to the respective publications.
 
 \paragraph{\unit[3]{Tesla}}
 %
-\todo[inline]{Swaroop, please add a brief summary and at least one citation}
+Participants were scanned in a Philips Intera Achieva scanner with 32 channel
+SENSE head coil at the Dartmouth College. Functional scans were acquired with
+an echo planar imaging sequence (\unit[2]{s} TR; \unit[35]{ms} TR,
+90\textdegree flip angle) at \unit[3]{mm} isotropic voxels.
+% MIH: as it was published before we probably don't have to include this
+%All subjects consented in accordance with the procedures set by the Committee
+%for the Protection of Human Subjects at the Dartmouth College. 
 
-\paragraph{\unit[7]{Tesla}}
+Each subject participated in eight functional runs. Stimuli were presented in
+an event-related design with a variable trial duration. Each run consisted of a
+total of 29 trials corresponding to 25 music clips and 4 catch trials presented
+randomly during each run. Each trial started with a \unit[6]{s} of music clip
+followed by \unit[4-8]{s} of fixation. For catch trials, a question appeared
+after the audio presentation asking whether a particular feature is present in
+the music clip such as vocals, guitar, etc. Subjects responded “Yes” or “No”
+with a button box. Catch trials helped keep the subjects’ attention to the
+music and were discarded from the analyses. Each run had \unit[4]{s} of
+fixation at the beginning and \unit[10]{s} of fixation at the end. For further
+details, see \citet{CTK+2012}
+
+\paragraph{\sevenT}
 %
-\citet{HDH+2015}; maybe \citet{HBI+14}
+The procedures for the \unit[7]{Tesla} acquisition were highly similar and only
+criticial differences are reported here. Echo-planar BOLD images
+(gradient-echo, \unit[2]{s} repetition time (TR), \unit[22]{ms} echo time,
+\unit[0.78]{ms} echo spacing, GRAPPA acceleration factor 3) were acquired using
+a whole-body \sevenT\ Siemens MAGNETOM magnetic resonance scanner equipped with
+a 32 channel brain receive coil. 36 axial slices (thickness \unit[1.4]{mm},
+\unit[1.4 $\times$ 1.4]{mm} in-plane resolution) with a 10\% inter-slice gap
+were recorded in ascending order.  Slices were oriented to include the ventral
+portions of frontal and occipital cortex while minimizing intersection with the
+eyeballs. The field-of-view was centred on the approximate location of Heschl's
+gyrus.
+
+Instead of dedicated catch trials, similar catch questions as for the 3T
+acquisition were presented \unit[4]{s} after the end of the stimulus in
+trials with an \unit[8]{s} inter-stimulus delay. Consequently, each run
+consisted of 25 trials, and no trials were discarded from the analysis.  There
+was no additional fixation at the start of a run. For further details, see
+\citet{HDH+2015}, and \citet{HBI+14} for details on MRI acquisition methods.
 
 
 \subsection*{Preprocessing}
@@ -103,7 +140,7 @@ For more information the reader is referred to the respective publications.
 Temporal lobe masks for each participant were extracted from Montreal
 Neurological Institute coordinate space using FSL \citep{SJB+04,JBB+12}, and
 projected into the subject-specific coordinate system.
-Each voxel inside the temporal lobe mask was run-wise normalized and linearly
+Each voxel inside the temporal lobe mask was run-wise $Z$-scored and linearly
 de-trended using PyMVPA \citep{HHS09b}. 
 
 \subsection*{Encoding model}
@@ -124,7 +161,7 @@ mel-frequency spectrum (LQ-MFS) of the stimulus.
 	  each stimulus is transformed into its low-quefrency mel-frequency
 	  spectrum (LQ-MFS). Then, the encoding features are extracted by a
   sliding window from the LQ-MFS. Using these features, encoding model is trained on all runs in
-  the training set, and used to predict the f{MRI} activity of the left-out run.
+  the training set, and used to predict the BOLD activity of the left-out run.
   These predictions are subsequently used for validation.}
 
  \label{fig:encoding_scheme}
@@ -139,7 +176,7 @@ no stimulus presented at time-point $t$, a zero vector $[1\times\widetilde{M}]$ 
 used. 
 
 Since the BOLD response is delayed,  the most recent feature vector was removed
-for each f{MRI} sample (since it could not yet have influenced the f{MRI}
+for each f{MRI} sample (since it could not yet have influenced the BOLD
 activity), and the new feature vector at time-point $t$ was created by
 concatenating the prior feature vectors $x_{t-1}$,$x_{t-2}$ and $x_{t-3}$
 (see Figure \ref{fig:encoding_scheme}). From
@@ -148,17 +185,17 @@ Feature vectors (and the corresponding f{MRI} sample) were removed from the
 analysis, if two-thirds or more of the concatenated feature vectors were
 zero-vectors.
 
-The f{MRI} activity time-series, as well as the feature time-series, were
+The BOLD activity time-series, as well as the feature time-series, were
 vertically stacked, resulting in a matrix of features $X$ $[N\times M]$ (where $N$ is
 the number of f{MRI} samples, and $M$ is number of LQ-MFS coefficients, with
-$M=3\widetilde{M}$) and a matrix of f{MRI} activity $Y$ $[N\times V]$ (where $V$ is
+$M=3\widetilde{M}$) and a matrix of BOLD activity $Y$ $[N\times V]$ (where $V$ is
 the number of voxels).
 
 This lagging of the stimulus allows us to train the encoding model to predict
 the f{MRI} time-series without explicitly modelling the BOLD response.
 
 %probabilistic or objective function minimization, also cite someone about using lin. reg. in encoding
-The encoding model could then be expressed as the probability to observe the f{MRI} activity at time-point $t$ and voxel $v$:
+The encoding model could then be expressed as the probability to observe the BOLD activity at time-point $t$ and voxel $v$:
 %
 \begin{equation}
   \label{eq:encmo}
@@ -178,7 +215,7 @@ cross-validation \citep{GHW79} was chosen from a set of candidate values.
 \paragraph{Binary retrieval accuracy}
 
 Binary retrieval accuracy \citep{ML08} tests if an encoding model's predictions
-can differentiate a stimulus's observed f{MRI} activity from the f{MRI} activity
+can differentiate a stimulus's observed BOLD activity from the BOLD activity
 of a decoy stimulus.
 Specifically, a stimulus pair is counted as succesfully classified, if the cosine similarity between predicted and
 observed f{MRI} responses is greater for the correctly matched predictions and
@@ -191,12 +228,12 @@ same genre, are counted and then divided by the number of combinations.
 %
 An alternative measure of encoding performance is the correlation rank score or
 matching score \citep{SF14}. For each stimulus label $l_{n}$ in the validation set,
-its predicted f{MRI} activity $\widetilde{y}_{n}$ is correlated with the
-observed f{MRI} activity of every stimulus, $y_{i}$ for $i=1..25$. These
+its predicted BOLD activity $\widetilde{y}_{n}$ is correlated with the
+observed BOLD activity of every stimulus, $y_{i}$ for $i=1..25$. These
 correlations are then ordered, and the  matching score $m(l_{n})$ is \[
 m(l_{n}) = 1-\frac{rank(l_{n})-1}{N-1} \] Where $rank(l_{n})$ is the rank of
 the correlation between predicted $\widetilde{y}_{n}$ and observed $y_{n}$
-f{MRI} activity of $l_{n}$. Finally, the matching scores for all stimuli in the
+BOLD activity of $l_{n}$. Finally, the matching scores for all stimuli in the
 validation set are averaged.
 
 
@@ -223,26 +260,26 @@ a decoder based on the individual encoding models \citet{NG11}
 $p(y_{vt}|x_{t})$ to $p(x_{t}|y_{t})$ we follow \citet{NG09} and first condense
 the large number of voxel-specific encoding models into one multi-voxel encoding model.
 To do this we project the predicted and observed f{MRI} data onto the first $k$
-principal components of the $[N\times V]$ matrix of predicted f{MRI} activity, where $k$ is the number of principal components that maximize the decoding
+principal components of the $[N\times V]$ matrix of predicted BOLD activity, where $k$ is the number of principal components that maximize the decoding
 accuracy on the training set for this participant.
 As in \citet{NG09} we construct the $k$-dimensional multivariate normal
 probability density function $p(y_{t}|x_{t})$ to obtain a likelihood function across voxels.
 To build a decoding model, we now express this likelihood in terms of the label
 of the music stimulus, instead of its LQ-MFS features.
-We use the simplifying assumption that the f{MRI} activity is influenced by the music stimuli only through their LQ-MFS
+We use the simplifying assumption that the BOLD activity is influenced by the music stimuli only through their LQ-MFS
 coefficients $x$, and --- given that each music stimulus was associated with only
 three (lagged) LQ-MFS representations --- the likelihood to observe a given
 triple of consecutive $y$ for a specific music stimulus $l_{i}$ is $p(y|l_{i}) \propto
 p(y_{t-1}|x_{1})p(y_{t}|x_{2})p(y_{t+1}|x_{3})$ where $t$ is the sample 6
 seconds after the start of the music stimulus and $x$ are the three LQ-MFS
 feature vectors of this stimulus.
-For a given triple of consecutive f{MRI} activity $y$ from the same stimulus, we can now estimate the probability distribution over music stimuli
+For a given triple of consecutive BOLD activity $y$ from the same stimulus, we can now estimate the probability distribution over music stimuli
 $p(l_{i}|y)$ (for $i=1..25$) by using Bayes' rule: $p(l_{i}|y) \propto
 p(y|l_{i})p(l_{i})$ and ignoring the normalizing constant $p(y)$. Since each
 stimulus was presented was presented exactly once, it has an uniform prior
 distribution with $p(l_{i})=\frac{1}{25}$. The mode of this distribution is the
 most probable presented stimulus given the data.
-We can then decode the musical genre of the presented stimulus given the observed f{MRI} activity as the mode of $p(c_{i}|y)
+We can then decode the musical genre of the presented stimulus given the observed BOLD activity as the mode of $p(c_{i}|y)
 \propto \prod\nolimits_{l \in stim(c_{i})} p(l|y)$ where $stim(c_{i})$ are
 the labels of the stimuli belonging to the genre $c_{i}$. 
 
@@ -255,7 +292,7 @@ based on voxel characteristics in the training set.
 \paragraph{Selection by stability}
 
 \citet{ML08} selected the 500 most stable voxels for their analysis. For a
-single voxel, each run can be represented as a vector of f{MRI} activity, where each
+single voxel, each run can be represented as a vector of BOLD activity, where each
 entry is associated with one stimulus. A voxel's "stability score" is then the
 average (pair-wise) correlation between the vectors of the eight runs for all
 combinations of runs.
