@@ -49,9 +49,7 @@ might impact encoding performance \citep{KB07,FK12}. \citet{SF14} offer some evi
 encoding model performs better on 7-Tesla than 3-Tesla data, although differing
 number of stimuli are a potential confound.
 Even less is known about effects of feature selection strategies or how
-the different ways to validate an encoding model relate to each other. \todo[inline]{How about adding
-citations used in the next paragraph? There is a new Neuroimage paper from 
-Naselaris as well.-Swaroop}
+the different ways to validate an encoding model relate to each other.
 
 Previous studies have introduced several different measures for the quality of an
 encoding model: \citet{ML08} used a binary retrieval task --- checking whether an encoding model's predictions
@@ -96,7 +94,7 @@ For more information the reader is referred to the respective publications.
 Participants were scanned in a Philips Intera Achieva scanner with 32 channel
 SENSE head coil at the Dartmouth College. Functional scans were acquired with
 an echo planar imaging sequence (\unit[2]{s} TR; \unit[35]{ms} TR,
-90\textdegree flip angle) at \unit[3]{mm} isotropic voxels.
+\unit[90]{\textdegree} flip angle) with \unit[3]{mm} isotropic voxels.
 % MIH: as it was published before we probably don't have to include this
 %All subjects consented in accordance with the procedures set by the Committee
 %for the Protection of Human Subjects at the Dartmouth College. 
@@ -137,7 +135,7 @@ was no additional fixation at the start of a run. For further details, see
 
 \subsection*{Preprocessing}
 
-Temporal lobe masks for each participant were extracted from Montreal
+Approximate temporal lobe masks for each participant were extracted from Montreal
 Neurological Institute coordinate space using FSL \citep{SJB+04,JBB+12}, and
 projected into the subject-specific coordinate system.
 Each voxel inside the temporal lobe mask was run-wise $Z$-scored and linearly
@@ -149,7 +147,9 @@ To build an encoding model with high predictive power, we need to find an
 appropriate feature representation of the music stimuli.  \citet{CTK+2012}
 already compared different feature representations of the same stimuli in the
 3-Tesla dataset. They found features corresponding to the timbre of the stimulus
-showed the highest binary retrieval accuracy.
+% MIH: we haven't introduced this metric yet
+%showed the highest binary retrieval accuracy.
+offer the best discriminative power.
 We chose a similar feature set made available by \citet{HDH+2015}, the low-quefrency
 mel-frequency spectrum (LQ-MFS) of the stimulus.
 
@@ -175,9 +175,8 @@ corresponding two second part of the stimulus were computed. In case there was
 no stimulus presented at time-point $t$, a zero vector $[1\times\widetilde{M}]$ was
 used. 
 
-Since the BOLD response is delayed,  the most recent feature vector was removed
-for each f{MRI} sample (since it could not yet have influenced the BOLD
-activity), and the new feature vector at time-point $t$ was created by
+As the BOLD response is delayed,  the most recent feature vector was removed
+for each f{MRI} sample (corresponds to an assumed \unit[2]{s} stimulus-response delay), and the new feature vector at time-point $t$ was created by
 concatenating the prior feature vectors $x_{t-1}$,$x_{t-2}$ and $x_{t-3}$
 (see Figure \ref{fig:encoding_scheme}). From
 now on, we denote this stacked feature vector as $x_{t}$.
@@ -209,13 +208,14 @@ over-fitting, the regression-coefficients were estimated using ridge regression
 \citep{HK70}.  Independently for each voxel, the regularization parameter
 $\lambda$ with the lowest mean squared error in a generalized leave-one-out
 cross-validation \citep{GHW79} was chosen from a set of candidate values.
+\todo{arbitrary selection?}
 
 \subsection*{Quality metrics} 
 
 \paragraph{Binary retrieval accuracy}
 
 Binary retrieval accuracy \citep{ML08} tests if an encoding model's predictions
-can differentiate a stimulus's observed BOLD activity from the BOLD activity
+can differentiate a stimulus' observed BOLD activity from the BOLD activity
 of a decoy stimulus.
 Specifically, a stimulus pair is counted as succesfully classified, if the cosine similarity between predicted and
 observed f{MRI} responses is greater for the correctly matched predictions and
@@ -240,7 +240,7 @@ validation set are averaged.
 
 \begin{figure}
   \centering
-  \includegraphics[width=\linewidth]{pics/Decoding_scheme}
+  \includegraphics[width=9cm]{pics/Decoding_scheme}
 
   \caption{A schematic overview of the decoding of music category. The predicted
   f{MRI} time series of the validation run is reduced in dimensionality by
@@ -255,9 +255,8 @@ validation set are averaged.
 \paragraph{Decoding of stimulus category}
 
 Instead of testing the encoding performance, we can also test the performance of
-a decoder based on the individual encoding models \citet{NG11}
-(Figure \ref{fig:decoding_scheme}). To go from
-$p(y_{vt}|x_{t})$ to $p(x_{t}|y_{t})$ we follow \citet{NG09} and first condense
+a decoder based on the individual encoding models \citep{NG11}
+(Figure \ref{fig:decoding_scheme}). To go from the probability of a voxel activation given stimulus features $p(y_{vt}|x_{t})$ to probability of stimulus features given voxel activation $p(x_{t}|y_{t})$ we follow \citet{NG09} and first condense
 the large number of voxel-specific encoding models into one multi-voxel encoding model.
 To do this we project the predicted and observed f{MRI} data onto the first $k$
 principal components of the $[N\times V]$ matrix of predicted BOLD activity, where $k$ is the number of principal components that maximize the decoding
@@ -287,7 +286,7 @@ the labels of the stimuli belonging to the genre $c_{i}$.
 
 We varied the number of voxels used in the analysis, both for 3- and 7-Tesla f{MRI} data,
 and selected which voxels to keep by two different criteria. Both criteria were
-based on voxel characteristics in the training set.  
+based on voxel characteristics in the training set only.
 
 \paragraph{Selection by stability}
 
@@ -300,10 +299,10 @@ This criterion selects voxels with consistent activation for each stimulus acros
 
 \paragraph{Selection by $r^2$}
 
-Since we are interested in encoding performance, we can use the quality of
+As we are interested in encoding performance, we can use the quality of
 predictions of each voxel's encoding model as a selection criterion. We compute
 the coefficient of determination $r^2$ for each voxel-specific encoding model in
-the training set. Using this criterion selects voxels whose activity can be explained well
+the training set. Using this criterion selects voxels whose activity can be explained best
 by an LQ-MFS-based encoding model.
 
 \section*{Results}
@@ -382,7 +381,7 @@ of the 3- and 7-Tesla matching score curves can be seen.
 \subsection*{Decoding accuracy}
 
 The decoding accuracy of each stimulus's music category is shown in Figure
-\ref{fig:decoding_accuracy}. Since the decoder is based on an encoding model, a
+\ref{fig:decoding_accuracy}. As the decoder is based on an encoding model, a
 natural comparison is with the performance of a standard decoder. For both selection methods, we contrast the decoding
 performance of the encoding model with the decoding performance of a linear Support
 Vector Machine (SVM) \citep{FCH+08,V13}. While such a decoder can use the subset of the most stable voxels, it can only select the voxels with the highest $r^2$, if it leverages the information of an encoding model. We still include these data, to show which information could be extracted from these voxels by a more sophisticated decoding approach.  The decoding accuracy was higher for 7-Tesla data than for 3-Tesla data, across all voxel numbers and selection criteria.  Selecting the most stable voxels, the decoding accuracy slightly increases for 7-Tesla data with higher numbers of voxels, while decreasing for 3-Tesla data.
@@ -426,7 +425,7 @@ voxels. %Using voxels selected by $r^2$ the Support Vector Machine starts to
 \subsection*{Effect of Multi-Voxel Encoding}
 
 Field strength affects performance differentially in the binary
-retrieval/matching score and the decoding accuracy. Since our decoding scheme
+retrieval/matching score and the decoding accuracy. As our decoding scheme
 had two parts -- reducing the independent voxel-wise encoding models to a single
 encoding model (1) and computing the posterior probability of a stimulus given
 the observed f{MRI} data (2) -- we cannot claim what causes this difference.
@@ -434,8 +433,6 @@ the observed f{MRI} data (2) -- we cannot claim what causes this difference.
 Therefore, we estimated the binary retrieval accuracy
 \ref{fig:binary_retrieval_mve} and the matching score
 \ref{fig:matching_score_mve} using the same reduced encoding model as in the decoding accuracy.
-
-\missingfigure{model validation on the movie}
 
 \section*{Discussion}
 
