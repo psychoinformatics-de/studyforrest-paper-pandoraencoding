@@ -226,7 +226,7 @@ cross-validation \citep{GHW79} was chosen from a set of candidate values.
 
 \subsection*{Quality metrics} 
 
-\paragraph{Binary retrieval accuracy}
+\subsubsection*{Binary retrieval accuracy}
 
 Binary retrieval accuracy \citep{ML08} tests if an encoding model's predictions
 can differentiate a stimulus' observed BOLD activity from the BOLD activity of
@@ -239,7 +239,7 @@ The correct matches for all pair-wise combinations of stimuli, including
 stimuli from the same genre, are counted and then divided by the number of
 combinations.
 
-\paragraph{Matching score}
+\subsubsection*{Matching score}
 %
 An alternative measure of encoding performance is the correlation rank score or
 matching score \citep{SF14}. For each stimulus label $l_{n}$ in the validation
@@ -268,22 +268,32 @@ categories is estimated.}
 \end{figure}
 
 
-\paragraph{Decoding of stimulus category}
+\subsubsection*{Decoding of stimulus category}
 
 Instead of testing the encoding performance, we can also test the performance
 of a decoder based on the individual encoding models \citep{NG11} (Figure
-\ref{fig:decoding_scheme}). To go from the probability of a voxel activation
+\ref{fig:decoding_scheme}).
+
+
+To go from the probability of a voxel activation
 given stimulus features $p(y_{vt}|x_{t})$ to probability of stimulus features
-given voxel activation $p(x_{t}|y_{t})$ we follow \citet{NG09} and first
-condense the large number of voxel-specific encoding models into one
+given voxel activation $p(x_{t}|y_{t})$ we follow \citet{NG09} and separate our
+decoding scheme into two parts. 
+
+\paragraph{Single- to Multi-Voxel Encoding}
+
+First we condense the large number of voxel-specific encoding models into one
 multi-voxel encoding model.  To do this we project the predicted and observed
 f{MRI} data onto the first $k$ principal components of the $[N\times V]$ matrix
 of predicted BOLD activity, where $k$ is the number of principal components
 that maximize the decoding accuracy on the training set for this participant.
 As in \citet{NG09} we construct the $k$-dimensional multivariate normal
 probability density function $p(y_{t}|x_{t})$ to obtain a likelihood function
-across voxels.  To build a decoding model, we now express this likelihood in
-terms of the label of the music stimulus, instead of its LQ-MFS features.  We
+across voxels. 
+
+\paragraph{Multi-Voxel Encoding to Decoding}
+
+We now express this likelihood in terms of the label of the music stimulus, instead of its LQ-MFS features.  We
 use the simplifying assumption that the BOLD activity is influenced by the
 music stimuli only through their LQ-MFS coefficients $x$, and --- given that
 each music stimulus was associated with only three (lagged) LQ-MFS
@@ -495,7 +505,7 @@ observe that this effect is mediated by the number of voxels used. A previous
 study \citep{SF14} found a higher performance for 7-Tesla data for the matching
 score, although using a different number of stimuli in the 3- and 7-Tesla
 datasets. %Furthermore, this study differs in the selection of voxels, the
-choice of stimulus features and the use
+%choice of stimulus features and the use
 %of an explicit BOLD-model instead of a lagged feature representation.
 
 One possible reason why we see a worse peak performance in these metrics for
