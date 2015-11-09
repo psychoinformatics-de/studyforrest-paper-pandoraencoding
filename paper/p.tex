@@ -46,20 +46,29 @@ between a real world stimulus and BOLD activity patterns
 a researcher has many degrees of freedom in constructing one.  Parameters of
 the data analysis, as well as parameters of BOLD-acquisition, like field
 strength and resolution, might impact encoding performance \citep{KB07,FK12}.
-\citet{SF14} offer some evidence that an encoding model performs better on
+Especially high-field f{MRI} (7-Tesla and higher), with its increased spatial
+specificity \citep{THW+05,YU08}, could lead to better encoding models \citep{FK12}. 
+\citet{SF14} offer some empirical evidence that an encoding model performs better on
 7-Tesla than 3-Tesla data, although differing number of stimuli are a potential
-confound.  Even less is known about effects of feature selection strategies or
-how the different ways to validate an encoding model relate to each other.
+confound. 
 
-Previous studies have introduced several different measures for the quality of
+After collecting the data, more choices await -- how to preprocess, which
+voxels to select and how to parameterize the encoding model -- and little is known about their
+consequences. Even when we obtain an encoding model for each included voxel,
+we can still choose between different ways of evaluating its performance.
+
+Previous studies have introduced several measures for the quality of
 an encoding model: \citet{ML08} used a binary retrieval task --- checking
 whether an encoding model's predictions can be used to identify a stimulus from
-a pair of stimuli --- to validate the predicted f{MRI} images for the meaning
+a pair of stimuli --- to evaluate the predicted f{MRI} images for the meaning
 of nouns. \citet{KG+08} used stimulus identification, and \citet{NG09} used
 stimulus reconstruction, as a metric for encoding performance. In auditory
 neuroscience, where encoding models are less frequent, only binary retrieval
 accuracy \citep{CTK+2012} and stimulus identification \citep{SF14} have been
-used.
+used. 
+
+It remains an open question if these validation strategies are consistent
+across different choices of analysis parameters and BOLD-acquisition schemes.
 
 Recently, a 3-Tesla f{MRI} study on the perception of musical genres
 \citep{CTK+2012} has been replicated with 7-Tesla data \citep{HDH+2015}, making
@@ -70,7 +79,6 @@ accuracy \citep{ML08}, stimulus identification \citep{KG+08,SF14} and the
 decoding accuracy of a stimulus's music genre, and compare them in a 3-Tesla
 and 7-Tesla dataset with identical stimuli and comparable design for different
 analysis strategies.
-
 
 \section*{Methods}
 
