@@ -100,6 +100,10 @@ precise stimulation timing, stimulation setup and equipment, as well as other
 acquisition details. A brief description of both datasets is provided below.
 For more information the reader is referred to the respective publications.
 
+\todo{Moritz please confirm that you used all subjects from both datasets.
+  In that case it would be 19@3T and 20@7T -- statements of N should be
+corrected based on this info (e.g. figure caption in the results}
+
 \paragraph{\unit[3]{Tesla}}
 %
 Participants were scanned in a Philips Intera Achieva scanner with 32 channel
@@ -237,7 +241,7 @@ than for the incorrectly matched ones (i.e. the similarity of the observed
 response of stimulus A with the predictions for stimulus B and vice versa).
 The correct matches for all pair-wise combinations of stimuli, including
 stimuli from the same genre, are counted and then divided by the number of
-combinations.
+combinations.\todo{one pair per stimulus, or multiple random pairs?}
 
 \subsubsection*{Matching score}
 %
@@ -262,7 +266,14 @@ validation set are averaged.
     dimensionality by principal component analysis, and a multivariate-normal
     likelihood function $p(y_{t}|x_{t})$ is constructed.  From there, the
   probability distribution over music stimuli and subsequently musical
-categories is estimated.}
+categories is estimated.
+\todo[inline]{this is talking about a 2-part decoding scheme. would be good to
+  label those parts. Probably best to include a symbolic reference that the
+  basic scores (without decoding) are computed from the predicted time series
+  at the top. The manuscript is unclear how models from multiple voxels are
+treated in this case. Is the correlation distance computed for all timepoints
+of a stimulus across all the voxels? or per voxel and averaged?}
+}
 
  \label{fig:decoding_scheme}
 \end{figure}
@@ -291,6 +302,8 @@ As in \citet{NG09} we construct the $k$-dimensional multivariate normal
 probability density function $p(y_{t}|x_{t})$ to obtain a likelihood function
 across voxels. 
 
+\todo[inline]{also for the other two metrics?}
+
 \paragraph{Multi-Voxel Encoding to Decoding}
 
 We now express this likelihood in terms of the label of the music stimulus, instead of its LQ-MFS features.  We
@@ -312,6 +325,8 @@ can then decode the musical genre of the presented stimulus given the observed
 BOLD activity as the mode of $p(c_{i}|y) \propto \prod\nolimits_{l \in
   stim(c_{i})} p(l|y)$ where $stim(c_{i})$ are the labels of the stimuli
   belonging to the genre $c_{i}$. 
+
+\todo[inline]{what about stimulus decoding? not genre?}
 
 \subsection*{Voxel selection}
 
@@ -356,7 +371,9 @@ these voxels.
   of the mean. The mean is taken over binary retrieval accuracies of eight runs
   for each of the 19 participants. \textbf{B} Mean binary retrieval accuracy as
 a function of the overall volume of the included voxels for 3- and 7-Tesla, for
-stability- and $r^2$-based voxel selection.}
+stability- and $r^2$-based voxel selection.
+\todo[inline]{250 r2 features are best, regardless of how much they sample. but
+it 27cm3 of stability give best perf. which shape would the accuracy curve have?}}
 
  \label{fig:binary_retrieval}
 \end{figure}
@@ -386,7 +403,8 @@ but shifted, pattern for 3- and 7-Tesla data.
   mean is taken over binary retrieval accuracies of eight runs for each of the
   19 participants. \textbf{B} Mean matching score as a function of the overall
 volume of the included voxels for 3- and 7-Tesla, for stability- and
-$r^2$-based voxel selection.}
+$r^2$-based voxel selection.
+\todo[inline]{27cm3 is optimal, regardless of \#voxels}}
 
  \label{fig:matching_score}
 \end{figure}
@@ -414,7 +432,10 @@ the 3- and 7-Tesla matching score curves can be seen.
   accuracies of eight runs for each of the 19 participants. \textbf{B} Mean
 decoding accuracy of music category as a function of the overall volume of the
 included voxels for 3- and 7-Tesla, for stability- and $r^2$-based voxel
-selection.}
+selection.
+\todo[inline]{keep color scheme for SVC: green cross; blue cross?}
+\todo[inline]{fewer voxels needed for genre classification? is that because it is simpler?}
+}
 
  \label{fig:decoding_accuracy}
 \end{figure}
@@ -456,7 +477,8 @@ model shows a higher decoding accuracy only for smaller numbers of voxels.
   binary retrieval accuracies of eight runs for each of the 19 participants.
   \textbf{B} Mean binary retrieval accuracy for a single encoding model as a
   function of the overall volume of the included voxels for 3- and 7-Tesla, for
-stability- and $r^2$-based voxel selection.}
+stability- and $r^2$-based voxel selection.
+\todo[inline]{this figure is practically identical to Fig3}}
 
 \label{fig:binary_retrieval_mve}
 \end{figure}
@@ -473,12 +495,17 @@ stability- and $r^2$-based voxel selection.}
   accuracies of eight runs for each of the 19 participants. \textbf{B} Mean
 matching score for a single encoding model as a function of the overall volume
 of the included voxels for 3- and 7-Tesla, for stability- and $r^2$-based voxel
-selection.}
+selection.
+\todo[inline]{this figure is now also practically identical to Fig3, hence the
+differences in the scores are eliminated (except for magnitude) by
+dimensionality reduction. Not immediately clear to me why this would happen\ldots}}
 
  \label{fig:matching_score_mve}
 \end{figure}
 
 \subsection*{Effect of Multi-Voxel Encoding}
+
+\todo[inline]{move this section one up? feels confusion to reference the section before the last one}
 
 Field strength affects performance differentially in the binary
 retrieval/matching score and the decoding accuracy. As our decoding scheme had
@@ -493,16 +520,20 @@ decoding accuracy.
 
 \section*{Discussion}
 
+%MIH: what if less than 250 voxels?
+% Fig 3: why only 100 good voxels in both 3T and 7T?
+
 Our results show considerable variation of different quality metrics with
 parameters of the data analysis and BOLD-acquisition. We demonstrate that the
 patterns of this variation differ between validation strategies and that the
 effects of field strength, voxel selection, and voxel number are inconsistent
-across these metrics.
+across these metrics.\todo{seems feature extraction has more impact than
+plain voxel selection}
 
 Specifically, we show a similar performance in purely encoding based metrics
 for 3- and 7-Tesla data with a slightly worse peak performance for 7-Tesla, but
 observe that this effect is mediated by the number of voxels used. A previous
-study \citep{SF14} found a higher performance for 7-Tesla data for the matching
+study \citep{SF14} found a better performance for 7-Tesla data for the matching
 score, although using a different number of stimuli in the 3- and 7-Tesla
 datasets. %Furthermore, this study differs in the selection of voxels, the
 %choice of stimulus features and the use
@@ -515,21 +546,28 @@ challenges posed by high-resolution f{MRI} might be tackled more easily by an
 information-based approach, instead of an activation-based one, partly because
 neural information can be locally combined without averaging. Since voxels are
 treated independently in a voxel-wise encoding model, this advantage is lost if
-voxel-specific information is not combined later on. In fact, if we reduce the
+voxel-specific information is not combined later on.
+\todo{the manuscript is unclear how exactly we do or not do this}
+In fact, if we reduce the
 multi-voxel encoding model to a single joint encoding model
 (\citep[see][]{NG09}), we observe a different pattern for field strength: the
 obtained decoding accuracy is consistently higher in the 7-Tesla than the
 3-Tesla dataset.  This reduction does only use information captured by the
 encoding models, it is estimated from the predictions for a set of voxels, not
-from the neuronal response itself, but this combination of voxel-specific
+from the recorded BOLD response itself, but this combination of voxel-specific
 information is still sufficient to make a higher field strength advantageous. 
-
+\todo{does it? Fig 6 and 7 seems to indicate the opposite}
 
 The number of voxels affect the encoding performance differentially for low and
-high field strength. This is not surprising, voxel size differs for the 3- and
-7-Tesla data. Indexing by the overall volume of the selected voxels, instead of
-their number, reveals similarities in performance when 3- and 7-Tesla encoding
-models are trained on a similar volume. 
+high field strength. This is not surprising, as voxel sizes differ for these
+particular 3- and 7-Tesla data. Indexing by the overall volume of the selected
+voxels, instead of their number, reveals similarities in performance when 3-
+and 7-Tesla encoding models are trained on a similar volume. 
+\todo[inline]{true, but I am struggeling to find a compact description for this when
+  considering the reduced model. Argg, hold on! If we select 250 features
+  of the reduced model, we cannot compute a corresponding volume, as they
+will be all over the place!!
+so I guess the lower rows of fig 6 and 7, possibly fig 5 need to be removed.}
 
 Selecting the voxels by $r^2$ instead of a stability criterion, improves
 performance especially in the lower number of voxels for the binary retrieval
