@@ -1,6 +1,6 @@
 %% Creator: Inkscape inkscape 0.91, www.inkscape.org
 %% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
-%% Accompanies image file 'decoding_var_95.pdf' (pdf, eps, ps)
+%% Accompanies image file 'decoding_full_few_vxl.pdf' (pdf, eps, ps)
 %%
 %% To include the image in your LaTeX document, write
 %%   \input{<filename>.pdf_tex}
@@ -49,6 +49,6 @@
   \global\let\svgscale\undefined%
   \makeatother%
   \begin{picture}(1,0.89039622)%
-    \put(0,0){\includegraphics[width=\unitlength,page=1]{Category_decoding_var95.pdf}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=1]{decoding_full_few_vxl.pdf}}%
   \end{picture}%
 \endgroup%

@@ -49,6 +49,6 @@
   \global\let\svgscale\undefined%
   \makeatother%
   \begin{picture}(1,0.89039622)%
-    \put(0,0){\includegraphics[width=\unitlength,page=1]{Category_decoding_var95.pdf}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=1]{decoding_var_95.pdf}}%
   \end{picture}%
 \endgroup%

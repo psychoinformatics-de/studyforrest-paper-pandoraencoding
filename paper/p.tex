@@ -568,7 +568,7 @@ the binary retrieval accuracy.
   \caption{\textbf{A} Mean decoding accuracy of music category as a function of
   the included number of voxels for 3- and 7-Tesla, for stability- and
   $r^2$-based voxel selection. Error bars denote the bootstrapped 95\%
-  confidence interval of the mean. The mean is taken over binary retrieval
+  confidence interval of the mean. The mean is taken over decoding
   accuracies of eight runs for each of the 19 participants. \textbf{B} Mean
 decoding accuracy of music category as a function of the overall volume of the
 included voxels for 3- and 7-Tesla, for stability- and $r^2$-based voxel
@@ -636,6 +636,33 @@ accuracy to a higher number of voxels. For a different percentage of retained
 variance, we see a different pattern: Retaining 99\% of variance strongly
 reduces the decoding accuracy in 7T for a high number of voxels. 
 %bc of much higher dimensionality than when CVed
+
+Reducing the dimensionality of the encoding model is necessary for stabilising
+the covariance matrix of the multivariate normal likelihood \citet{NG11}.  
+Since the decoding accuracy varies with the dimensionality of the reduced
+encoding model, we were interested if a small number of voxels might give a
+similar performance without the need for reducing the encoding model. As in the
+reduced encoding model, we constructed the likelihood out of the residuals of
+the predicted f{MRI} activity. In Figure \ref{fig:decoding_full} we show the
+accuracy of such a decoding model for up to 1000 voxels, the overlap with the
+range of the reduced encoding model is intentional, to see where -- or if -- not
+reducing the encoding models results in worse performance.
+
+\begin{figure}
+  \centering
+  \def\svgwidth{\linewidth}
+  \input{pics/decoding_full_few_vxl.pdf_tex}
+	
+  \caption{  Mean decoding accuracy of music category using a full encoding
+	  model for 3- and 7-Tesla, for stability- and
+  $r^2$-based voxel selection, represented as a function of the number of voxels
+  or their volume. Error bars denote the bootstrapped 95\%
+  confidence interval of the mean. The mean is taken over decoding
+  accuracies of eight runs for each of the 19 participants.
+ }
+
+ \label{fig:decoding_full}
+\end{figure}
 
 \begin{figure}
   \centering
