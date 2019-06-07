@@ -20,7 +20,6 @@ features -- a 3T/7T comparison}
 Magdeburg, Magdeburg, Germany}
 \affil[4]{Center for Behavioral Brain Sciences, Magdeburg, Germany}
 \maketitle
-\thispagestyle{fancy}
 
 \listoftodos
 
@@ -255,7 +254,7 @@ validation set are averaged.
 
 \begin{figure}
   \centering
-  \includegraphics[width=9cm]{pics/Decoding_scheme}
+  \includegraphics[width=\linewidth]{pics/decoding_scheme.pdf}
 
   \caption{A schematic overview of the decoding of music category. The
     predicted f{MRI} time series of the validation run is reduced in
@@ -356,8 +355,7 @@ these voxels.
 
 \begin{figure}
   \centering
-  \def\svgwidth{\linewidth}
-  \input{pics/binary_score_joint.pdf_tex}
+  \includegraphics[width=\linewidth]{pics/binary.pdf}
 	
   \caption{\textbf{A} Mean binary retrieval accuracy as a function of the
   included number of voxels for 3T and 7T, for stability- and $r^2$-based
@@ -368,8 +366,7 @@ a function of the overall volume of the included voxels for 3T and 7T, for
 stability- and $r^2$-based voxel selection.
 }
 
- \label{fig:binary_retrieval}
-\end{figure}
+ \label{fig:binary_retrieval}\end{figure}
 
 \subsection*{Binary retrieval accuracy}
 
@@ -385,14 +382,13 @@ but shifted, pattern for 3T and 7T data.
 
 \begin{figure}
   \centering
-  \def\svgwidth{\linewidth}
-  \input{pics/matching_score_joint.pdf_tex}
+    \includegraphics[width=\linewidth]{pics/rank.pdf}
 	
-  \caption{\textbf{A} Mean matching score as a function of the included number
+  \caption{\textbf{A} Mean matching rank score as a function of the included number
   of voxels for 3T and 7T, for stability- and $r^2$-based voxel selection.
   Error bars denote the bootstrapped 95\% confidence interval of the mean. The
   mean is taken over binary retrieval accuracies of eight runs for each of the
-  19 participants. \textbf{B} Mean matching score as a function of the overall
+  19 participants. \textbf{B} Mean matching rank score as a function of the overall
 volume of the included voxels for 3T and 7T, for stability- and
 $r^2$-based voxel selection.}
 
@@ -410,34 +406,27 @@ steeper increase and decrease and a higher peak for both field strengths.  If
 indexed by the overall voxel volume, similarities in the overlapping regions of
 the 3T and 7T matching score curves can be seen.
 
-
 \begin{figure}
   \centering
-  \def\svgwidth{\linewidth}
-  \input{pics/Stimulus_decoding.pdf_tex}
-	
-  \caption{ Decoding of the stimulus itself with dimensionality chosen so it
-	  retains 95\% of variance }%\todo[inline]{extend y-axis to include 0.04 as chance level?} }
+    \includegraphics[width=\linewidth]{pics/decoding.pdf}
 
+	\caption{\textbf{A} Mean decoding accuracy of individual music stimuli as a function of
+  the included number of voxels for 3T and 7T, for stability- and
+  $r^2$-based voxel selection. Error bars denote the bootstrapped 95\%
+  confidence interval of the mean. The mean is taken over decoding
+  accuracies of eight runs for each of the 19 participants. Chance level is
+    0.04. \textbf{B} Mean
+decoding accuracy of individual music stimuli as a function of the overall volume of the
+included voxels for 3T and 7T, for stability- and $r^2$-based voxel
+selection. Chance level is 0.04.
+}
  \label{fig:decoding_accuracy_stimulus}
 \end{figure}
 
 \begin{figure}
   \centering
-  \def\svgwidth{\linewidth}
-  \input{pics/Category_decoding_var95.pdf_tex}
-	
-  \caption{ Decoding accuracy now with the number of eigenvectors chosen to
-  retain 95\% of the variance instead of cross-validated for decoding }
+  \includegraphics[width=\linewidth]{pics/decoding_genre.pdf}
 
- \label{fig:decoding_accuracy_var95}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \def\svgwidth{\linewidth}
-  \input{pics/Category_decoding_cv.pdf_tex}
-	
   \caption{\textbf{A} Mean decoding accuracy of music category as a function of
   the included number of voxels for 3T and 7T, for stability- and
   $r^2$-based voxel selection. Error bars denote the bootstrapped 95\%
@@ -453,13 +442,9 @@ selection.
 
 \begin{figure}
   \centering
-  \def\svgwidth{\linewidth}
-  \input{pics/confusion_matrices.pdf_tex}
-	
-  \caption{ Confusion matrices for genre decoding, separated by field-strength
-  and voxel selection. Each confusion matrix is averaged across the different number
-  of voxels, participants and runs, for each cell the mean and standard deviation (in parentheses)
-  are given. }
+  \includegraphics[width=\linewidth]{pics/conf_mats.pdf}
+
+  \caption{ Confusion matrices for genre decoding, separated by field-strength and voxel selection. Each confusion matrix is averaged across the different number of voxels, participants and runs.}
 
  \label{fig:confusion_matrices}
 \end{figure}
@@ -515,38 +500,38 @@ speech (country, rock'n'roll and heavy metal) and between instrumental genres
 (ambient and symphonic), while very few genres that contain speech are
 incorrectly classified as instrumental or vice versa.
 
-\begin{figure}
-  \centering
-  \def\svgwidth{\linewidth}
-  \input{pics/r2_means.pdf_tex}
-	
-  \caption{ Mean $r^2$ of voxels sorted by $r^2$.}
-
- \label{fig:r2}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \def\svgwidth{\linewidth}
-  \input{pics/Mean_fstatistic_stim_cat.pdf_tex}
-	
-  \caption{ Mean voxel-wise F-statistic for the f{MRI} time series averaged over
-  the voxels selected by $r^2$ for genre or stimulus.}
-
- \label{fig:anova}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \def\svgwidth{\linewidth}
-  \input{pics/Mean_fstatistic_stim_cat_yhat.pdf_tex}
-	
-  \caption{ Mean voxel-wise F-statistic for the predicted f{MRI} time series averaged over
-  the voxels selected by $r^2$ for genre or stimulus.}
-
- \label{fig:anova_yhat}
-\end{figure}
-
+%\begin{figure}
+%  \centering
+%  \def\svgwidth{\linewidth}
+%  \input{pics/r2_means.pdf_tex}
+%	
+%  \caption{ Mean $r^2$ of voxels sorted by $r^2$.}
+%
+% \label{fig:r2}
+%\end{figure}
+%
+%\begin{figure}
+%  \centering
+%  \def\svgwidth{\linewidth}
+%  \input{pics/Mean_fstatistic_stim_cat.pdf_tex}
+%	
+%  \caption{ Mean voxel-wise F-statistic for the f{MRI} time series averaged over
+%  the voxels selected by $r^2$ for genre or stimulus.}
+%
+% \label{fig:anova}
+%\end{figure}
+%
+%\begin{figure}
+%  \centering
+%  \def\svgwidth{\linewidth}
+%  \input{pics/Mean_fstatistic_stim_cat_yhat.pdf_tex}
+%	
+%  \caption{ Mean voxel-wise F-statistic for the predicted f{MRI} time series averaged over
+%  the voxels selected by $r^2$ for genre or stimulus.}
+%
+% \label{fig:anova_yhat}
+%\end{figure}
+%
 
 \subsection*{Voxel-wise $r^2$ and discriminability}
 %

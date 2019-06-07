@@ -16,7 +16,11 @@ paper.pdf: figures
 	$(MAKE) -C paper fancyboilerplate all
 	cp paper/p.pdf paper.pdf
 
-figures: data
+figures: data pymvpa
+	$(PYTHON) code/pandora_preprocessing.py 
+	$(PYTHON) code/pandora_encoding.py
+	$(PYTHON) code/validate_encoding.py
+	$(PYTHON) code/make_plots.py
 
 pymvpa:
 	git clone https://github.com/PyMVPA/PyMVPA.git pymvpa
