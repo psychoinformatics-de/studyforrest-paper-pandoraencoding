@@ -2,8 +2,7 @@
 
 \begin{document}
 \bibliographystyle{unsrtnat}
-\title{Decoding musical genre with an fMRI encoding model of musical
-features -- a 3T/7T comparison}
+\title{Exploring the role of auxilliary factors in evaluating voxel-wise encoding models}
 
 
 \author[1]{Moritz~Boos}
@@ -41,24 +40,57 @@ Magdeburg, Magdeburg, Germany}
 In functional magnetic resonance imaging (f{MRI}) research, voxel-wise encoding
 models are an increasingly popular tool to characterize the relationship
 between a real world stimulus and BOLD activity patterns
-\citep{NG11,TD+06,KG+08,SZ09}.  Yet not all encoding models are made alike, and
-a researcher has many degrees of freedom in constructing one.  Parameters of
-the data analysis, as well as parameters of BOLD-acquisition, like field
-strength and resolution, might impact encoding performance \citep{KB07,FK12}.
-Especially high-field f{MRI} (7-Tesla and higher), with its increased spatial
-specificity \citep{THW+05,YU08}, could lead to better encoding models \citep{FK12}. 
-\citet{SF14} offer some empirical evidence that an encoding model performs better on
-7-Tesla (7T) than 3-Tesla (3T) data.
+\citep{NG11,TD+06,KG+08,SZ09}.
 
-After collecting the data, more choices await -- how to preprocess, which
-voxels to select and how to parameterize the encoding model -- and little is known about their
-consequences. Even when we obtain an encoding model for each included voxel,
-we can still choose between different ways of evaluating its performance.
+%TODO: citations by gallant etc
+Encoding models learn linear filters that predict recorded activity in each voxel
+from a stimulus representation, thus providing information how well features of the stimulus can explain brain activity.
 
+%accordingly, the quality of an encoding model is
+%routinely equated with the amount of variance it explains in each voxel.
+
+%TODO: klarer in einem satz sagen
+%However, the ability of voxel-wise encoding models to approximate brain
+%activity across multiple voxel
+
+%However, this gives little information about a model's ability to predict brain
+%activity 
+
+%brain activity evoked by different stimuli that spans multiple voxels, i.e. if
+%brain activity is evoked by a face or a house.
+
+%However, evaluating if voxel-wise encoding models provide accurate predictions
+%across multiple voxels, i.e. can differentiate brain activity evoked by
+%different stimuli, remains an open problem. 
+%all unclear: what's the point of this?
+
+Yet, researchers have many degrees of freedom in constructing voxel-wise encoding models, such as the type of stimulus
+representation, the number of voxels to use, or which voxels to include in the analysis.
+
+%ohne multiple
+Accordingly, to evaluate the influence of these choices, multiple quality metrics
+exist that assess how well encoding models approximate brain activity across multiple
+voxels.
+
+%a researcher has many degrees of freedom in constructing one.  Parameters of
+%the data analysis, as well as parameters of BOLD-acquisition, like field
+%strength and resolution, might impact encoding performance \citep{KB07,FK12}.
+
+%Especially high-field f{MRI} (7-Tesla and higher), with its increased spatial
+%specificity \citep{THW+05,YU08}, could lead to better encoding models \citep{FK12}. 
+%\citet{SF14} offer some empirical evidence that an encoding model performs better on
+%7-Tesla (7T) than 3-Tesla (3T) data.
+
+%After collecting the data, more choices await -- how to preprocess, which
+%voxels to select and how to parameterize the encoding model -- and little is known about their
+%consequences. Even when we obtain an encoding model for each included voxel,
+%we can still choose between different ways of evaluating its performance.
+
+%TODO: search for other examples
 Previous studies have introduced several measures for the quality of
 an encoding model: \citet{ML08} used a binary retrieval measure --- checking
-whether an encoding model's predictions can be used to identify a stimulus from
-a pair of stimuli --- to evaluate the predicted f{MRI} images for the meaning
+whether an encoding model's predictions can be used to identify the correct
+stimulus against a decoy --- to evaluate the predicted f{MRI} images for the meaning
 of nouns. \citet{KG+08} used stimulus identification accuracy, and \citet{NG09} used
 stimulus reconstruction quality, as a metric for encoding performance.
 %TODO: I think a new Formisano paper uses encoding model reconstruction
@@ -66,18 +98,20 @@ In auditory neuroscience, where encoding models are less frequent, only binary r
 accuracy \citep{CTK+2012} and stimulus identification \citep{SF14} have been
 used. 
 
-It remains an open question if these validation strategies are consistent
-across different choices of analysis parameters and BOLD-acquisition schemes.
+However, while providing novel insights into the cortical processing of sensory
+stimuli, these studies leave large gaps in our understanding how analysis
+parameters and BOLD acquisition affect these different validation strategies.
+In this study, we aim to narrow these gaps, by documenting the effect of field
+strength, voxel selection strategies, and numbers of voxels used on different
+quality metrics of voxel-wise encoding models.
 
-Recently, a 3T f{MRI} study on the perception of musical genres
-\citep{CTK+2012} has been replicated with 7T data \citep{HDH+2015}. This makes
-it possible to directly compare the effect of field strength for different 
-validation strategies for encoding models. The main goal of this
-study is to apply three approaches to encoding validation, binary retrieval
+To this end, we utilize a 3T f{MRI} study on the perception of musical genres
+\citep{CTK+2012} which has recently been replicated using a 7T fMRI scanner \citep{HDH+2015}.
+The main goal of this study is thus to apply three approaches to encoding validation, binary retrieval
 accuracy \citep{ML08}, stimulus identification \citep{KG+08,SF14} and
 decoding accuracy of the stimulus, and compare them in a 3T
-and 7T dataset with identical stimuli and comparable design, while varying
-data analysis parameters.
+and 7T dataset with identical stimuli and comparable design, for different
+choices in data analysis parameters.
 
 \section*{Methods}
 
