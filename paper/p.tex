@@ -1,4 +1,11 @@
 \input{boilerplate}
+\newcommand{\beginsupplement}{%
+        \setcounter{table}{0}
+        \renewcommand{\thetable}{S\arabic{table}}%
+        \setcounter{figure}{0}
+        \renewcommand{\thefigure}{S\arabic{figure}}%
+     }
+
 
 \begin{document}
 \bibliographystyle{unsrtnat}
@@ -43,8 +50,10 @@ between a real world stimulus and BOLD activity patterns
 \citep{NG11,TD+06,KG+08,SZ09}.
 
 %TODO: citations by gallant etc
-Encoding models learn linear filters that predict recorded activity in each voxel
-from a stimulus representation, thus providing information how well features of the stimulus can explain brain activity.
+%These models learn a linear filter of the stimulus representation that best
+%predicts recorded activity in each voxel, thus forming 
+
+%how well features of the stimulus can explain brain activity.
 
 %accordingly, the quality of an encoding model is
 %routinely equated with the amount of variance it explains in each voxel.
@@ -64,13 +73,12 @@ from a stimulus representation, thus providing information how well features of 
 %different stimuli, remains an open problem. 
 %all unclear: what's the point of this?
 
-Yet, researchers have many degrees of freedom in constructing voxel-wise encoding models, such as the type of stimulus
-representation, the number of voxels to use, or which voxels to include in the analysis.
+However, researchers face many degrees of freedom in constructing voxel-wise encoding models, 
+such as how to represent the stimulus or how to estimate an accurate model.
 
 %ohne multiple
-Accordingly, to evaluate the influence of these choices, multiple quality metrics
-exist that assess how well encoding models approximate brain activity across multiple
-voxels.
+To evaluate the fidelity of these choices and the resulting voxel-wise encoding models,
+multiple quality metrics exist that assess how well these models approximate brain activity across multiple voxels.
 
 %a researcher has many degrees of freedom in constructing one.  Parameters of
 %the data analysis, as well as parameters of BOLD-acquisition, like field
@@ -92,24 +100,26 @@ an encoding model: \citet{ML08} used a binary retrieval measure --- checking
 whether an encoding model's predictions can be used to identify the correct
 stimulus against a decoy --- to evaluate the predicted f{MRI} images for the meaning
 of nouns. \citet{KG+08} used stimulus identification accuracy, and \citet{NG09} used
-stimulus reconstruction quality, as a metric for encoding performance.
+stimulus reconstruction quality as a metric for encoding performance.
 %TODO: I think a new Formisano paper uses encoding model reconstruction
 In auditory neuroscience, where encoding models are less frequent, only binary retrieval
 accuracy \citep{CTK+2012} and stimulus identification \citep{SF14} have been
 used. 
 
 However, while providing novel insights into the cortical processing of sensory
-stimuli, these studies leave large gaps in our understanding how analysis
-parameters and BOLD acquisition affect these different validation strategies.
-In this study, we aim to narrow these gaps, by documenting the effect of field
-strength, voxel selection strategies, and numbers of voxels used on different
-quality metrics of voxel-wise encoding models.
+stimuli, it is unknown how additional parameters of the data analysis that are unrelated to the encoding models themselves
+affect these quality metrics.
+Hence, it remains difficult to compare the quality of voxel-wise encoding models when they differ in such auxilliary parameters.
+
+In this study, we aim to tackle this problem by documenting the effect of two common auxilliary parameters in the
+validation of voxel-wise encoding models --- the number of voxels used and how they were selected --- on different
+quality metrics for low and high field strength (3 and 7-Tesla fMRI).
 
 To this end, we utilize a 3T f{MRI} study on the perception of musical genres
-\citep{CTK+2012} which has recently been replicated using a 7T fMRI scanner \citep{HDH+2015}.
-The main goal of this study is thus to apply three approaches to encoding validation, binary retrieval
-accuracy \citep{ML08}, stimulus identification \citep{KG+08,SF14} and
-decoding accuracy of the stimulus, and compare them in a 3T
+\citep{CTK+2012} which has recently been replicated in 7T \citep{HDH+2015}.
+The main goal of this study is thus to apply three approaches to encoding
+validation, --- binary retrieval accuracy \citep{ML08}, stimulus identification \citep{KG+08,SF14} and
+decoding accuracy of the stimulus ---, and compare them in a 3T
 and 7T dataset with identical stimuli and comparable design, for different
 choices in data analysis parameters.
 
@@ -204,7 +214,7 @@ linearly de-trended using PyMVPA \citep{HHS09b}.
 
 To build an encoding model with high predictive power, we need to find an
 appropriate feature representation of the music stimuli.  \citet{CTK+2012}
-already compared different feature representations of the same stimuli in the
+compared different feature representations of the same stimuli in the
 3T dataset. They found features corresponding to the timbre of the
 stimulus offer the best discriminative power. We chose a similar feature set made
 available by \citet{HDH+2015}, the low-quefrency mel-frequency spectrum
@@ -382,10 +392,10 @@ explained best by an LQ-MFS-based encoding model.
 
 We varied the number of voxels used in the analysis and how they were selected,
 both for 3T and 7T f{MRI} data, and compared the resulting differences in
-three encoding metrics. To differentiate between effects of voxel number and
-overall volume of the voxels, which differs in 3T and 7T, we show the
-results as a function of the number of voxels, as well as overall volume of
-these voxels.
+three quality metrics of encoding models.
+To differentiate between effects of voxel number and overall volume of the voxels,
+which differs in 3T and 7T, we show the results as a function of the number of voxels,
+as well as overall volume of these voxels.
 
 \begin{figure}
   \centering
@@ -404,15 +414,19 @@ stability- and $r^2$-based voxel selection.
 
 \subsection*{Binary retrieval accuracy}
 
-Differences in binary retrieval accuracy are shown in Figure
-\ref{fig:binary_retrieval}. For the stability selection criterion, binary retrieval
-accuracy is higher in 3T than 7T data for lower numbers of voxels.
-When a higher number of the most stable voxels are included, binary retrieval
-accuracy increases for 7T data, while decreasing for 3T data. In
-contrast, increasing the number of voxels included by $r^2$ decreases the
-binary retrieval accuracy for 3T, as well as 7T data, although the
-decrease seen in 3T data is larger. Indexing by the overall volume of the voxels, reveals a very similar,
-but shifted, pattern for 3T and 7T data.
+Figure \ref{fig:binary_retrieval} shows differences in binary retrieval accuracy
+for different numbers of voxels, selection strategies, and field strength.
+%TODO: indicate maxima?
+For both 3T and 7T data, and both selection strategies, the maximum binary
+retrieval accuracy is achieved with relatively low number of voxels (3T and
+$r2$: 250 voxels, 7T and $r2$: 500 voxels, 3T and stability selection: 500
+voxels, 7T and stability selection: 1000 voxels) and decreases the more voxels are
+included.
+For both stability selection criteria, 3T outperforms or is equal to 7T across
+all numbers of voxels.
+With regard to the voxel selection strategies, selection by $r2$ outperforms or
+is equal to selection by stability across all numbers of voxels (Figure
+\ref{fig:binary_retrieval_selection}).
 
 \begin{figure}
   \centering
@@ -431,14 +445,21 @@ $r^2$-based voxel selection.}
 
 \subsection*{Matching score}
 
-Figure \ref{fig:matching_score} shows the matching score. Again, for few
-voxels, encoding models for 3T data produce a higher score than encoding
-models for 7T data. Increasing the number of voxels increases the matching
-score for 7T data, and decreases the score for 3T data. This pattern
-is present in both selection criteria. For voxels selected by $r^2$, there is a
-steeper increase and decrease and a higher peak for both field strengths.  If
-indexed by the overall voxel volume, similarities in the overlapping regions of
-the 3T and 7T matching score curves can be seen.
+Figure \ref{fig:matching_score} shows differences in matching score
+for different numbers of voxels, selection strategies, and field strength.
+Matching scores in both 3T and 7T data peak at high numbers of voxels (3T and
+$r2$: 1000 voxels, 7T and $r2$: 5000 voxels, 3T and stability selection: 500
+voxels, 7T and stability selection: 5000 voxels).
+Indexing by the overall volumes these voxels encompass reveals that the matching
+score peaks for 3T and 7T at (for stability selection) or close to (for
+selection by $r2$) the same volume.
+For both stability selection and selection by $r2$, 3T outperforms 7T for the
+same number of voxels, except for the largest two numbers of voxels, and --- in
+terms of the volume the voxels take --- 7T outperforms 3T for volumes up to 2.7
+$cm^{3}$ and 3T outperforms 7T for volumes beyond 27 $cm^{3}$.
+Furthermore, for 3T data, selection by stability and selection by $r2$ perform
+similarly, while selection by $r2$ outperforms selection by stability
+consistently in 7T data (Figure \ref{fig:matching_score_selection}).
 
 \begin{figure}
   \centering
@@ -486,22 +507,20 @@ selection.
 \subsection*{Decoding accuracy}
 
 Figure \ref{fig:decoding_accuracy_stimulus} shows the accuracy of decoding each
-individual stimulus. We compare the performance of our encoding-based decoder
-with a linear Support Vector Classifier (SVC) \citep{FCH+08,V13} that predicts
-stimulus labels using the time series from the selected voxels (dashed lines).
-While such a decoder can use the subset of the most stable
-voxels, it can only select the voxels with the highest $r^2$ if it can access
-the information from an encoding model. We still include these data, to show
-which information could be extracted from these voxels by a more sophisticated
-decoding approach. 
+individual stimulus (chance level 0.04) for different numbers of voxels,
+selection strategies, and field strength.
+A large discrepancy between the decoding performance of individual stimuli in 3T
+and 7T is visible: if voxels are selected by stability, 3T outperforms 7T for
+all numbers of voxels, if voxels are selected by $r2$, 3T outperforms 7T for all
+but the two highest numbers of voxels.
+For 7T data, the number of voxels matters little, however, for 3T data, optimal
+decoding accuracy is reached at a relatively low number of voxels (250 voxels
+for selection by $r2$ and selection by stability), and subsequently decreases if
+more voxels are included.
+However, decoding accuracy in 3T shows large variability, making comparisons
+between different numbers of voxels difficult.
 
-Decoding accuracy for the most stable voxels is slightly higher in 3T than 7T
-data, and similar across different numbers of voxels. For voxels selected by
-$r^2$, 3T shows a higher decoding accuracy than 7T for fewer voxels, and
-a similar performance if the number of voxels increases.
-Independent from voxel number and selection, support vector classification
-performs worse than the encoding-based decoder.
-
+%TODO: hier weiter
 The decoding accuracy of each stimulus's music category is shown in Figure
 \ref{fig:decoding_accuracy_var95}.  The decoding accuracy was higher for 7T data than for
 3T data, across all voxel numbers and selection criteria. 7T decoding
@@ -741,6 +760,76 @@ We are grateful to Michael Casey and the musicians ;) \ldots
 \todo[inline]{express gratitude}
 
 \bibliography{references}
+
+\beginsupplement
+\section*{Supplementary information} \label{supplemental}
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{pics/binary_selection.pdf}
+	
+  \caption{\textbf{A} Mean binary retrieval accuracy as a function of the
+  included number of voxels for 3T and 7T, for stability- and $r^2$-based
+  voxel selection. Error bars denote the bootstrapped 95\% confidence interval
+  of the mean. The mean is taken over binary retrieval accuracies of eight runs
+  for each of the 19 participants. \textbf{B} Mean binary retrieval accuracy as
+a function of the overall volume of the included voxels for 3T and 7T, for
+stability- and $r^2$-based voxel selection.
+}
+
+ \label{fig:binary_retrieval_selection}\end{figure}
+
+\begin{figure}
+  \centering
+    \includegraphics[width=\linewidth]{pics/rank_selection.pdf}
+	
+  \caption{\textbf{A} Mean matching rank score as a function of the included number
+  of voxels for 3T and 7T, for stability- and $r^2$-based voxel selection.
+  Error bars denote the bootstrapped 95\% confidence interval of the mean. The
+  mean is taken over binary retrieval accuracies of eight runs for each of the
+  19 participants. \textbf{B} Mean matching rank score as a function of the overall
+volume of the included voxels for 3T and 7T, for stability- and
+$r^2$-based voxel selection.}
+
+ \label{fig:matching_score_selection}
+\end{figure}
+
+
+\begin{figure}
+  \centering
+    \includegraphics[width=\linewidth]{pics/decoding_selection.pdf}
+
+	\caption{\textbf{A} Mean decoding accuracy of individual music stimuli as a function of
+  the included number of voxels for 3T and 7T, for stability- and
+  $r^2$-based voxel selection. Error bars denote the bootstrapped 95\%
+  confidence interval of the mean. The mean is taken over decoding
+  accuracies of eight runs for each of the 19 participants. Chance level is
+    0.04. \textbf{B} Mean
+decoding accuracy of individual music stimuli as a function of the overall volume of the
+included voxels for 3T and 7T, for stability- and $r^2$-based voxel
+selection. Chance level is 0.04.
+}
+ \label{fig:decoding_accuracy_stimulus_selection}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{pics/decoding_genre_selection.pdf}
+
+  \caption{\textbf{A} Mean decoding accuracy of music category as a function of
+  the included number of voxels for 3T and 7T, for stability- and
+  $r^2$-based voxel selection. Error bars denote the bootstrapped 95\%
+  confidence interval of the mean. The mean is taken over decoding
+  accuracies of eight runs for each of the 19 participants. \textbf{B} Mean
+decoding accuracy of music category as a function of the overall volume of the
+included voxels for 3T and 7T, for stability- and $r^2$-based voxel
+selection.
+}
+
+ \label{fig:decoding_accuracy_selection}
+\end{figure}
+
+
+
 \end{document}
 
 % vim: textwidth=80 colorcolumn=81
