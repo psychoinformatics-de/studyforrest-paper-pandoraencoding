@@ -113,7 +113,7 @@ Hence, it remains difficult to compare the quality of voxel-wise encoding models
 
 In this study, we aim to tackle this problem by documenting the effect of two common auxilliary parameters in the
 validation of voxel-wise encoding models --- the number of voxels used and how they were selected --- on different
-quality metrics for low and high field strength (3 and 7-Tesla f{MRI]).
+quality metrics for low and high field strength (3 and 7-Tesla f{MRI}).
 
 To this end, we utilize a 3T f{MRI} study on the perception of musical genres
 \citep{CTK+2012} which has recently been replicated in 7T \citep{HDH+2015}.
@@ -133,7 +133,7 @@ genres: 1) Ambient, 2) Roots Country 3) Heavy Metal, 4) 50s Rock'n'Roll, and 5)
 Symphonic. Previously, all 25 stimuli and have been made publicly available
 \citep{HDH+2015}.
 
-\subsection*{f{MRI] data}
+\subsection*{f{MRI} data}
 
 The analyses presented here were performed on two independently recorded, and
 previously published datasets \citep{CTK+2012,HDH+2015} . While these datasets
@@ -196,7 +196,7 @@ Montreal Neurological Institute coordinate space using FSL
 system. 
 Each voxel inside the temporal lobe mask was run-wise $Z$-scored and
 linearly de-trended using PyMVPA \citep{HHS09b}. 
-After preprocessing, 3T f{MRI] data consisted of 16999 voxels and 7T f{MRI] data of
+After preprocessing, 3T f{MRI} data consisted of 16999 voxels and 7T f{MRI} data of
 115439 voxels.
 
 \begin{figure}
@@ -394,7 +394,7 @@ explained best by an LQ-MFS-based encoding model.
 \section*{Results}
 
 We trained voxel-wise encoding models to predict voxel activity using a LQ-MFS
-representation of music stimuli in 3T and 7T f{MRI] data.
+representation of music stimuli in 3T and 7T f{MRI} data.
 First, we evaluate each voxel's encoding model individually.
 Figure \ref{fig:r2_plot} shows $r2$ values from an eight fold cross-validation
 of the 10000 voxels with highest $r2$ averaged across participants.
@@ -617,8 +617,8 @@ and that field strength, voxel selection, and voxel number all affect these metr
 differently.
 
 However, in spite of these inconsistencies, some common patterns emerge:
-voxel-wise encoding models in 3T f{MRI] data outperform voxel-wise encoding models in
-7T f{MRI] data in all but one quality metric.
+voxel-wise encoding models in 3T f{MRI} data outperform voxel-wise encoding models in
+7T f{MRI} data in all but one quality metric.
 This indicates that high field strength does not provide more information per
 se, since stimuli can't be differentiated better in general.
 Only when a decoding framework incorporates the relevant information, in our
@@ -687,7 +687,7 @@ Thus, one has to exercise caution, when choosing which label to decode from a se
 of encoding models, because the "wrong" label might provide a distorted picture.
 
 However, to assess if these recommendations prove to be general, more data are
-needed, since the results in this study are based on only two f{MRI] datasets
+needed, since the results in this study are based on only two f{MRI} datasets
 encompassing the same auditory stimuli recorded in 3- and 7T.
 While these circumstances facilitate a comparison between different field
 strengths, further work is needed to show that conclusions truly generalize
