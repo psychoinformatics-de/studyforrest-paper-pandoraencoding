@@ -113,7 +113,7 @@ Hence, it remains difficult to compare the quality of voxel-wise encoding models
 
 In this study, we aim to tackle this problem by documenting the effect of two common auxilliary parameters in the
 validation of voxel-wise encoding models --- the number of voxels used and how they were selected --- on different
-quality metrics for low and high field strength (3 and 7-Tesla fMRI).
+quality metrics for low and high field strength (3 and 7-Tesla f{MRI]).
 
 To this end, we utilize a 3T f{MRI} study on the perception of musical genres
 \citep{CTK+2012} which has recently been replicated in 7T \citep{HDH+2015}.
@@ -133,7 +133,7 @@ genres: 1) Ambient, 2) Roots Country 3) Heavy Metal, 4) 50s Rock'n'Roll, and 5)
 Symphonic. Previously, all 25 stimuli and have been made publicly available
 \citep{HDH+2015}.
 
-\subsection*{fMRI data}
+\subsection*{f{MRI] data}
 
 The analyses presented here were performed on two independently recorded, and
 previously published datasets \citep{CTK+2012,HDH+2015} . While these datasets
@@ -193,8 +193,11 @@ additional fixation at the start of a run. For further details, see
 Approximate temporal lobe masks for each participant were extracted from
 Montreal Neurological Institute coordinate space using FSL
 \citep{SJB+04,JBB+12}, and projected into the subject-specific coordinate
-system.  Each voxel inside the temporal lobe mask was run-wise $Z$-scored and
+system. 
+Each voxel inside the temporal lobe mask was run-wise $Z$-scored and
 linearly de-trended using PyMVPA \citep{HHS09b}. 
+After preprocessing, 3T f{MRI] data consisted of 16999 voxels and 7T f{MRI] data of
+115439 voxels.
 
 \begin{figure}
   \centering
@@ -390,6 +393,27 @@ explained best by an LQ-MFS-based encoding model.
 
 \section*{Results}
 
+We trained voxel-wise encoding models to predict voxel activity using a LQ-MFS
+representation of music stimuli in 3T and 7T f{MRI] data.
+First, we evaluate each voxel's encoding model individually.
+Figure \ref{fig:r2_plot} shows $r2$ values from an eight fold cross-validation
+of the 10000 voxels with highest $r2$ averaged across participants.
+While voxel-wise encoding models in 3T perform similarly or even better than 7T
+in the best predicted voxels, voxel-wise encoding models in 7T clearly
+outperform models in 3T in all other voxels.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{pics/r2_plot.pdf}
+	
+  \caption{Average $r2$ across participants and 95\% confidence interval for the 10000 voxels with
+    highest $r2$, sorted by $r2$, for 3T and 7T.
+  }
+
+ \label{fig:r2_plot}\end{figure}
+
+Next, we evaluate sets of voxel-wise encoding models for 3T and 7T using several
+quality metrics.
 We varied the number of voxels used in the analysis and how they were selected,
 both for 3T and 7T f{MRI} data, and compared the resulting differences in
 three quality metrics of encoding models.
@@ -520,38 +544,37 @@ more voxels are included.
 However, decoding accuracy in 3T shows large variability, making comparisons
 between different numbers of voxels difficult.
 
-%TODO: hier weiter
-The decoding accuracy of each stimulus's music category is shown in Figure
-\ref{fig:decoding_accuracy_var95}.  The decoding accuracy was higher for 7T data than for
-3T data, across all voxel numbers and selection criteria. 7T decoding
-accuracy increases with the number of most stable voxels, while 3T stays level.
-For voxels selected by $r^2$, 7T decoding accuracy peaks around 2500 voxels,
-then decreases, while 3T decreases in decoding accuracy from 500 voxels
-on. 
+Instead of decoding individual stimuli, we can also decode the musical genre of
+each individual stimulus.
+Figure \ref{fig:decoding_accuracy} shows the accuracy of decoding music genre
+(chance level 0.20) for different numbers of voxels, selection strategies,
+and field strength.
+Here a different pattern emerges: decoding accuracy is higher for 7T data than for
+3T data, across all numbers of voxels and selection criteria.
+For both selection strategies, 7T shows higher genre decoding accuracy for high
+numbers of voxels, while 3T shows higher genre decoding accuracy for lower
+numbers of voxels.
 
+We next want to answer the question which musical genres can be best predicted,
+and if those differ between 3T and 7T data.
+For this we compute the confusion matrix from the out-of-sample predictions of
+all classifiers: Rows denote the stimulus' true genre, columns denote the
+predicted genre. Each cell contains the count -- or proportion
+-- of occurences of this combination of true and predicted genres.
+Maximum classification accuracy leads to a diagonal confusion matrix.
 
-Instead of reducing the dimensionality of the encoding model to retain a fixed
-amount of variance, we wanted to see if choosing the dimensionality to optimise decoding
-performance affects the genre decoding accuracy.
-Figure \ref{fig:decoding_accuracy} shows these results, note that the support vector
-classification curves stay the same and can be used as a reference point.
-Both 7T and 3T show a higher decoding accuracy and better performance especially
-for lower numbers of voxels. 
+Figure \ref{fig:confusion_matrices} shows the confusion matrices averaged across
+numbers of voxels for different field strength and selection criteria.
 
-Overall decoding accuracy can be complemented by the confusion matrix of a
-classifier: Rows are annotated by the true class label, columns by the
-classifier's chosen class label. Each cell contains the count -- or proportion
--- of occurences of this row/column combination. A perfect classification
-accuracy, implies a diagonal confusion matrix.
-
-In Figure \ref{fig:confusion_matrices} the confusion matrices averaged across
-numbers of voxels for different field strength and selection criteria are shown.
 The occurences are normalized per row, and their mean proportion together with
 the standard deviation across numbers of voxels are indicated in each cell. All
 confusion matrices show a higher misclassification between genres that contain
 speech (country, rock'n'roll and heavy metal) and between instrumental genres
 (ambient and symphonic), while very few genres that contain speech are
 incorrectly classified as instrumental or vice versa.
+The increased genre decoding accuracy in 7T is thus due to a better
+discrimination between the two instrumental genres --- ambient and symphonic ---
+and between the three vocal genres --- country, rock'n'roll, and heavy metal.
 
 %\begin{figure}
 %  \centering
@@ -585,135 +608,101 @@ incorrectly classified as instrumental or vice versa.
 % \label{fig:anova_yhat}
 %\end{figure}
 %
-
-\subsection*{Voxel-wise $r^2$ and discriminability}
-%
-Instead of validating encoding performance for a set of voxels, we can also test
-each voxel independently.
-
-To quantify each voxel's encoding performance -- in terms of explained
-variance -- with the discriminability of the selected voxels, we order each
-participant's voxels by explained variance and compute the mean $r^2$ for each
-voxel across participants (Figure \ref{fig:r2}). Vertical bars the point up to
-which voxels were selected by $r^2$. 
-
-The potential discriminability of a voxel can be illustrated by computing its
-F-statistic. This measure is the between-group variability divided by the within-group
-variability, where the groups are either the stimulus or genre labels. 
-Additionally, we can then test if an encoding model actually increases the
-discriminability, by computing this measure for the original f{MRI} time-series as well
-as the time-series predicted by the voxel-wise encoding models. In Figure
-\ref{fig:anova} we show the F-statistic first averaged over the
-voxels selected by $r^2$ and then averaged over participants, for the original
-time series (left column) and for the time series predicted by an encoding model
-(right column).
-
-Grouping the observed f{MRI} time-series both by genre and stimuli shows a
-higher F-statistic for 7T than 3T across all numbers of voxels, with an
-especially strong difference for grouping by genre.
-
-Using the predicted f{MRI} time-series increases the discriminability overall,
-with the largest difference again for genre.
-
 \section*{Discussion}
 
-Our results show considerable variation of different quality metrics with
-field strength and parameters of the data analysis. We demonstrate that the
-patterns of this variation differ between validation strategies and that the
-effects of field strength, voxel selection, and voxel number are inconsistent
-across these metrics.
+Our results show all three quality metrics varying with the numbers of
+voxels and voxel selection strategies in both low and high field strengths.
+We demonstrate that the patterns of this variation differ between validation strategies
+and that field strength, voxel selection, and voxel number all affect these metrics
+differently.
 
-Specifically, we show a similar performance in purely encoding based metrics
-for 3T and 7T data with a slightly worse peak performance for 7T, but
-observe that this effect is mediated by the number of voxels used. A previous
-study \citep{SF14} found a better performance for 7T data for the matching
-score, although using a different number of stimuli in the 3T and 7T
-datasets. 
+However, in spite of these inconsistencies, some common patterns emerge:
+voxel-wise encoding models in 3T f{MRI] data outperform voxel-wise encoding models in
+7T f{MRI] data in all but one quality metric.
+This indicates that high field strength does not provide more information per
+se, since stimuli can't be differentiated better in general.
+Only when a decoding framework incorporates the relevant information, in our
+case the musical genre, can it harness the improved signal-to-noise ratio of
+higher field strength.
+Our result thus constrasts a  previous study \citep{SF14} that found a better
+performance for 7T data for the matching score, although using a different
+number of stimuli in the 3T and 7T datasets.
 
-Selecting the voxels by $r^2$ instead of a stability criterion, improves
-performance especially in the lower number of voxels for the binary retrieval
-accuracy and the decoding accuracy, while widening the performance gap between
-3T and 7T data in the matching score. Including voxels ordered by $r^2$
---- a measure that captures encoding performance in a single voxel --- gives
-diminishing returns for higher numbers of voxels: Voxels for which an encoding
-model performs well are already included, and each additional voxel decreases
-the joint encoding performance.  Interestingly, this pattern is not seen in the
+One reason for this, could be that training encoding models on stimulus features
+can make stimulus labels somewhat arbitrary.
+Two stimuli might be quite similar, and the encoding model might correctly translate this into similar BOLD
+activity, but this could still decrease a quality measure that is based on the
+correct discrimination between individual stimuli.
+
+A further commonality is the effect of voxel selection strategy:
+selecting the voxels by $r^2$ either improves upon or performs indistinguishably
+from selection by a stability criterion.
+One reason that this effect is especially prominent when only few voxels are included could
+be the quickly diminishing returns for higher number of voxels: voxels in which 
+an encoding model performs well are already included, and each additional voxel
+decreases the joint encoding performance.
+
+Interestingly, this pattern is not seen in the
 matching score, where performance in 7T is worse for the smallest number
-of voxels and increases with voxel number. The same pattern is seen in the
-performance of the linear SVC. Even with information from an encoding model ---
-selecting voxels by $r^2$ --- a standard decoder can initially not take
-advantage of this information as well as an encoding model. For the high field
-strength condition, the decoder improves if more voxels are included and
-eventually performs better than the encoding model. This might be an effect of
-the sheer number of features used by the decoder, or of the information content
-of these voxels, i.e. because the decoder profits from pattern information that
-is not related to the LQ-MFS features of the stimulus, and would therefore be
-more present in a voxel with lower $r^2$ in encoding LQ-MFS.
+of voxels and continually increases when more voxels are included.
+In fact, this holds true for selection by both $r2$ and a stability criterion,
+and thus differentiates the matching score from both binary retrieval accuracy,
+as well as decoding accuracy.
 
-The number of voxels affect the encoding performance differentially for low and
-high field strength. This is not surprising, as voxel sizes differ for these
-particular 3T and 7T data. Indexing by the overall volume of the selected
-voxels, instead of their number, reveals similarities in performance when 3T
+Accordingly, indexing by the overall volume of the selected voxels,
+instead of their number, reveals similarities in performance when 3T
 and 7T encoding models are trained on a similar volume in the matching
-score, but other metrics show a higher sensitivity to the number of
+score, yet all other metrics show a higher sensitivity to the number of
 voxels.
 
-All quality metrics show a different pattern for field strength differences.
-One might expect a better encoding performance in 7T than 3T a priori, since 7T contains
-potentially higher information \citep{FK12}, but only in decoding the music genre
-is there a consistently higher performance for 7T data.
+To conclude, we can abstract several recommendations for applying and validating
+voxel-wise encoding models.
 
-Training encoding models on stimulus features makes stimulus labels as the
-boundaries of f{MRI} activity somewhat arbitrary. Two stimuli might be quite
-similar, and the encoding model might correctly translate this into similar BOLD
-activity, but this could still decrease a quality measure that is based on the
-correct discrimination between individual stimuli. We also observe this in our
-study: In 7T there's a higher voxel-wise explained variance (Figure \ref{fig:r2}) and a higher potential discriminability
-between stimuli and genre (Figure \ref{fig:anova} and \ref{fig:anova_yhat}). Yet, this difference does not translate into a higher
-binary retrieval accuracy, matching score or stimulus decoding accuracy. Only
-in decoding information about the similarity between stimuli -- their genre
--- is there an advantage of the better voxel-wise encoding models present in
-7T.
+%r2 > stability selection
+First, it is likely that selecting voxels by the quality of its encoding model,
+such as the $r2$ score, will outperform a selection of voxels based on their
+stable response to the stimulus --- however, this difference diminishes for
+large numbers of voxels.
 
-Which validation strategy should one then choose?
+%number of voxels matters: to compare two encoding models one has to control for
+%it
+Second, the number of voxels used has a large effect on all quality metrics, and
+to compare two sets of voxel-wise encoding models even on the same stimuli, one
+has to control for them.
+For most quality metrics, this control is most easily exercised by fixing the
+number of voxels directly, however, in case of the matching score, it can be
+more meaningful to fix the overall volume the two sets of encoding models
+encompass.
+%For most applications of voxel-wise encoding models, this distinction will not
+%matter, since comparisons between encoding models rarely encompass different
+%voxel sizes, however, to judge the difference in performance for
 
-Selecting voxels by $r^2$ outperforms a stability-based selection consistently.
-If this information is available, it should be used. It helps
-discriminating stimuli using fewer voxels, and it is more justified to interpret
-the location of voxels selected by $r^2$ than by a stability criterion.
-Voxels can alternatively be selected by anatomical criteria.
+Third, while higher field strength might lead to better individual encoding
+models, it might not improve their decoding accuracy.
+The key insight is, that higher field strength can decrease the decoding
+accuracy for some labels of the stimulus, i.e. the decoding of individual
+stimuli, yet increase the decoding accuracy for other labels, i.e the decoding
+of the musical genre of individual stimuli.
+Thus, one has to exercise caution, when choosing which label to decode from a set
+of encoding models, because the "wrong" label might provide a distorted picture.
 
-Different numbers of voxels interact with different quality metrics and they
-have to be considered together. 
+However, to assess if these recommendations prove to be general, more data are
+needed, since the results in this study are based on only two f{MRI] datasets
+encompassing the same auditory stimuli recorded in 3- and 7T.
+While these circumstances facilitate a comparison between different field
+strengths, further work is needed to show that conclusions truly generalize
+beyond this set of stimuli, our chosen stimulus representation,  or even beyond the auditory domain.
 
-Binary retrieval accuracy shows the highest similarity between 3T and 7T data
-across different numbers of voxels, the effect of the number of voxels is
-stronger than their volume. The matching score on the other hand shows
-sensitivity to the overall volume of the selected voxels, potentially indicating
-the size of the region(s) in the temporal lobe where the signal is strongest.
-
-By considering only the pair-wise similarity, the binary retrieval score is a more stable measure than the matching
-score or the decoding accuracy, but that stability comes with a price: The measure
-quickly saturates and it might become difficult to detect performance
-differences for well performing models. The matching score ranks one
-stimulus's prediction against all stimuli, and more accurately represents how
-well stimuli can be discriminated. Decoding the stimulus identity through an
-encoding model does this as well, but adds an additional degree of freedom: how to select the dimensionality
-of the reduced encoding model. Yet, using a encoding-based  decoder also has an
-advantage over the matching score. It is not limited to decoding the
-stimulus identity, but can be used to decode other stimulus features -- like its
-genre -- which might capture similarity between stimuli, or their associated
-f{MRI} response, better. The decoding approach might better capture the individual voxel-wise encoding
-model's performance if the set of stimuli can be separated by other labels than the stimulus identity.
-
-Yet, the main take-away of this study might be a different one: Arbitrary
-choices in the data analysis, -- like the number of voxels used or how they are
-selected -- have a considerable impact on the performance evaluation of
-voxel-wise encoding models. Even worse, the impact of these parameters is vastly
-different for the considered validation strategies. The effects of these
-hyper-parameters are rarely known, and each choice of a specific value can
-easily be justified, but there are considerable researcher degrees-of-freedom
-\citep{SNS11} in arriving at the end-result.
+Nonetheless, this work shows the significance of on an often under-appreciated aspect of
+computational models in neuroimaging: arbitrary choices in the data analysis,
+-- like the number of voxels used or how they are selected --
+have a considerable impact on the performance evaluation of
+voxel-wise encoding models. Furthermore, the impact of these parameters is
+highly inconsistent across the considered validation strategies.
+The effects of these parameters are rarely known a-priori, and each choice of a specific value can often
+be easily justified, yet this undisclosed flexibility leads to considerable researcher degrees-of-freedom
+\citep{SNS11,hong2019false} and will bias the comparison between different
+voxel-wise encoding models.
 
 \section*{Author contributions}
 %In order to give appropriate credit to each author of an article, the
