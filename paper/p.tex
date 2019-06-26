@@ -95,8 +95,7 @@ multiple quality metrics exist that assess how well these models approximate bra
 %we can still choose between different ways of evaluating its performance.
 
 %TODO: search for other examples
-Previous studies have introduced several measures for the quality of
-an encoding model: \citet{ML08} used a binary retrieval measure --- checking
+\citet{ML08} used a binary retrieval measure --- assessing
 whether an encoding model's predictions can be used to identify the correct
 stimulus against a decoy --- to evaluate the predicted f{MRI} images for the meaning
 of nouns. \citet{KG+08} used stimulus identification accuracy, and \citet{NG09} used
@@ -117,11 +116,10 @@ quality metrics for low and high field strength (3 and 7-Tesla f{MRI}).
 
 To this end, we utilize a 3T f{MRI} study on the perception of musical genres
 \citep{CTK+2012} which has recently been replicated in 7T \citep{HDH+2015}.
-The main goal of this study is thus to apply three approaches to encoding
+Using these datasets, we apply three approaches to encoding model
 validation, --- binary retrieval accuracy \citep{ML08}, stimulus identification \citep{KG+08,SF14} and
-decoding accuracy of the stimulus ---, and compare them in a 3T
-and 7T dataset with identical stimuli and comparable design, for different
-choices in data analysis parameters.
+decoding accuracy of the stimulus ---, and compare them in a 3T and 7T dataset with identical stimuli
+and comparable design, for different choices in data analysis parameters.
 
 \section*{Methods}
 
@@ -130,7 +128,7 @@ choices in data analysis parameters.
 Stimuli were five natural, stereo, high-quality music stimuli (\unit[6]{s}
 duration; \unit[44.1]{kHz} sampling rate) for each of five different musical
 genres: 1) Ambient, 2) Roots Country 3) Heavy Metal, 4) 50s Rock'n'Roll, and 5)
-Symphonic. Previously, all 25 stimuli and have been made publicly available
+Symphonic. Previously, all 25 stimuli have been made publicly available
 \citep{HDH+2015}.
 
 \subsection*{f{MRI} data}
@@ -268,6 +266,9 @@ Later on the encoding models are validated by their predicted f{MRI} activity
 for a set of voxels (visualised in the upper left corner of Figure
 \ref{fig:decoding_scheme}). 
 
+All analyses were implemented using custom code utilizing the SciPy ecosystem \citep{jones2014scipy},
+Scikit-Learn \citep{PVG+11}, Nilearn \citep{abraham2014machine}, and PyMVPA
+\citep{HHS09b}.
 
 %\subsection*{Quality metrics} 
 %
@@ -337,11 +338,10 @@ decoding scheme into two parts.
 First we condense the large number of voxel-specific encoding models into one
 multi-voxel encoding model.  To do this we project the predicted and observed
 f{MRI} data onto the first $k$ principal components of the $[N\times V]$ matrix
-of predicted BOLD activity. We consider two ways of choosing $k$: using
-cross-validation to estimate the number of principal components
-that maximize the decoding accuracy on the training set for this participant
-(1), and choosing $k$ to retain a fixed amount of variance -- 95\% -- in the
-predicted BOLD activity (2). As in \citet{NG09} we construct the $k$-dimensional multivariate normal
+of predicted BOLD activity. We choose $k$ via cross-validation to estimate the
+number of principal components that maximize the decoding accuracy on the
+training set for each participant.
+As in \citet{NG09} we construct the $k$-dimensional multivariate normal
 probability density function $p(y_{t}|x_{t})$ to obtain a likelihood function
 across voxels. 
 
@@ -421,7 +421,7 @@ To differentiate between effects of voxel number and overall volume of the voxel
 which differs in 3T and 7T, we show the results as a function of the number of voxels,
 as well as overall volume of these voxels.
 
-\begin{figure}
+\begin{figure*}
   \centering
   \includegraphics[width=\linewidth]{pics/binary.pdf}
 	
@@ -434,7 +434,7 @@ a function of the overall volume of the included voxels for 3T and 7T, for
 stability- and $r^2$-based voxel selection.
 }
 
- \label{fig:binary_retrieval}\end{figure}
+ \label{fig:binary_retrieval}\end{figure*}
 
 \subsection*{Binary retrieval accuracy}
 
@@ -452,7 +452,7 @@ With regard to the voxel selection strategies, selection by $r2$ outperforms or
 is equal to selection by stability across all numbers of voxels (Figure
 \ref{fig:binary_retrieval_selection}).
 
-\begin{figure}
+\begin{figure*}
   \centering
     \includegraphics[width=\linewidth]{pics/rank.pdf}
 	
@@ -465,7 +465,7 @@ volume of the included voxels for 3T and 7T, for stability- and
 $r^2$-based voxel selection.}
 
  \label{fig:matching_score}
-\end{figure}
+\end{figure*}
 
 \subsection*{Matching score}
 
@@ -485,7 +485,7 @@ Furthermore, for 3T data, selection by stability and selection by $r2$ perform
 similarly, while selection by $r2$ outperforms selection by stability
 consistently in 7T data (Figure \ref{fig:matching_score_selection}).
 
-\begin{figure}
+\begin{figure*}
   \centering
     \includegraphics[width=\linewidth]{pics/decoding.pdf}
 
@@ -500,9 +500,9 @@ included voxels for 3T and 7T, for stability- and $r^2$-based voxel
 selection. Chance level is 0.04.
 }
  \label{fig:decoding_accuracy_stimulus}
-\end{figure}
+\end{figure*}
 
-\begin{figure}
+\begin{figure*}
   \centering
   \includegraphics[width=\linewidth]{pics/decoding_genre.pdf}
 
@@ -517,7 +517,7 @@ selection.
 }
 
  \label{fig:decoding_accuracy}
-\end{figure}
+\end{figure*}
 
 \begin{figure}
   \centering
@@ -566,11 +566,10 @@ Maximum classification accuracy leads to a diagonal confusion matrix.
 Figure \ref{fig:confusion_matrices} shows the confusion matrices averaged across
 numbers of voxels for different field strength and selection criteria.
 
-The occurences are normalized per row, and their mean proportion together with
-the standard deviation across numbers of voxels are indicated in each cell. All
-confusion matrices show a higher misclassification between genres that contain
-speech (country, rock'n'roll and heavy metal) and between instrumental genres
-(ambient and symphonic), while very few genres that contain speech are
+The occurences are normalized per row, and their mean proportion across numbers
+of voxels are indicated in each cell. All confusion matrices show a higher
+misclassification between genres that contain speech (country, rock'n'roll and heavy metal)
+and between instrumental genres (ambient and symphonic), while very few genres that contain speech are
 incorrectly classified as instrumental or vice versa.
 The increased genre decoding accuracy in 7T is thus due to a better
 discrimination between the two instrumental genres --- ambient and symphonic ---
@@ -610,7 +609,7 @@ and between the three vocal genres --- country, rock'n'roll, and heavy metal.
 %
 \section*{Discussion}
 
-Our results show all three quality metrics varying with the numbers of
+Our results show all three quality metrics varying with the number of
 voxels and voxel selection strategies in both low and high field strengths.
 We demonstrate that the patterns of this variation differ between validation strategies
 and that field strength, voxel selection, and voxel number all affect these metrics
@@ -620,7 +619,8 @@ However, in spite of these inconsistencies, some common patterns emerge:
 voxel-wise encoding models in 3T f{MRI} data outperform voxel-wise encoding models in
 7T f{MRI} data in all but one quality metric.
 This indicates that high field strength does not provide more information per
-se, since stimuli can't be differentiated better in general.
+se, since stimuli can't be differentiated better in general, in spite of the higher
+$r2$ in individual voxels in 7T than in 3T.
 Only when a decoding framework incorporates the relevant information, in our
 case the musical genre, can it harness the improved signal-to-noise ratio of
 higher field strength.
@@ -630,11 +630,11 @@ number of stimuli in the 3T and 7T datasets.
 
 One reason for this, could be that training encoding models on stimulus features
 can make stimulus labels somewhat arbitrary.
-Two stimuli might be quite similar, and the encoding model might correctly translate this into similar BOLD
-activity, but this could still decrease a quality measure that is based on the
-correct discrimination between individual stimuli.
+Two stimuli might be quite similar, and the encoding model might correctly translate this into similar
+predicted BOLD activity, and hence a higher $r2$,  yet this similarity could decrease a quality measure
+that is based on the correct discrimination between individual stimuli.
 
-A further commonality is the effect of voxel selection strategy:
+We observe another common pattern in the effect of voxel selection strategy:
 selecting the voxels by $r^2$ either improves upon or performs indistinguishably
 from selection by a stability criterion.
 One reason that this effect is especially prominent when only few voxels are included could
@@ -684,14 +684,14 @@ accuracy for some labels of the stimulus, i.e. the decoding of individual
 stimuli, yet increase the decoding accuracy for other labels, i.e the decoding
 of the musical genre of individual stimuli.
 Thus, one has to exercise caution, when choosing which label to decode from a set
-of encoding models, because the "wrong" label might provide a distorted picture.
+of encoding models.
 
-However, to assess if these recommendations prove to be general, more data are
+However, to assess if these recommendations generalize, more data are
 needed, since the results in this study are based on only two f{MRI} datasets
 encompassing the same auditory stimuli recorded in 3- and 7T.
-While these circumstances facilitate a comparison between different field
-strengths, further work is needed to show that conclusions truly generalize
-beyond this set of stimuli, our chosen stimulus representation,  or even beyond the auditory domain.
+This facilitates a comparison between different field
+strengths, yet, further work is needed to show that these conclusions hold beyond
+this set of stimuli, our chosen stimulus representation, and even beyond the auditory domain.
 
 Nonetheless, this work shows the significance of on an often under-appreciated aspect of
 computational models in neuroimaging: arbitrary choices in the data analysis,
