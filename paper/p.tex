@@ -9,13 +9,13 @@
 
 \begin{document}
 \bibliographystyle{unsrtnat}
-\title{Exploring the role of auxilliary factors in evaluating voxel-wise encoding models}
+\title{Exploring the role of auxilliary parameters in evaluating voxel-wise encoding models}
 
 
 \author[1]{Moritz~Boos}
 \author[2]{J.~Swaroop~Guntupalli}
-\author[1]{Cristiano Micheli}
-\author[1]{Jochem Rieger}
+\author[1]{Cristiano~Micheli}
+\author[1]{Jochem~W.~Rieger}
 \author[3,4]{Michael~Hanke}
 
 \affil[1]{Oldenburg, Germany}
@@ -28,13 +28,20 @@
 \listoftodos
 
 \begin{abstract}
-% Abstracts should be up to 300 words and provide a succinct summary of the
-% article. Although the abstract should explain why the article might be
-% interesting, care should be taken not to inappropriately over-emphasise the
-% importance of the work described in the article. Citations should not be used
-% in the abstract, and the use of abbreviations should be minimized.
-
-\todo[inline]{write abstract}
+In neuroimaging, voxel-wise encoding models are a popular method for
+characterizing how a naturalistic stimulus elicits BOLD activity patterns.
+To evaluate if this characterization proves to be accurate, one can choose
+between multiple quality metrics.
+However, each quality metric requires specifying additional parameters, such as
+the number of voxels and how to select them, and the influence of these
+parameters on the evaluation remains unknown.
+To shed light on the effect of these parameters, we use voxel-wise encoding models
+to predict 3- and 7-Tesla BOLD activity that was elicited by musical stimuli,
+and evaluate these models with three quality metrics that were introducted in previous studies.
+By varying the numbers of voxels used and the voxel selection strategy, we
+demonstrate that these parameters, as well as field strength, influence each quality metric
+differently, and how these differences might affect the comparison between
+    voxel-wise encoding models.
 \end{abstract}
 
 \clearpage
@@ -43,65 +50,24 @@
 \section*{Introduction}
 
 In functional magnetic resonance imaging (f{MRI}) research, voxel-wise encoding
-models \todo{acronym: VWEM? used quite a bit, may be worth it} are an increasingly popular tool to characterize the relationship
+models (VWEM) \todo{acronym: VWEM? used quite a bit, may be worth it} are an increasingly popular tool to characterize the relationship
 between a real world stimulus and BOLD activity patterns
 \citep{NG11,TD+06,KG+08,SZ09}.
-
-%TODO: citations by gallant etc
-%These models learn a linear filter of the stimulus representation that best
-%predicts recorded activity in each voxel, thus forming 
-
-%how well features of the stimulus can explain brain activity.
-
-%accordingly, the quality of an encoding model is
-%routinely equated with the amount of variance it explains in each voxel.
-
-%TODO: klarer in einem satz sagen
-%However, the ability of voxel-wise encoding models to approximate brain
-%activity across multiple voxel
-
-%However, this gives little information about a model's ability to predict brain
-%activity 
-
-%brain activity evoked by different stimuli that spans multiple voxels, i.e. if
-%brain activity is evoked by a face or a house.
-
-%However, evaluating if voxel-wise encoding models provide accurate predictions
-%across multiple voxels, i.e. can differentiate brain activity evoked by
-%different stimuli, remains an open problem. 
-%all unclear: what's the point of this?
 
 However, researchers face many degrees of freedom in constructing voxel-wise encoding models, 
 such as how to represent the stimulus or how to estimate an accurate model.
 
-%ohne multiple
 To evaluate the fidelity of these choices and the resulting voxel-wise encoding models,
 multiple quality metrics exist that assess how well these models approximate brain activity across multiple voxels.
 
-%a researcher has many degrees of freedom in constructing one.  Parameters of
-%the data analysis, as well as parameters of BOLD-acquisition, like field
-%strength and resolution, might impact encoding performance \citep{KB07,FK12}.
-
-%Especially high-field f{MRI} (7-Tesla and higher), with its increased spatial
-%specificity \citep{THW+05,YU08}, could lead to better encoding models \citep{FK12}. 
-%\citet{SF14} offer some empirical evidence that an encoding model performs better on
-%7-Tesla (7T) than 3-Tesla (3T) data.
-
-%After collecting the data, more choices await -- how to preprocess, which
-%voxels to select and how to parameterize the encoding model -- and little is known about their
-%consequences. Even when we obtain an encoding model for each included voxel,
-%we can still choose between different ways of evaluating its performance.
-
-%TODO: search for other examples
-\citet{ML08} used a binary retrieval measure --- assessing
-whether an encoding model's predictions can be used to identify the correct
+\citet{ML08} first introduced binary retrieval accuracy --- a measure that
+assesses whether an encoding model's predictions can be used to identify the correct
 stimulus against a decoy --- to evaluate the predicted f{MRI} images for the meaning
 of nouns. \citet{KG+08} used stimulus identification accuracy, and \citet{NG09} used
 stimulus reconstruction quality as a metric for encoding performance.
-%TODO: I think a new Formisano paper uses encoding model reconstruction
-In auditory neuroscience, where encoding models are less frequent, only binary retrieval
-accuracy \citep{CTK+2012} and stimulus identification \citep{SF14} have been
-used. 
+
+In auditory neuroscience, only binary retrieval accuracy \citep{CTK+2012,hoefle2018identifying}
+and stimulus identification \citep{SF14,allen2018encoding} have been used. 
 
 However, while providing novel insights into the cortical processing of sensory
 stimuli, it is unknown how additional parameters of the data analysis that are unrelated to the encoding models themselves
@@ -116,7 +82,7 @@ To this end, we utilize a 3T f{MRI} study on the perception of musical genres
 \citep{CTK+2012} which has recently been replicated in 7T \citep{HDH+2015}.
 Using these datasets, we apply three approaches to encoding model
 validation, --- binary retrieval accuracy \citep{ML08}, stimulus identification \citep{KG+08,SF14} and
-decoding accuracy of the stimulus ---, and compare them in a 3T and 7T dataset with identical stimuli
+decoding accuracy of the stimulus \citep{NG09} ---, and compare them in a 3T and 7T dataset with identical stimuli
 and comparable design, for different choices in data analysis parameters.
 
 \section*{Methods}
@@ -132,7 +98,7 @@ Symphonic. Previously, all 25 stimuli have been made publicly available
 \subsection*{f{MRI} data}
 
 The analyses presented here were performed on two independently recorded, and
-previously published datasets \citep{CTK+2012,HDH+2015} . While these datasets
+previously published datasets \citep{CTK+2012,HDH+2015}. While these datasets
 have been acquired using identical stimuli, with the same number of acquisition
 runs and number of stimulation trials, they nevertheless differ in their
 precise stimulation timing, stimulation setup and equipment, as well as other
@@ -308,13 +274,6 @@ validation set are averaged.
     likelihood function $p(y_{t}|x_{t})$ is constructed.  From there, the
   probability distribution over music stimuli and subsequently musical
 categories is estimated.}
-%\todo[inline]{this is talking about a 2-part decoding scheme. would be good to
-%  label those parts. Probably best to include a symbolic reference that the
-%  basic scores (without decoding) are computed from the predicted time series
-%  at the top. The manuscript is unclear how models from multiple voxels are
-%treated in this case. Is the correlation distance computed for all timepoints
-%of a stimulus across all the voxels? or per voxel and averaged?}
-
 
  \label{fig:decoding_scheme}
 \end{figure}
@@ -378,7 +337,7 @@ criteria were based on voxel characteristics in the training set only.
 single voxel, each run can be represented as a vector of BOLD activity, where
 each entry is associated with one stimulus. A voxel's "stability score" is then
 the average (pair-wise) correlation between the vectors of the eight runs for
-all combinations of runs.  This criterion selects voxels with consistent
+all combinations of runs. Hence, this criterion selects voxels with consistent
 activation for each stimulus across runs.
 
 \paragraph{Selection by $r^2$}
@@ -628,8 +587,8 @@ number of stimuli in the 3T and 7T datasets.
 
 One reason for this, could be that training encoding models on stimulus features
 can make stimulus labels somewhat arbitrary.
-Two stimuli might be quite similar, and the encoding model might correctly translate this into similar
-predicted BOLD activity, and hence a higher $r2$,  yet this similarity could decrease a quality measure
+Two similar stimuli can lead to similar and accurate predictions of BOLD activity,
+and hence a higher $r2$,  yet this similarity could decrease a quality measure
 that is based on the correct discrimination between individual stimuli.
 
 We observe another common pattern in the effect of voxel selection strategy:
@@ -652,6 +611,11 @@ instead of their number, reveals similarities in performance when 3T
 and 7T encoding models are trained on a similar volume in the matching
 score, yet all other metrics show a higher sensitivity to the number of
 voxels.
+
+In regards to binary retrieval accuracy, results from a previous study indicate
+that low numbers of voxels lead to high binary retrieval accuracy \citep{hoefle2018identifying}.
+Our results seem to corroborate this finding, suggesting that binary retrieval accuracy,
+in contrast to the matching score, is sensitive to the inclusion of worse performing voxels.
 
 To conclude, we can abstract several recommendations for applying and validating
 voxel-wise encoding models.
@@ -711,8 +675,6 @@ voxel-wise encoding models.
 MB performed the analysis and wrote the manuscript.
 JSG contributed to the manuscript.
 MH contributed to the manuscript.
-\todo{some authors are missing here}
-
 
 \section*{Competing Interests}
 
@@ -819,4 +781,3 @@ selection.
 
 \end{document}
 
-% vim: textwidth=80 colorcolumn=81
