@@ -54,7 +54,6 @@ def run_split_from_labels(labels, label_occ=3):
         counter[label] += 1
     return run_samples
 
-#TODO: build test
 
 def compute_stability(fmri, labels):
     '''Computes stability score for each voxel

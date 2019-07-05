@@ -26,7 +26,7 @@ def preprocess_and_tmp_save_fmri_3T(datapath, task, subj, model, scratch_path, g
     run-wise linear de-trending and z-scoring'''
     from nipype.interfaces import fsl
     dhandle = mvpa.OpenFMRIDataset(datapath)
-    mask_fname = '/home/mboos/pandora_paper/temporal_lobe_mask_3T_subj{}bold.nii.gz'.format(subj)
+    mask_fname = os.path.join('..','masks','temporal_lobe_mask_3T_subj{}bold.nii.gz'.format(subj))
     flavor = 'moco_to_subjbold3Tp2'
     nmbrs = []
     with open(datapath+'/'+'stimuli_labels.txt') as fh:
@@ -41,6 +41,7 @@ def preprocess_and_tmp_save_fmri_3T(datapath, task, subj, model, scratch_path, g
         for i in range(len(run_events)):
             run_events[i]['condition'] = run_info[run_id-1][i]
 
+        #warp into group space
         run_ds = dhandle.get_bold_run_dataset(subj, task, run_id, chunks=run_id-1, mask=mask_fname, flavor=flavor)
         filename = 'brain_subj_{}_run_{}.nii.gz'.format(subj, run_id)
         tmp_path = scratch_path + filename
@@ -48,8 +49,8 @@ def preprocess_and_tmp_save_fmri_3T(datapath, task, subj, model, scratch_path, g
         warp = fsl.ApplyWarp()
         warp.inputs.in_file = tmp_path
         warp.inputs.out_file = scratch_path+'group_'+filename
-        warp.inputs.ref_file = '/data/pandora_3T/data/templates/grpbold/brain.nii.gz'
-        warp.inputs.field_file = '/data/pandora_3T/data/sub{:03}/templates/bold/in_grpbold/subj2tmpl_warp.nii.gz'.format(subj)
+        warp.inputs.ref_file = os.path.join(datapath,'templates','grpbold','brain.nii.gz')
+        warp.inputs.field_file = os.path.join(datapath, 'sub{:03}'.format(subj), 'templates', 'bold', 'in_grpbold', 'subj2tmpl_warp.nii.gz')
         warp.inputs.interp = 'nn'
         warp.run()
         os.remove(tmp_path)
@@ -96,11 +97,12 @@ def preprocess_and_tmp_save_fmri_7T(datapath, task, subj, model, scratch_path, g
         filename = 'brain_subj_{}_run_{}.nii.gz'.format(subj, run_id)
         tmp_path = scratch_path + filename
         save(unmask(run_ds.samples.astype('float32'), mask_fname), tmp_path)
+        # warp into group space
         warp = fsl.ApplyWarp()
         warp.inputs.in_file = tmp_path
         warp.inputs.out_file = scratch_path+'group_'+filename
-        warp.inputs.ref_file = '/data/forrest_gump/phase1/templates/grpbold7Tp1/brain.nii.gz'
-        warp.inputs.field_file = '/data/forrest_gump/phase1/sub{:03}/templates/bold7Tp1/in_grpbold7Tp1/subj2tmpl_warp.nii.gz'.format(subj)
+        warp.inputs.ref_file = os.path.join(datapath,'templates','grpbold7Tp1','brain.nii.gz')
+        warp.inputs.field_file = os.path.join(datapath, 'sub{:03}'.format(subj), 'templates', 'bold7Tp1', 'in_grpbold7Tp1', 'subj2tmpl_warp.nii.gz')
         warp.inputs.interp = 'nn'
         warp.run()
         os.remove(tmp_path)
@@ -118,7 +120,7 @@ def preprocess_and_tmp_save_fmri_7T(datapath, task, subj, model, scratch_path, g
 
 def process_subj_7T(subj, scratch_path='/data/mboos/tmp/',
                  preprocessed_path='/data/mboos/pandora/fmri/',
-                 datapath='/data/forrest_gump/phase1', **kwargs):
+                 datapath='../data/forrest_gump/phase1', **kwargs):
     '''this function preprocesses subj run-wise and then saves it as a joblib pickle under preprocessed_path'''
     # Forrest Gump, auditory version
     task = 2
@@ -144,6 +146,7 @@ if __name__=='__main__':
 
     subjects = {'7T': range(1,20),
                 '3T': range(1,19)}
+    #save the preprocessed data here:
     preprocessed_path = {'7T': '/data/mboos/pandora/fmri',
                          '3T': '/data/mboos/pandora/fmri_3T'}
     for dataset in dataset_keys:

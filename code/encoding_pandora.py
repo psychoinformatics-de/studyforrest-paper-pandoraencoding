@@ -13,7 +13,7 @@ from sklearn.linear_model import RidgeCV
 from sklearn.model_selection import KFold
 import validation_functions as val
 
-memory = joblib.Memory('/data/mboos/joblib')
+memory = joblib.Memory('~/joblib')
 
 lqmfs_list = glob.glob(os.path.join('/data','forrest_gump','phase1','stimulus',
                                     'task002','features','*.lq_mfs'))
@@ -163,23 +163,20 @@ def ridge_gridsearch_per_target(X, y, alphas, n_splits=7, **kwargs):
 
 if __name__=='__main__':
     if len(sys.argv) == 1:
-        #dataset_keys = ['7T', '3T']
-        dataset_keys = ['3T']
+        dataset_keys = ['7T', '3T']
     else:
         dataset_keys = sys.argv[1:]
 
     subjects = {'7T': range(1,20),
                 '3T': range(1,19)}
+    # folder with preprocessed fMRI data
     preprocessed_path = {'7T': '/data/mboos/pandora/fmri',
                          '3T': '/data/mboos/pandora/fmri_3T'}
+
+    # folder where encoding models and predictions should be saved
     save_path = {'7T': '/data/mboos/pandora',
                  '3T': '/data/mboos/pandora/3T'}
-#    for dataset in dataset_keys:
-#        for subj in subjects[dataset]:
-#            fit_subjects(subj, alphas=[1000, 10000.0, 100000.0, 1000000.0], n_splits=7,
-#                    preprocessed_path=preprocessed_path[dataset],
-#                    save_path=save_path[dataset])
-#
+
     for dataset in dataset_keys:
         joblib.Parallel(n_jobs=4)(
                 joblib.delayed(fit_subjects)(

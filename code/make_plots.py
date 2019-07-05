@@ -75,6 +75,16 @@ def prob_to_acc_for_array(prob_mat):
         prob_mat_red[i] = prob_to_acc(prob_mat[i])
     return prob_mat_red.reshape(shapes[:-2])
 
+def make_r2_plot():
+    # use whichever folder you saved your preditions in
+    scores_3t = [joblib.load('/data/mboos/pandora/3T/predictions/scores/scores_ridge_group_{}.pkl'.format(subj)) for subj in range(1,19)]
+    scores_7t = [joblib.load('/data/mboos/pandora/predictions/scores/scores_ridge_{}.pkl'.format(subj)) for subj in range(1,19)]
+    scores_sorted_3t = [np.sort(score)[::-1][:10000] for score in scores_3t]
+    scores_sorted_7t = [np.sort(score)[::-1][:10000] for score in scores_7t]
+    df = pd.DataFrame({r'$r2$': np.concatenate([np.concatenate(scores_sorted_3t), np.concatenate(scores_sorted_7t)]), 'Field strength': np.repeat(['3T', '7T'], 18*10000), 'Subject': np.tile(np.repeat(np.arange(1,19), 10000), 2), 'voxel': np.tile(np.tile(np.arange(1,10001), 18), 2)})
+    sns.lineplot(x='voxel', y=r'$r2$', hue='Field strength', data=df)
+    plt.savefig('r2_plot.pdf')
+
 if __name__ == '__main__':
     data_folders = {'7T': '/data/mboos/pandora/encodingscores/',
                     '3T': '/data/mboos/pandora/3T/encodingscores/'}
@@ -113,11 +123,4 @@ if __name__ == '__main__':
         g.set_axis_labels(transl_dict[measure],'')
         g.savefig('../pics/{}_sel_comparison_volume.pdf'.format(measure))
 
-    # plot of r2s
-    scores_3t = [joblib.load('/data/mboos/pandora/3T/predictions/scores/scores_ridge_group_{}.pkl'.format(subj)) for subj in range(1,19)]
-    scores_7t = [joblib.load('/data/mboos/pandora/predictions/scores/scores_ridge_{}.pkl'.format(subj)) for subj in range(1,19)]
-    scores_sorted_3t = [np.sort(score)[::-1][:10000] for score in scores_3t]
-    scores_sorted_7t = [np.sort(score)[::-1][:10000] for score in scores_7t]
-    df = pd.DataFrame({r'$r2$': np.concatenate([np.concatenate(scores_sorted_3t), np.concatenate(scores_sorted_7t)]), 'Field strength': np.repeat(['3T', '7T'], 18*10000), 'Subject': np.tile(np.repeat(np.arange(1,19), 10000), 2), 'voxel': np.tile(np.tile(np.arange(1,10001), 18), 2)})
-    sns.lineplot(x='voxel', y=r'$r2$', hue='Field strength', data=df)
-    plt.savefig('r2_plot.pdf')
+    make_r2_plot()
