@@ -20,14 +20,12 @@ cat_nrs = np.array(['ambient3', 'ambient4', 'ambient1', 'ambient0', 'ambient2',
 # sequence per participant
 seqs = [[6,2,0,3,7,5,4,1],[1,5,0,7,3,2,4,6],[5,1,4,3,6,2,0,7],[0,4,6,2,5,7,1,3],[2,6,4,6,1,0,2,5],[6,3,2,0,7,1,4,5],[0,6,5,4,2,1,7,3],[6,1,7,0,3,4,5,2],[1,3,2,4,0,6,7,5],[0,7,2,4,5,1,3,6],[5,0,4,1,6,3,7,2],[7,3,1,2,6,5,0,4],[5,2,6,0,7,3,4,1],[0,2,7,1,5,6,4,3],[1,5,2,4,6,3,0,7],[6,1,7,0,2,3,5,4],[3,6,0,7,2,1,4,5],[3,7,4,1,0,5,2,6],[4,7,6,2,3,0,1,5]]
 
-
-def preprocess_and_tmp_save_fmri_3T(datapath, task, subj, model, scratch_path):
+def preprocess_and_tmp_save_fmri_3T(datapath, task, subj, model, scratch_path, group_mask='/home/mboos/pandora_paper/temporal_lobe_mask_grp_3T.nii.gz'):
     '''preprocesses one subject from Pandora 3T
     aligns to group template
     run-wise linear de-trending and z-scoring'''
     from nipype.interfaces import fsl
     dhandle = mvpa.OpenFMRIDataset(datapath)
-
     mask_fname = '/home/mboos/pandora_paper/temporal_lobe_mask_3T_subj{}bold.nii.gz'.format(subj)
     flavor = 'moco_to_subjbold3Tp2'
     nmbrs = []
@@ -44,9 +42,23 @@ def preprocess_and_tmp_save_fmri_3T(datapath, task, subj, model, scratch_path):
             run_events[i]['condition'] = run_info[run_id-1][i]
 
         run_ds = dhandle.get_bold_run_dataset(subj, task, run_id, chunks=run_id-1, mask=mask_fname, flavor=flavor)
-        mvpa.poly_detrend(run_ds, polyord=1)
-        mvpa.zscore(run_ds)
-        yield (mvpa.events2sample_attr(run_events, run_ds.sa.time_coords, noinfolabel='rest'), run_ds.samples.astype('float32'))
+        filename = 'brain_subj_{}_run_{}.nii.gz'.format(subj, run_id)
+        tmp_path = scratch_path + filename
+        save(unmask(run_ds.samples.astype('float32'), mask_fname), tmp_path)
+        warp = fsl.ApplyWarp()
+        warp.inputs.in_file = tmp_path
+        warp.inputs.out_file = scratch_path+'group_'+filename
+        warp.inputs.ref_file = '/data/pandora_3T/data/templates/grpbold/brain.nii.gz'
+        warp.inputs.field_file = '/data/pandora_3T/data/sub{:03}/templates/bold/in_grpbold/subj2tmpl_warp.nii.gz'.format(subj)
+        warp.inputs.interp = 'nn'
+        warp.run()
+        os.remove(tmp_path)
+        run_ds_new = mvpa.fmri_dataset(scratch_path+'group_'+filename, mask=group_mask, chunks=run_id-1)
+        mvpa.poly_detrend(run_ds_new, polyord=1)
+        mvpa.zscore(run_ds_new)
+        os.remove(scratch_path+'group_'+filename)
+
+        yield (mvpa.events2sample_attr(run_events, run_ds.sa.time_coords, noinfolabel='rest'), run_ds_new.samples.astype('float32'))
 
 def process_subj_3T(subj, scratch_path='/data/mboos/tmp/',
                  preprocessed_path='/data/mboos/pandora/fmri_3T/',
