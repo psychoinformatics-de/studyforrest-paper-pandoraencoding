@@ -28,16 +28,15 @@
 \listoftodos
 
 \begin{abstract}
-In neuroimaging, voxel-wise encoding models are a popular method for
-characterizing how a naturalistic stimulus elicits BOLD activity patterns.
+In neuroimaging, voxel-wise encoding models are often used to characterize how a
+naturalistic stimulus influences BOLD activity.
 To evaluate if this characterization proves to be accurate, one can choose
 between multiple quality metrics.
 However, each quality metric requires specifying additional parameters, such as
-the number of voxels and how to select them, and the influence of these
-parameters on the evaluation remains unknown.
-To shed light on the effect of these parameters, we use voxel-wise encoding models
-to predict 3- and 7-Tesla BOLD activity that was elicited by musical stimuli,
-and evaluate these models with three quality metrics that were introducted in previous studies.
+the number of voxels and how to select them, and it is unknown which influence
+these parameters exert.
+To shed light on this, we use voxel-wise encoding models to predict 3- and 7-Tesla fMRI activity that was elicited by musical stimuli,
+and evaluate these models with three quality metrics that were introduced in previous studies.
 By varying the numbers of voxels used and the voxel selection strategy, we
 demonstrate that these parameters, as well as field strength, influence each quality metric
 differently, and how these differences might affect the comparison between
@@ -50,9 +49,9 @@ differently, and how these differences might affect the comparison between
 \section*{Introduction}
 
 In functional magnetic resonance imaging (f{MRI}) research, voxel-wise encoding
-models (VWEM) \todo{acronym: VWEM? used quite a bit, may be worth it} are an increasingly popular tool to characterize the relationship
+models are an increasingly popular tool to characterize the relationship
 between a real world stimulus and BOLD activity patterns
-\citep{NG11,TD+06,KG+08,SZ09}.
+\citep{TD+06,KG+08,NG11,huth2012continuous}.
 
 However, researchers face many degrees of freedom in constructing voxel-wise encoding models, 
 such as how to represent the stimulus or how to estimate an accurate model.
@@ -674,6 +673,7 @@ voxel-wise encoding models.
 
 MB performed the analysis and wrote the manuscript.
 JSG contributed to the manuscript.
+JWG contributed to the manuscript.
 MH contributed to the manuscript.
 
 \section*{Competing Interests}
