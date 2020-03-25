@@ -61,9 +61,9 @@ def preprocess_and_tmp_save_fmri_3T(datapath, task, subj, model, scratch_path, g
 
         yield (mvpa.events2sample_attr(run_events, run_ds.sa.time_coords, noinfolabel='rest'), run_ds_new.samples.astype('float32'))
 
-def process_subj_3T(subj, scratch_path='/data/mboos/tmp/',
-                 preprocessed_path='/data/mboos/pandora/fmri_3T/',
-                 datapath='/data/pandora_3T/data', **kwargs):
+def process_subj_3T(subj, scratch_path='/tmp/',
+                 preprocessed_path='../preprocessed/3T/',
+                 datapath='../data_3T/', **kwargs):
     '''this function preprocesses subj run-wise and then saves it as a joblib pickle under preprocessed_path'''
 
     task = 1
@@ -118,8 +118,8 @@ def preprocess_and_tmp_save_fmri_7T(datapath, task, subj, model, scratch_path, g
                 run_events[i]['condition'] = run_info_subj[run_id-1][i]
         yield (mvpa.events2sample_attr(run_events,run_ds.sa.time_coords,noinfolabel='rest'), run_ds_new.samples.astype('float32'))
 
-def process_subj_7T(subj, scratch_path='/data/mboos/tmp/',
-                 preprocessed_path='/data/mboos/pandora/fmri/',
+def process_subj_7T(subj, scratch_path='/tmp/',
+                 preprocessed_path='../preprocessed/7T',
                  datapath='../data/forrest_gump/phase1', **kwargs):
     '''this function preprocesses subj run-wise and then saves it as a joblib pickle under preprocessed_path'''
     # Forrest Gump, auditory version
@@ -147,8 +147,8 @@ if __name__=='__main__':
     subjects = {'7T': range(1,20),
                 '3T': range(1,19)}
     #save the preprocessed data here:
-    preprocessed_path = {'7T': '/data/mboos/pandora/fmri',
-                         '3T': '/data/mboos/pandora/fmri_3T'}
+    preprocessed_path = {'7T': '../preprocessed/7T',
+                         '3T': '../preprocessed/3T'}
     for dataset in dataset_keys:
         for subj in subjects[dataset]:
             preprocess_funcs[dataset](subj, preprocessed_path=preprocessed_path[dataset])
