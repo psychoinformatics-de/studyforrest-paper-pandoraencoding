@@ -9,7 +9,8 @@
 
 \begin{document}
 \bibliographystyle{unsrtnat}
-\title{Exploring the role of auxilliary parameters in evaluating voxel-wise encoding models}
+%\title{Exploring the role of auxilliary parameters in evaluating voxel-wise encoding models}
+\title{The role of auxilliary parameters in evaluating voxel-wise encoding models}
 
 
 \author[1]{Moritz~Boos}
@@ -28,9 +29,9 @@
 In neuroimaging, voxel-wise encoding models are a popular tool to predict brain activity elicited by a stimulus.
 To evaluate the accuracy of these predictions across multiple voxels, one can choose between multiple quality metrics.
 However, each quality metric requires specifying auxilliary parameters such as the number and selection criteria of voxels, whose influence on model validation is unknown.
-In this study, we systematically vary these parameters and observe their effects on three common quality metrics of voxel-wise encoding models in two open datasets of 3- and 7-Tesla fMRI activity that was elicited by musical stimuli.
-We show that such auxilliary parameters not only exert significant influence on model validation, but also differ in how they affect each quality metric.
-Finally, we give several recommendations for validating voxel-wise encoding models that may limit variability due to different numbers of voxels, voxel selection criteria, and field strengths.
+In this study, we systematically vary these parameters and observe their effects on three common quality metrics of voxel-wise encoding models in two open datasets of 3- and 7-Tesla BOLD fMRI activity elicited by musical stimuli.
+We show that such auxilliary parameters not only exert substantial influence on model validation, but also differ in how they affect each quality metric.
+Finally, we give several recommendations for validating voxel-wise encoding models that may limit variability due to different numbers of voxels, voxel selection criteria, and magnetic field strengths.
 \end{abstract}
 
 \clearpage
@@ -87,7 +88,7 @@ Approximate temporal lobe masks for each participant were extracted from Montrea
 
 \subsection*{Encoding model}
 
-To build an encoding model with high predictive power, one needs to find an appropriate feature representation of the music stimuli \citep{holdgraf2017encoding}. \citet{CTK+2012} compared different feature representations of the same stimuli in the 3T dataset. They found features corresponding to the timbre of the stimulus offer the best discriminative power. We chose a similar feature set, related to timbre, that was made available by \citet{HDH+2015}, the low-quefrency mel-frequency spectrum (LQ-MFS) of the stimulus. This stimulus representation consists of 48 LQ-MFS coefficients for each 100 ms segment of a stimulus, thus each stimulus comprises overall 2880 LQ-MFS coefficients.
+To build an encoding model with high predictive power, one needs to find an appropriate feature representation of the music stimuli \citep{holdgraf2017encoding}. \citet{CTK+2012} compared different feature representations of the same stimuli in the 3T dataset. They found features corresponding to the timbre of the stimulus offer the best discriminative power. We chose a similar feature set, related to timbre, that was made available by \citet{HDH+2015}, the low-quefrency mel-frequency spectrum (LQ-MFS) of the stimulus. This stimulus representation consists of 48 LQ-MFS coefficients for each 100 ms segment of a stimulus, thus each stimulus overall comprises 2880 LQ-MFS coefficients.
 
 For each f{MRI} sample $y_{vt}$ (where $t=1,2,,\ldots,T$ denotes the time-points, $T$ the number of samples in each run, and $v=1,2,\ldots,V$ denotes the voxels) the LQ-MFS features $x_{t}$ $[1\times\widetilde{M}]$ (where $\widetilde{M}$ is the number of LQ-MFS coefficients) of the corresponding two second part of the stimulus -- immediately prior to the acquision time point -- were computed. In case there was no stimulus presented at time-point $t$, a zero vector $[1\times\widetilde{M}]$ was used. 
 
