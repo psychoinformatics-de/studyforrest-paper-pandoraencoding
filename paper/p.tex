@@ -19,8 +19,7 @@
 \author[3,4]{Michael~Hanke}
 
 \affil[1]{Applied Neurocognitive Psychology Lab and Cluster of Excellence "Hearing4all", University of Oldenburg, Oldenburg, Germany}
-\affil[2]{Department of Psychological and Brain Sciences,
-  Dartmouth College, Hanover, New Hampshire, USA}
+\affil[2]{Vicarious AI, Union City CA, USA}
 \affil[3]{Institute of Neuroscience and Medicine, Brain \& Behaviour (INM-7), Research Centre Jülich, Jülich, Germany}
 \affil[4]{Institute of Systems Neuroscience, Medical Faculty, Heinrich Heine University Düsseldorf, Düsseldorf, Germany}
 \maketitle
@@ -181,6 +180,7 @@ First, we evaluate each voxel's encoding model individually. Figure \ref{fig:r2_
  \label{fig:r2_plot}\end{figure}
 
 Next, we evaluate sets of voxel-wise encoding models for 3T and 7T using several quality metrics. We varied the number of voxels used in the analysis and how they were selected, both for 3T and 7T f{MRI} data, and compared the resulting differences in three quality metrics of encoding models. To differentiate between effects of voxel number and overall volume of the voxels, which differs in 3T and 7T, we show the results as a function of the number of voxels, as well as overall volume of these voxels.
+To illustrate the extent of 10000 selected voxels for different field strengths and selection criteria, we show for each voxel the proportion of validation sets across all participants in which it was selected in Figure \ref{fig:glassbrains}. In both 3T and 7T the voxels that are most often selected are situated in primary and secondary auditory areas.
 
 \begin{figure*}
   \centering
@@ -335,6 +335,15 @@ We are also thankful for Cristiano Micheli's helpful feedback on an earlier vers
 \beginsupplement
 \newpage
 \section*{Supplementary information} \label{supplemental}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{pics/glassbrains.png}
+  \caption{Glassbrains showing the proportion of how often a voxel was included across all participants and all validation sets for different field strengths and voxel selection criteria.}
+
+ \label{fig:glassbrains}\end{figure}
+
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=\linewidth]{pics/binary_selection.pdf}
