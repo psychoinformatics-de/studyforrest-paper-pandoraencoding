@@ -9,8 +9,8 @@
 
 \begin{document}
 \bibliographystyle{unsrtnat}
-%\title{Exploring the role of auxilliary parameters in evaluating voxel-wise encoding models}
-\title{The role of auxilliary parameters in evaluating voxel-wise encoding models for 3T and 7T BOLD fMRI data}
+%\title{Exploring the role of auxiliary parameters in evaluating voxel-wise encoding models}
+\title{The role of auxiliary parameters in evaluating voxel-wise encoding models for 3T and 7T BOLD fMRI data}
 
 
 \author[1]{Moritz~Boos}
@@ -27,9 +27,9 @@
 \begin{abstract}
 In neuroimaging, voxel-wise encoding models are a popular tool to predict brain activity elicited by a stimulus.
 To evaluate the accuracy of these predictions across multiple voxels, one can choose between multiple quality metrics.
-However, each quality metric requires specifying auxilliary parameters such as the number and selection criteria of voxels, whose influence on model validation is unknown.
+However, each quality metric requires specifying auxiliary parameters such as the number and selection criteria of voxels, whose influence on model validation is unknown.
 In this study, we systematically vary these parameters and observe their effects on three common quality metrics of voxel-wise encoding models in two open datasets of 3- and 7-Tesla BOLD fMRI activity elicited by musical stimuli.
-We show that such auxilliary parameters not only exert substantial influence on model validation, but also differ in how they affect each quality metric.
+We show that such auxiliary parameters not only exert substantial influence on model validation, but also differ in how they affect each quality metric.
 Finally, we give several recommendations for validating voxel-wise encoding models that may limit variability due to different numbers of voxels, voxel selection criteria, and magnetic field strengths.
 \end{abstract}
 
@@ -39,8 +39,8 @@ Finally, we give several recommendations for validating voxel-wise encoding mode
 \section*{Introduction}
 
 In functional magnetic resonance imaging (f{MRI}) research, voxel-wise encoding models are an increasingly popular tool to characterize the relationship between a real world stimulus and BOLD activity patterns \citep{TD+06,KG+08,NG11,huth2012continuous,holdgraf2016rapid}. However, researchers face many degrees of freedom in constructing voxel-wise encoding models, such as how to represent the stimulus or how to estimate an accurate model. To evaluate the fidelity of these choices and the resulting voxel-wise encoding models, multiple quality metrics exist that assess how well these models approximate spatial patterns of brain activity across multiple voxels. \citet{ML08} first introduced binary retrieval accuracy --- a measure that assesses whether an encoding model's predicted spatial activation patterns can, on average, identify the correct stimulus against a decoy --- to evaluate the predicted f{MRI} images for the meaning of nouns. \citet{KG+08} used stimulus identification accuracy, and \citet{NG09} used stimulus reconstruction quality as a metric for encoding performance. In auditory neuroscience, only binary retrieval accuracy \citep{CTK+2012,hoefle2018identifying} and stimulus identification \citep{SF14,allen2018encoding} have been used.
-However, while providing novel insights into the cortical processing of sensory stimuli, it is unknown how additional parameters of the data analysis that are unrelated to the encoding models themselves affect these quality metrics. Hence, it remains difficult to compare the quality of voxel-wise encoding models when they differ in such auxilliary parameters.
-In this study, we aim to tackle this problem by documenting the effect of two common auxilliary parameters in the validation of voxel-wise encoding models --- the number of voxels used and how they were selected --- on different quality metrics for low and high field strength (3 and 7-Tesla f{MRI}). To this end, we utilize a 3T f{MRI} study on the perception of musical genres \citep{CTK+2012} which has recently been replicated in 7T \citep{HDH+2015}. Using these datasets, we apply three approaches to encoding model validation, --- binary retrieval accuracy \citep{ML08}, stimulus identification \citep{KG+08,SF14} and decoding accuracy of the stimulus \citep{NG09} ---, and compare them in a 3T and 7T dataset with identical stimuli and comparable design, for different choices in data analysis parameters.
+However, while providing novel insights into the cortical processing of sensory stimuli, it is unknown how additional parameters of the data analysis that are unrelated to the encoding models themselves affect these quality metrics. Hence, it remains difficult to compare the quality of voxel-wise encoding models when they differ in such auxiliary parameters.
+In this study, we aim to tackle this problem by documenting the effect of two common auxiliary parameters in the validation of voxel-wise encoding models --- the number of voxels used and how they were selected --- on different quality metrics for low and high field strength (3 and 7-Tesla f{MRI}). To this end, we utilize a 3T f{MRI} study on the perception of musical genres \citep{CTK+2012} which has recently been replicated in 7T \citep{HDH+2015}. Using these datasets, we apply three approaches to encoding model validation, --- binary retrieval accuracy \citep{ML08}, stimulus identification \citep{KG+08,SF14} and decoding accuracy of the stimulus \citep{NG09} ---, and compare them in a 3T and 7T dataset with identical stimuli and comparable design, for different choices in data analysis parameters.
 
 \section*{Methods}
 
