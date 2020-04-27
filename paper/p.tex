@@ -8,7 +8,7 @@
 
 
 \begin{document}
-\bibliographystyle{unsrtnat}
+\bibliographystyle{apacite}
 %\title{Exploring the role of auxiliary parameters in evaluating voxel-wise encoding models}
 \title{The role of auxiliary parameters in evaluating voxel-wise encoding models for 3T and 7T BOLD fMRI data}
 
@@ -63,7 +63,7 @@ Each participant participated in eight functional runs. Stimuli were presented i
 \paragraph{\sevenT}
 %
 The procedures for the \unit[7]{Tesla} acquisition were highly similar and only
-criticial differences are reported here. Echo-planar BOLD images (gradient-echo, \unit[2]{s} repetition time (TR), \unit[22]{ms} echo time, \unit[0.78]{ms} echo spacing, GRAPPA acceleration factor 3) were acquired using a whole-body \sevenT\ Siemens MAGNETOM magnetic resonance scanner equipped with a 32 channel brain receive coil. 36 axial slices (thickness \unit[1.4]{mm}, \unit[1.4 $\times$ 1.4]{mm} in-plane resolution) with a 10\% inter-slice gap were recorded in ascending order.  Slices were oriented to include the ventral portions of frontal and occipital cortex while minimizing intersection with the eyeballs. The field-of-view was centred on the approximate location of Heschl's gyrus along the rostral-caudal axis.
+critical differences are reported here. Echo-planar BOLD images (gradient-echo, \unit[2]{s} repetition time (TR), \unit[22]{ms} echo time, \unit[0.78]{ms} echo spacing, GRAPPA acceleration factor 3) were acquired using a whole-body \sevenT\ Siemens MAGNETOM magnetic resonance scanner equipped with a 32 channel brain receive coil. 36 axial slices (thickness \unit[1.4]{mm}, \unit[1.4 $\times$ 1.4]{mm} in-plane resolution) with a 10\% inter-slice gap were recorded in ascending order.  Slices were oriented to include the ventral portions of frontal and occipital cortex while minimizing intersection with the eyeballs. The field-of-view was centered on the approximate location of Heschl's gyrus along the rostral-caudal axis.
 
 Instead of dedicated catch trials, similar catch questions as for the 3T acquisition were presented \unit[4]{s} after the end of the stimulus in trials with an \unit[8]{s} inter-stimulus delay. Consequently, each run consisted of 25 trials, and no trials were discarded from the analysis.  There was no additional fixation at the start of a run. For further details, see \citet{HDH+2015}, and \citet{HBI+14} for details on MRI acquisition methods.
 
@@ -89,11 +89,11 @@ Approximate temporal lobe masks for each participant were extracted from Montrea
 
 To build an encoding model with high predictive power, one needs to find an appropriate feature representation of the music stimuli \citep{holdgraf2017encoding}. \citet{CTK+2012} compared different feature representations of the same stimuli in the 3T dataset. They found features corresponding to the timbre of the stimulus offer the best discriminative power. We chose a similar feature set, related to timbre, that was made available by \citet{HDH+2015}, the low-quefrency mel-frequency spectrum (LQ-MFS) of the stimulus. This stimulus representation consists of 48 LQ-MFS coefficients for each 100 ms segment of a stimulus, thus each stimulus overall comprises 2880 LQ-MFS coefficients.
 
-For each f{MRI} sample $y_{vt}$ (where $t=1,2,,\ldots,T$ denotes the time-points, $T$ the number of samples in each run, and $v=1,2,\ldots,V$ denotes the voxels) the LQ-MFS features $x_{t}$ $[1\times\widetilde{M}]$ (where $\widetilde{M}$ is the number of LQ-MFS coefficients) of the corresponding two second part of the stimulus -- immediately prior to the acquision time point -- were computed. In case there was no stimulus presented at time-point $t$, a zero vector $[1\times\widetilde{M}]$ was used. 
+For each f{MRI} sample $y_{vt}$ (where $t=1,2,,\ldots,T$ denotes the time-points, $T$ the number of samples in each run, and $v=1,2,\ldots,V$ denotes the voxels) the LQ-MFS features $x_{t}$ $[1\times\widetilde{M}]$ (where $\widetilde{M}$ is the number of LQ-MFS coefficients) of the corresponding two second part of the stimulus -- immediately prior to the acquisition time point -- were computed. In case there was no stimulus presented at time-point $t$, a zero vector $[1\times\widetilde{M}]$ was used. 
 
 As the BOLD response is delayed,  the most recent feature vector was removed for each f{MRI} sample (this corresponds to an assumed \unit[2]{s} stimulus-response delay), and the new feature vector at time-point $t$ was created by concatenating the prior feature vectors $x_{t-1}$,$x_{t-2}$ and $x_{t-3}$ (see Figure \ref{fig:encoding_scheme}). From now on, we denote this stacked feature vector as $x_{t}$.  Feature vectors (and the corresponding f{MRI} sample) were removed from the analysis, if two-thirds or more of the concatenated feature vectors were zero-vectors.
 
-The BOLD activity time-series, as well as the feature time-series, were vertically stacked, resulting in a matrix of features $X$ $[N\times M]$ (where $N$ is the number of f{MRI} samples, and $M$ is number of LQ-MFS coefficients, with $M=3\widetilde{M}$) and a matrix of BOLD activity $Y$ $[N\times V]$ (where $V$ is the number of voxels and $N$ as above). This lagging of the stimulus allows us to train the encoding model to predict the f{MRI} time-series without explicitly modelling the BOLD response. The encoding model could then be expressed as the probability to observe the BOLD activity at time-point $t$ and voxel $v$:
+The BOLD activity time-series, as well as the feature time-series, were vertically stacked, resulting in a matrix of features $X$ $[N\times M]$ (where $N$ is the number of f{MRI} samples, and $M$ is number of LQ-MFS coefficients, with $M=3\widetilde{M}$) and a matrix of BOLD activity $Y$ $[N\times V]$ (where $V$ is the number of voxels and $N$ as above). This lagging of the stimulus allows us to train the encoding model to predict the f{MRI} time-series without explicitly modeling the BOLD response. The encoding model could then be expressed as the probability to observe the BOLD activity at time-point $t$ and voxel $v$:
 \begin{equation}
   \label{eq:encmo}
   p(y_{vt}|x_{t}) = N(y_{vt};x_{t}\beta_{v},\sigma)
@@ -107,17 +107,17 @@ $[M\times1]$ vector of regression coefficients specific to voxel $v$. The corres
 \end{equation}
 where $\mathbf{Y}$ and $\mathbf{X}$ are defined as above and $\mathbf{\beta}$ is a $[M \times V]$ matrix of regression coefficients per voxel.
 To reduce over-fitting, the regression-coefficients were estimated using ridge regression \citep{HK70}. Independently for each voxel, the regularization parameter $\lambda$ with the lowest mean squared error in a generalized leave-one-out cross-validation \citep{GHW79} was chosen from a set of candidate values. This set was chosen so that the highest and lowest values of $\lambda$ were only rarely selected in cross-validation. While this regularization parameter can exert a large influence on regression coefficients, and hence interpretation, we do not scrutinize its role here, since we are interested in choosing the amount of regularization that maximizes prediction accuracy.
-All analyses were implemented using custom code that heavily utilizes the SciPy ecosystem \citep{jones2014scipy}, Scikit-Learn \citep{PVG+11}, Nilearn \citep{abraham2014machine}, and PyMVPA \citep{HHS09b}.
+All analyses were implemented using custom code that heavily utilizes the SciPy ecosystem \citep{jones2014scipy}, Scikit-Learn \citep{PVG+11}, Nilearn \citep{abraham2014machine}, and PyMVPA \citep{HHS09b}. All source code for analysis and visualization is available under \url{https://github.com/psychoinformatics-de/studyforrest-paper-pandoraencoding}.
 
 \subsection*{Quality metrics} 
 
-Binary retrieval accuracy and the matching score quantify encoding model performance based on the difference between predicted and observed spatial patterns that stretch across multiple voxels. They assume that each stimulus is associated with one spatial patterns, and thus do not incorporate stimulus timecourses with multiple BOLD samples. Since our stimuli encompass three BOLD samples each, we treat each BOLD sample as as an individual stimulus in both the binary retrieval accuracy and the matching score. However, we need to avoid misclassifications in the case in which predicted BOLD activity for one sample of the stimulus is closest to another sample in the same stimulus -- and thus "misclassifies" the time point, but correctly classifies the stimulus. To deal with this issue, when testing each predicted BOLD sample we temporarily remove all other samples of the same stimulus from the validation set.
+Binary retrieval accuracy and the matching score quantify encoding model performance based on the difference between predicted and observed spatial patterns that stretch across multiple voxels. They assume that each stimulus is associated with one spatial patterns, and thus do not incorporate stimulus time courses with multiple BOLD samples. Since our stimuli encompass three BOLD samples each, we treat each BOLD sample as as an individual stimulus in both the binary retrieval accuracy and the matching score. However, we need to avoid misclassifications in the case in which predicted BOLD activity for one sample of the stimulus is closest to another sample in the same stimulus -- and thus "misclassifies" the time point, but correctly classifies the stimulus. To deal with this issue, when testing each predicted BOLD sample we temporarily remove all other samples of the same stimulus from the validation set.
 Hence, for each BOLD sample of a stimulus we test against $N = 25\:\times 3 - 2$ other stimuli per run (25 stimuli with 3 BOLD samples each).
-Since all quality metrics are computed on the validation set in a leave-one-run-out cross-validation scheme, this leads to different number of samples used for the binary retrieval accuracy and machting score (number of samples $N$ = 3 samples $\times$ 25 stimuli $\times$ 8 runs = 600), and decoding accuracy ($N$ = 25 stimuli $\times$ 8 runs = 200 or $N$ = 5 genres $\times$ 8 runs = 40).
+Since all quality metrics are computed on the validation set in a leave-one-run-out cross-validation scheme, this leads to different number of samples used for the binary retrieval accuracy and matching score (number of samples $N$ = 3 samples $\times$ 25 stimuli $\times$ 8 runs = 600), and decoding accuracy ($N$ = 25 stimuli $\times$ 8 runs = 200 or $N$ = 5 genres $\times$ 8 runs = 40).
 
 \subsubsection*{Binary retrieval accuracy}
 %
-Binary retrieval accuracy \citep{ML08} tests if an encoding model's predictions can, on average, differentiate a stimulus' observed BOLD activity from the BOLD activity of a decoy stimulus. Specifically, a stimulus pair is counted as succesfully classified, if the cosine similarity between predicted and observed f{MRI} responses is greater for the correctly matched predictions and observations than for the incorrectly matched ones (i.e. the similarity of the observed response of stimulus A with the predictions for stimulus B and vice versa). In our case, the binary retrieval measure for one predicted BOLD sample of a stimulus was computed by counting the correct matches for all (exhaustive) pair-wise combinations of all BOLD samples of all stimuli, independent of genre, while excluding other samples of the same stimulus, and then dividing by the number of combinations. This quantity was averaged across all samples of all stimuli.
+Binary retrieval accuracy \citep{ML08} tests if an encoding model's predictions can, on average, differentiate a stimulus' observed BOLD activity from the BOLD activity of a decoy stimulus. Specifically, a stimulus pair is counted as successfully classified, if the cosine similarity between predicted and observed f{MRI} responses is greater for the correctly matched predictions and observations than for the incorrectly matched ones (i.e. the similarity of the observed response of stimulus A with the predictions for stimulus B and vice versa). In our case, the binary retrieval measure for one predicted BOLD sample of a stimulus was computed by counting the correct matches for all (exhaustive) pair-wise combinations of all BOLD samples of all stimuli, independent of genre, while excluding other samples of the same stimulus, and then dividing by the number of combinations. This quantity was averaged across all samples of all stimuli.
 
 \subsubsection*{Matching score}
 %
@@ -164,6 +164,11 @@ We varied the number of voxels used in the analysis, both for 3T and 7T f{MRI} d
 \paragraph{Selection by $r^2$}
 
 As we are interested in encoding performance, we can use the quality of predictions of each voxel's encoding model as a selection criterion. We compute the coefficient of determination $r^2$ for each voxel-specific encoding model in the training set. Using this criterion selects voxels whose activity can be explained best by an LQ-MFS-based encoding model.
+
+\subsection*{Data availability}
+
+The 7T f{MRI} data is available as part of the OpenNeuro \href{https://openneuro.org/datasets/ds000113/versions/1.3.0}{ds000113b} dataset.
+The 3T f{MRI} data is available upon request.
 
 \section*{Results}
 
@@ -254,12 +259,10 @@ selection. Chance level is 0.2.
 
  \label{fig:decoding_accuracy}
 \end{figure*}
-
 \begin{figure}
   \centering
-  \includegraphics[width=\linewidth]{pics/conf_mats.pdf}
-
-  \caption{ Confusion matrices for genre decoding, separated by field-strength and voxel selection. Each confusion matrix is averaged across the different number of voxels, participants and runs.}
+  \makebox[\textwidth][c]{\includegraphics[width=1.5\linewidth]{pics/conf_mats.pdf}}%
+  \caption{Confusion matrices for genre decoding, separated by field-strength and voxel selection. Each confusion matrix is averaged across the different number of voxels, participants and runs.}
 
  \label{fig:confusion_matrices}
 \end{figure}
@@ -270,9 +273,9 @@ Figure \ref{fig:decoding_accuracy_stimulus} shows the accuracy of decoding each 
 
 Instead of decoding individual stimuli, we can also decode the musical genre of each individual stimulus. Figure \ref{fig:decoding_accuracy} shows the accuracy of decoding music genre (chance level 0.20) for different numbers of voxels, selection strategies, and field strength. Here a different pattern emerges: decoding accuracy is higher for 7T data than for 3T data, across all numbers of voxels and selection criteria. Potentially, this suggests that 7T BOLD activity contains different information than 3T.  For both selection strategies, 7T shows higher maximum genre decoding accuracy for high numbers of voxels, while 3T shows higher maximum genre decoding accuracy for lower numbers of voxels.
 
-Next, we want to answer the question which musical genres can be best predicted, and if those differ between 3T and 7T data. For this we compute the confusion matrix from the out-of-sample predictions of all classifiers: Rows denote the stimulus' true genre, columns denote the predicted genre. Each cell contains the count -- or proportion -- of occurences of this combination of true and predicted genres. Maximum classification accuracy leads to a diagonal confusion matrix.
+Next, we want to answer the question which musical genres can be best predicted, and if those differ between 3T and 7T data. For this we compute the confusion matrix from the out-of-sample predictions of all classifiers: Rows denote the stimulus' true genre, columns denote the predicted genre. Each cell contains the count -- or proportion -- of occurrences of this combination of true and predicted genres. Maximum classification accuracy leads to a diagonal confusion matrix.
 
-Figure \ref{fig:confusion_matrices} shows the confusion matrices averaged across numbers of voxels for different field strength and selection criteria. The occurences are normalized per row, and their mean proportion across numbers of voxels are indicated in each cell. All confusion matrices show a higher misclassification between genres that contain speech (country, rock'n'roll and heavy metal) and between instrumental genres (ambient and symphonic), while very few genres that contain speech are incorrectly classified as instrumental or vice versa. The increased genre decoding accuracy in 7T is thus due to a better discrimination between the two instrumental genres --- ambient and symphonic --- and between the three vocal genres --- country, rock'n'roll, and heavy metal.
+Figure \ref{fig:confusion_matrices} shows the confusion matrices averaged across numbers of voxels for different field strength and selection criteria. The occurrences are normalized per row, and their mean proportion across numbers of voxels are indicated in each cell. All confusion matrices show a higher misclassification between genres that contain speech (country, rock'n'roll and heavy metal) and between instrumental genres (ambient and symphonic), while very few genres that contain speech are incorrectly classified as instrumental or vice versa. The increased genre decoding accuracy in 7T is thus due to a better discrimination between the two instrumental genres --- ambient and symphonic --- and between the three vocal genres --- country, rock'n'roll, and heavy metal.
 
 \section*{Discussion}
 
@@ -280,7 +283,7 @@ Our results show that all three quality metrics vary with the number of voxels a
 
 We believe these results emphasize the significance of an often under- appreciated aspect of computational models in neuroimaging: near arbitrary choices in the data analysis -- like the number of voxels used or how they are selected -- have a considerable impact on the performance evaluation of voxel-wise encoding models. Furthermore, the impact of these choices is inconsistent across the considered validation strategies. The effects of these parameters are rarely known a-priori, and each choice of a specific value can often be easily justified, yet this undisclosed flexibility leads to considerable researcher degrees-of-freedom \citep{SNS11,hong2019false} that will bias the comparison between different voxel-wise encoding models and hinder generalization of findings across individual studies.
 
-In light of the substantial effects individual parameters exert on validation strategies, it does not surprise that one of our results -- a higher matching score in 7T than in 3T BOLD fMRI data -- constrasts a  previous study \citep{SF14}, which found higher matching scores for encoding natural sounds in 7T than in 3T, although using a different number of stimuli in the two conditions.
+In light of the substantial effects individual parameters exert on validation strategies, it does not surprise that one of our results -- a higher matching score in 7T than in 3T BOLD fMRI data -- contrasts a  previous study \citep{SF14}, which found higher matching scores for encoding natural sounds in 7T than in 3T, although using a different number of stimuli in the two conditions.
 
 However, in spite of these variabilities, we can abstract several recommendations for applying and validating voxel-wise encoding models.
 
@@ -397,7 +400,6 @@ We are also thankful for Cristiano Micheli's helpful feedback on an earlier vers
 
  \label{fig:decoding_accuracy_selection}
 \end{figure}
-
 
 
 \end{document}
